@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/assets/images/logo/jobPortal.png" sizes="16x16" type="image/png"> 
+    <title>Rocket Job Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.svg" />
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/app.min.css" />
+    <link rel="stylesheet" href="/assets/css/LineIcons.2.0.css" />
+    <link rel="stylesheet" href="/assets/css/animate.css" />
+    <link rel="stylesheet" href="/assets/css/tiny-slider.css" />
+    <link rel="stylesheet" href="/assets/css/glightbox.min.css" />
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body >
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('serviceWorker.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+
+            // navigator.serviceWorker.register(new URL('../firebase-messaging-sw.js'), {type: 'module'})
+            navigator.serviceWorker.register('../firebase-messaging-sw.js')
+            .then(function(response) {               
+                console.log('Registration Successful', response);
+            }, function(error) {
+                console.log('Registration Failed', error);
+            })            
+        }
+
+      
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFuXdotU6GxxCvuCsikV4HX7jIwfP54EY&libraries=places"></script>
+    <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script crossorigin  src="/assets/js/wow.min.js"></script>
+    <script crossorigin  src="/assets/js/tiny-slider.js"></script>
+    <script crossorigin  src="/assets/js/glightbox.min.js"></script>
+    <script crossorigin  src="/assets/js/main.js"></script>
+    <script type="text/javascript">
+            //====== Clients Logo Slider
+            tns({
+                container: '.client-logo-carousel',
+                slideBy: 'page',
+                autoplay: true,
+                autoplayButtonOutput: false,
+                mouseDrag: true,
+                gutter: 15,
+                nav: false,
+                controls: false,
+                responsive: {
+                    0: {
+                        items: 1,
+                    },
+                    540: {
+                        items: 2,
+                    },
+                    768: {
+                        items: 3,
+                    },
+                    992: {
+                        items: 4,
+                    },
+                    1170: {
+                        items: 6,
+                    }
+                }
+            });
+            //========= testimonial 
+            tns({
+                container: '.testimonial-slider',
+                items: 1,
+                slideBy: 'page',
+                autoplay: false,
+                mouseDrag: true,
+                gutter: 0,
+                nav: false,
+                controls: true,
+                controlsText: ['<i class="lni lni-arrow-left"></i>', '<i class="lni lni-arrow-right"></i>'],
+                responsive: {
+                    0: {
+                        items: 1,
+                    },
+                    540: {
+                        items: 1,
+                    },
+                    768: {
+                        items: 1,
+                    },
+                    992: {
+                        items: 1,
+                    },
+                    1170: {
+                        items: 1,
+                    }
+                }
+            });
+    
+            //========= glightbox
+            GLightbox({
+                'href': 'https://www.youtube.com/watch?v=cz4z8CyvDas',
+                'type': 'video',
+                'source': 'youtube', //vimeo, youtube or local
+                'width': 900,
+                'autoplayVideos': true,
+            });
+        </script>
+  </body>
+</html>

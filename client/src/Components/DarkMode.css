@@ -1,0 +1,363 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+:root {
+  --body-background: #7E8890;
+  --h1-h6: #081828;
+  --h1-h6-alternate: #e4e8ed;
+  --breadcrumbs: #2042e3;
+  --breadcrumbs-p: #fff; 
+  --breadcrumbs-p-alternate: #000; 
+  --nav-text: #333;
+  --nav-text222: #222;
+  --nav-submenu: #666;
+  --nav-submenu-alternate: #999;
+  --hero-area:#f6f9fc;
+  --hero-area-border:#eee;
+  --job-search:#e2e4ea;
+  --shadow: rgba(35, 38, 45, 0.15);
+
+  --text-color: black;
+  --background-color: white;
+  --a-color: blue;
+  
+}
+
+.dark {
+  --body-background: #000;
+  --h1-h6: #e4e8ed;
+  --h1-h6-alternate: #081828;
+  --breadcrumbs: #e4e8ed;
+  --breadcrumbs-p: #000; 
+  --breadcrumbs-p-alternate: #fff; 
+  --nav-text: #cccccc;
+  --nav-text222: #d9d9d9;
+  --nav-submenu: #999;
+  --nav-submenu-alternate: #666;
+  --hero-area:#060d13;
+  --hero-area-border: #1a1a1a;
+  --job-search:#15171e;
+  --shadow:rgba(240, 243, 248, 0.15);
+
+  --text-color: white;
+  --background-color: #212121;
+  --a-color: #4fc3f7;
+}
+
+/* p,
+span,
+li,
+h1,
+h2,
+h3,
+h4,
+h5, */
+.nojob {
+  color: var(--text-color);
+}
+/* a {
+  color: var(--text-color);
+}
+body {
+  background-color: var(--background-color);
+}
+
+.hero-area{
+  background-color: var(--background-color);
+} */
+
+
+/*======================================
+    Variables
+========================================*/
+/*======================================
+    Normalize CSS
+========================================*/
+@import url("https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&amp;display=swap");
+
+/* body {
+  background-color: var(--body-background);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  margin: 0px;
+  color: var(--h1-h6);
+} */
+
+/*======================================
+    Hero Area CSS
+========================================*/
+.hero-area {
+  background: var(--hero-area);
+}
+
+.hero-text h1 {
+  color: var(--h1-h6)
+}
+
+.about-us{
+  background: var(--hero-area);
+}
+
+.about-us .content-right h2{
+  color: var(--h1-h6)
+}
+
+.about-us .content-right p{
+  color: var(--h1-h6)
+}
+
+.about-us .content-left .media-body h6 {
+  color: #fff;
+}
+
+.about-us .content-left .media-body p {
+  color: #fff;
+}
+
+.about-us .content-right .single-list i {
+  background: #2042e3;
+  color: #fff;
+}
+
+.about-us .content-right .single-list .list-bod h5 {
+  color: var(--h1-h6)
+}
+
+.job-search-wrap-two .job-search-form {
+  border: 1px solid var(--job-search);
+  background: #fff;
+}
+
+.job-search-wrap-two .job-search-form form .single-field-item label {
+  color: #000;
+}
+
+/*======================================
+    Faq CSS
+========================================*/
+.faq-area {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+   Clients CSS
+========================================*/
+/* .client-logo-section {
+  background: #fff;
+} */
+
+/*======================================
+    Job Category CSS
+========================================*/
+.job-category {
+  background-color: var(--hero-area);
+}
+
+.job-category h2 {
+  color: var(--h1-h6);
+}
+
+.job-category p{
+  color: var(--breadcrumbs-p-alternate);
+}
+
+.all-categories {
+  background-color: var(--hero-area);
+  border-bottom: 1px solid var(--hero-area-border);
+}
+
+.all-categories h2 {
+  color: var(--h1-h6);
+}
+
+.all-categories ul li a {
+  border: 1px solid var(--hero-area-border);
+}
+
+/*======================================
+    Find Job CSS
+========================================*/
+.find-job {
+  background-color: var(--hero-area);
+}
+
+.find-job h2{
+  color: var(--h1-h6);
+}
+
+.find-job .section-title p{
+  color: var(--h1-h6);
+}
+
+.find-job .single-job:hover {
+  -webkit-box-shadow: 0 1rem 3rem var(--shadow);
+          box-shadow: 0 1rem 3rem var(--shadow);
+}
+
+/*======================================
+    Job Details CSS
+========================================*/
+.job-details {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+    Resume CSS
+========================================*/
+.resume {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+    Privacy Policy CSS
+========================================*/
+.privacy-policy {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+    Add Resume CSS
+========================================*/
+.add-resume {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+    Manage Resumes CSS
+========================================*/
+.manage-resumes {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+    Job Alerts CSS
+========================================*/
+.job-alerts {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+    Manage Jobs CSS
+========================================*/
+.manage-jobs {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+    Manage Applications CSS
+========================================*/
+.manage-applications {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+    Browse Resumes CSS
+========================================*/
+.browse-resumes {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+    Bookmarked CSS
+========================================*/
+.bookmarked {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+    Notifications CSS
+========================================*/
+.notifications {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+    Change Password CSS
+========================================*/
+.change-password {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+	Contact CSS
+========================================*/
+.contact-us {
+  background-color: var(--hero-area);
+}
+
+.map-section {
+  background-color: var(--hero-area);
+}
+
+/*======================================
+	Footer CSS
+========================================*/
+
+/* .no-gutters {
+  background-color: var(--hero-area);
+} */
+
+.footer {
+  background-color: var(--h1-h6-alternate);
+}
+
+.footer .f-about .contact-address li span {
+  color: #081828;
+}
+.footer .f-about .contact-address li a {
+  color: #081828;
+}
+
+.footer .footer-social ul li a {
+  background-color: #081828;
+  color: #e4e8ed;
+}
+
+.footer .single-footer h3 {
+  color: #081828;
+}
+
+.footer .f-link ul li a:hover {
+  color: #2042e3;
+  text-decoration: none;
+}
+
+.footer .newsletter p {
+ color: #7E8890;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration: none;
+}
+
+
+  .is_a_error{
+    color: #D10000;
+    background-color: #FFD2D2;
+    padding:"3px 10px";
+    border:"1px solid red";
+    border-radius:"5px";
+    margin-top: "5px";
+  }
+
