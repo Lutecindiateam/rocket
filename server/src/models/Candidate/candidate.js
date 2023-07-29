@@ -23,15 +23,15 @@ const candidateSchema = new mongoose.Schema(
     industry: {
       type: String
     },
-    course: {
+    // course: {
+    //   type: String
+    // },
+    education: {
+      type: Object
+    },
+    pincode: {
       type: String
     },
-    // expected_salary: {
-    //   type: String
-    // },
-    // salary_currency: {
-    //   type: String
-    // },
     token: {
       type: String
     },
@@ -89,6 +89,10 @@ const candidateSchema = new mongoose.Schema(
     },
     skills:{
       type: String
+    },
+    deleted: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }

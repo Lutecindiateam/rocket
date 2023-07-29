@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const Employer = require('../../models/Employer/register');
+const candidate = require('../../models/Candidate/candidate');
 
 
 
@@ -69,6 +70,20 @@ exports.updateEmployerprofile = async (req, res) => {
         return res.status(200).json({
             code: 200,
             message: "Employer Profile Detail updated!!",
+            status: "success"
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+exports.empGetCandidate = async (req, res) => {
+    try {
+        const getCandidate = await candidate.findById(req.params.id);
+        return res.status(200).json({
+            data: [getCandidate],
+            message: "Candidate details found",
             status: "success"
         })
     } catch (error) {

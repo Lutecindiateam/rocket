@@ -1,7 +1,7 @@
 const express= require('express');
 const { EmployerRegister, EmployerLogin } = require('../controller/Employee/auth');
 const { PostJob , GetJobList ,getRecentlyAddedJobs, getJobDetails, editjob, getCandidateForJob} = require('../controller/Employee/job');
-const { getEmployerProfile, updateEmployerprofile } = require('../controller/Employee/profile');
+const { getEmployerProfile, updateEmployerprofile, empGetCandidate } = require('../controller/Employee/profile');
 const { createCategoryDropdownList, getAllformdetails, createEducationalDropdownList, createCourseDropdownList } = require('../controller/Employee/dropdowndata');
 const router =express.Router();
 
@@ -21,6 +21,7 @@ router.post('/job/lastweekadded-jobs' , createCategoryDropdownList)
 router.post('/job/form-fields', getAllformdetails)
 router.post('/create/education', createEducationalDropdownList)
 router.post('/create/course', createCourseDropdownList)
+router.get('/candidate/simple/:id', empGetCandidate)
 
 module.exports= router;
 

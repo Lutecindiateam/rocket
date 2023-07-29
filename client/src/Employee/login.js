@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { requestEmpLogin, userLogout } from "../Redux/actions";
 import WOW from "wowjs";
@@ -77,6 +77,7 @@ function Login(props) {
     return valid;
   }
 
+  
   // function onSubmitForm(e) {
   //   e.preventDefault();
   //   props.userLogout();
@@ -99,23 +100,20 @@ function Login(props) {
     if (validateForm()) {
       try {
         const user = await Auth.signIn(data.email, data.password);
-        console.log(user.attributes.email_verified);
-        console.log(user);
-
-        setData(user)
         if (user) {
           props.requestEmpLogin({
             data: {
-              user
+              email: user.attributes.email,
+              name:user.attributes.name,
+              sub:user.attributes.sub,
+              token:user.signInUserSession.idToken.jwtToken
             },
           });
-          alert("Authentication completed")
-          navigate("/home");
-          setError(false)
-        }else{
-          setError(true)
-        }       
+        }        
+          // alert("Authentication completed")
+          // navigate("/home");
     } catch (error) {
+      alert(error.message)
         console.log('error signing in', error);
     }
       setError(false)
@@ -207,9 +205,9 @@ function Login(props) {
                         onChange={onChangeData}
                         onBlur={validatePassword}
                       />
-                      {errorpassword && (
+                      {/* {errorpassword && (
                         <div style={mystyle}>{errorpassword}</div>
-                      )}
+                      )} */}
                     </div>
                   </div>
                   <div class="form-group d-flex flex-wrap justify-content-between">
@@ -226,7 +224,7 @@ function Login(props) {
                       </label>
                     </div>
                     <a
-                      href="/empforgotpass1"
+                      href="/empforget"
                       class="font-size-3 text-dodger line-height-reset"
                     >
                       Forget Password

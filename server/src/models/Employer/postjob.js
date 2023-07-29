@@ -57,14 +57,14 @@ const jobSchema = new mongoose.Schema({
     vacancy:{
         type: Number
     },
-    state:{
-        type: Object,
-        required: true
-    },
-    city:{
-        type: Object,
-        required:true
-    },
+    // state:{
+    //     type: Object,
+    //     required: true
+    // },
+    // city:{
+    //     type: Object,
+    //     required:true
+    // },
     company_id:{
         type: String,
         required: true
@@ -84,9 +84,9 @@ const jobSchema = new mongoose.Schema({
     position_status : {
         type: String
     },
-    status:{
-        type: String
-    }
+    // status:{
+    //     type: String
+    // }
 
 }, { timestamps: true })
 

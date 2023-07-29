@@ -146,14 +146,15 @@ function Companies(props) {
                                       <tr key={index}>
                                         <td>
                                           <div class="d-flex ">
-                                            <a href={`/admin/viewCompany/${item.id}`}>  <img src={img} alt="" /></a>
+                                            <a href={`/admin/viewCompany/${item._id}`}>  <img src={img} alt="" /></a>
                                             <div>
-                                              <a href={`/admin/viewCompany/${item.id}`}>  <h6>{item.name}</h6></a>
+                                              <a href={`/admin/viewCompany/${item._id}`}>  <h6>{item.name}</h6></a>
                                               <p>
                                                 <i class="fa fa-map-marker"></i>{" "}
-                                                {item.city_name},{" "}
-                                                {item.state_name},{" "}
-                                                {item.country_name}
+                                                {item.city},{" "}
+                                                {item.state}
+                                                {/* ,{" "}
+                                                {item.country_name} */}
                                               </p>
                                             </div>
                                           </div>
@@ -182,7 +183,7 @@ function Companies(props) {
                                           <p>{item.industries_name}</p>
                                         </td>
                                         <td>
-                                          <a href={`/admin/viewCompany/${item.id}`}>
+                                          <a href={`/admin/viewCompany/${item._id}`}>
                                             <button
                                               class="badge badge-opacity-primary"
                                               style={{ border: "0px" }}

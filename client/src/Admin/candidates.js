@@ -140,6 +140,7 @@ function Candidates(props) {
                                 </thead>
                                 <tbody>
                                   {candidates.map((item, index) => {
+                                    // console.log(item);
                                     const img = item.profile
                                       ? process.env.REACT_APP_API_HOST +
                                       item.profile
@@ -149,14 +150,14 @@ function Candidates(props) {
                                         <td>
                                           <div class="d-flex ">
                                             <a
-                                              href={`/admin/viewCandidate/${item.id}`}
+                                              href={`/admin/viewCandidate/${item._id}`}
                                             >
                                               {" "}
                                               <img src={img} alt="" />
                                             </a>
                                             <div>
                                               <a
-                                                href={`/admin/viewCandidate/${item.id}`}
+                                                href={`/admin/viewCandidate/${item._id}`}
                                               >
                                                 {" "}
                                                 <h6>
@@ -166,9 +167,9 @@ function Candidates(props) {
                                               </a>
                                               <p>
                                                 <i class="fa fa-map-marker"></i>{" "}
-                                                {item.city_name},{" "}
-                                                {item.state_name},{" "}
-                                                {item.country_name}
+                                                {/* {item.city.name},{" "}
+                                                {item.state.name},{" "} */}
+                                                {/* {item.country_name} */}
                                               </p>
                                             </div>
                                           </div>
@@ -192,7 +193,7 @@ function Candidates(props) {
                                           <p>{item.industries_name}</p>
                                         </td>
                                         <td>
-                                          <a href={`/admin/viewCandidate/${item.id}`}>
+                                          <a href={`/admin/viewCandidate/${item._id}`}>
                                             <button
                                               class="badge badge-opacity-primary"
                                               style={{ border: "0px" }}

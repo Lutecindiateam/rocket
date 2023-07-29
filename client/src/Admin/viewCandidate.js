@@ -26,13 +26,13 @@ function ViewCandidate(props) {
     let candidateDeatilsData = props.data.candidateDeatilsData;
     if (candidateDeatilsData !== undefined) {
       setdata(candidateDeatilsData?.data?.data[0]);
-      if (candidateDeatilsData.data.data[0].profile) {
-        setimg(
-          process.env.REACT_APP_API_HOST + candidateDeatilsData.data.data[0].profile
-        );
-      } else {
+      // if (candidateDeatilsData.data.data[0].profile) {
+      //   setimg(
+      //     process.env.REACT_APP_API_HOST + candidateDeatilsData.data.data[0].profile
+      //   );
+      // } else {
         setimg(image);
-      }
+      // }
 
       setresume(
         process.env.REACT_APP_API_HOST + candidateDeatilsData.data.data[0].resume

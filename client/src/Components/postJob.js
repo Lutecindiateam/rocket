@@ -22,6 +22,7 @@ function PostJob(props) {
   useEffect(() => {
     new WOW.WOW().init();
     localStorage.removeItem("link");
+    // localStorage.removeItem("link1")
   }, []);
 
   const mystyle = {
@@ -48,7 +49,7 @@ function PostJob(props) {
   const [skills, setskills] = useState([]);
   const [tags, settags] = useState([]);
   const [types, settypes] = useState([]);
- const [functional_area, setfunctional_area] = useState([]);
+  const [functional_area, setfunctional_area] = useState([]);
   const [errorstate, seterrorstate] = useState("");
   const [errorcity, seterrorcity] = useState("");
   const [selectedState, setSelectedState] = useState(null);
@@ -79,19 +80,20 @@ function PostJob(props) {
 
   const navigate = useNavigate();
   const [emp, setEmp] = useState({});
+  const [empProfile, setEmpProfile] = useState({});
 
-  const options = [];
-  const today = new Date();
-  for (let i = 1; i < 16; i++) {
-    const nextDay = new Date();
-    nextDay.setDate(today.getDate() + i);
-    const formattedDate = nextDay.toISOString().split("T")[0];
-    options.push(
-      <option key={i} value={formattedDate}>
-        {formattedDate}
-      </option>
-    );
-  }
+  // const options = [];
+  // const today = new Date();
+  // for (let i = 1; i < 16; i++) {
+  //   const nextDay = new Date();
+  //   nextDay.setDate(today.getDate() + i);
+  //   const formattedDate = nextDay.toISOString().split("T")[0];
+  //   options.push(
+  //     <option key={i} value={formattedDate}>
+  //       {formattedDate}
+  //     </option>
+  //   );
+  // }
 
   // useEffect(() => {
   //   console.log(selectedState);
@@ -110,7 +112,7 @@ function PostJob(props) {
 
   useEffect(() => {
     let empLoginData = props.employee.empLoginData;
-    // console.log(empLoginData);
+    // console.log(props);
     if (empLoginData !== undefined) {
       if (empLoginData?.data?.status == "success") {
         setEmp(empLoginData.data.data);
@@ -128,20 +130,31 @@ function PostJob(props) {
   }, [props.employee.empLoginData]);
 
   useEffect(() => {
+    let empData = props.employee.empData;
+    if (empData !== undefined) {
+      if (empData?.data?.status == "success") {
+        setEmpProfile(empData.data.data);
+      }
+    }
+  }, [props.employee.empData])
+
+  useEffect(() => {
     let formfieldData = props.employee.formfieldData;
     // console.log(formfieldData);
     if (formfieldData !== undefined) {
       if (formfieldData?.data?.status == "success") {
+        setcategories(formfieldData.data.data.categories[0].category);
+        setfunctional_area(formfieldData.data.data.categories[2].educationOptions);
+        setfunctional_area(formfieldData.data.data.categories[2].educationOptions);
+        setdegree_levels(formfieldData.data.data.categories[1].educationLevel);
+        setexpiry_date(formfieldData.data.data.categories[4].expiry_date);
+
         // setSalaryPeriod(formfieldData.data.data.SalaryPeriod);
         // setcareer_levels(formfieldData.data.data.career_levels);
-         setcategories(formfieldData.data.data.categories[0].category);
         // seteducation(formfieldData.data.data.categories[1].educationLevel);
-         setfunctional_area(formfieldData.data.data.categories[2].educationOptions);
         // setnotice_period(formfieldData.data.data.categories[3].notice_period);
         // setcurrencies(formfieldData.data.data.currencies);
-        setdegree_levels(formfieldData.data.data.categories[1].educationLevel);
         // setfunctional_areas(formfieldData.data.data.functional_areas);
-         setexpiry_date(formfieldData.data.data.categories[4].expiry_date);
         // setskills(formfieldData.data.data.skills);
         // settags(formfieldData.data.data.tags);
         // settypes(formfieldData.data.data.types);
@@ -168,10 +181,10 @@ function PostJob(props) {
   function validateTitle() {
     let formIsValid = false;
     if (!data["title"]) {
-      formIsValid = false;
+      // formIsValid = false;
       seterrorTitle("*Enter job title.");
     } else if (typeof data["title"] === "undefined") {
-      formIsValid = false;
+      // formIsValid = false;
       seterrorTitle("*Enter job title.");
     } else {
       formIsValid = true;
@@ -241,20 +254,20 @@ function PostJob(props) {
   //   }
   //   return formIsValid;
   // }
-  function validateCategory() {
-    let formIsValid = false;
-    if (data["category"] === "0") {
-      formIsValid = false;
-      seterrorCategory("*Select job category.");
-    } else if (typeof data["category"] === "undefined") {
-      formIsValid = false;
-      seterrorCategory("*Select job category.");
-    } else {
-      formIsValid = true;
-      seterrorCategory("");
-    }
-    return formIsValid;
-  }
+  // function validateCategory() {
+  //   let formIsValid = false;
+  //   if (data["category"] === "0") {
+  //     formIsValid = false;
+  //     seterrorCategory("*Select job category.");
+  //   } else if (typeof data["category"] === "undefined") {
+  //     formIsValid = false;
+  //     seterrorCategory("*Select job category.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorCategory("");
+  //   }
+  //   return formIsValid;
+  // }
   function validateGender() {
     let formIsValid = false;
     if (typeof data["gender"] === "undefined") {
@@ -266,23 +279,23 @@ function PostJob(props) {
     }
     return formIsValid;
   }
-  function validateExpiry() {
-    let formIsValid = false;
-    var Today = new Date();
-    if (typeof data["expiry_date"] !== "undefined") {
-      if (new Date(data["expiry_date"]).getTime() <= Today.getTime()) {
-        formIsValid = false;
-        seterrorExpiry("*Please select proper date.");
-      } else {
-        formIsValid = true;
-        seterrorExpiry("");
-      }
-    } else {
-      formIsValid = true;
-      seterrorExpiry("");
-    }
-    return formIsValid;
-  }
+  // function validateExpiry() {
+  //   let formIsValid = false;
+  //   var Today = new Date();
+  //   if (typeof data["expiry_date"] !== "undefined") {
+  //     if (new Date(data["expiry_date"]).getTime() <= Today.getTime()) {
+  //       formIsValid = false;
+  //       seterrorExpiry("*Please select proper date.");
+  //     } else {
+  //       formIsValid = true;
+  //       seterrorExpiry("");
+  //     }
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorExpiry("");
+  //   }
+  //   return formIsValid;
+  // }
   function validateFrom() {
     let formIsValid = false;
     // if (data["salary_from"] === undefined) {
@@ -506,91 +519,112 @@ function PostJob(props) {
   }
   function validateForm() {
     let Title = validateTitle();
-    // let Type = validateType();
-    let Category = validateCategory();
+    let Degree = validateDegree();
+    let Functional = validateFunctional();
+    // let Category = validateCategory();
     let Gender = validateGender();
-    let Expiry = validateExpiry();
     let Desired = validateDesired();
     let From = validateFrom();
     let To = validateTo();
-    // let Currency = validateCurrency();
-    // let Period = validatePeriod();
-    // let Career = validateCareer();
-    // let Shift = validateShift();
-    let Degree = validateDegree();
-     let Functional = validateFunctional();
-    // let Position = validatePosition();
     let Desc = validateDesc();
-    // let Name = validateName();
-    // let Email = validateEmail();
     let Vacancy = validateVacancy();
     let state = validateState();
     let city = validateCity();
     let pincode = validatepincode();
     let remote = validateremote()
 
+    // let Type = validateType();
+
+    // let Expiry = validateExpiry();
+
+
+
+    // let Currency = validateCurrency();
+    // let Period = validatePeriod();
+    // let Career = validateCareer();
+    // let Shift = validateShift();
+
+
+    // let Position = validatePosition();
+
+    // let Name = validateName();
+    // let Email = validateEmail();
+
+
+
 
     let valid =
       Title &&
       remote &&
-      Category &&
+      // Category &&
       Gender &&
-      Expiry &&
-      Desired &&
-      // From &&
-      To &&
-      // Currency &&
-      // Period &&
-      // Career &&
-      // Shift &&
       Degree &&
       Functional &&
-      // Position &&
+      Desired &&
+      From &&
+      To &&
       Desc &&
-      // Name &&
-      // Email &&
       Vacancy &&
       state &&
       city &&
       pincode;
+    // Expiry &&
+    // Currency &&
+    // Period &&
+    // Career &&
+    // Shift &&
+
+    // Position &&
+    // Name &&
+    // Email &&
+
     return valid;
   }
 
   function submitForm(e) {
     e.preventDefault();
     if (validateForm()) {
-      props.requestAddJob({
-        token: emp.token,
-        data: {
-          company_name: emp.name,
-          company_id: emp.id,
-          title: data.title,
-          category: data.category,
-          gender: data.gender,
-          expiry_date: data.expiry_date,
-          salary_from: data.salary_from,
-          salary_to: data.salary_to,
-          desired_description: data.desired_description,
-          pincode: data.pincode,
-          remote: data.remote,
-          // salary_period: data.salary_period,
-          career_level: data.career_level,
-          // shift: data.shift,
-          // tag: data.tag,
-          degree_level: data.degree_level,
-          functional_area: data.functional_area,
-          // position: data.position,
-          experience: data.experience,
-          description: data.description,
-          // Recruiter_name: data.Recruiter_name,
-          // Recruiter_email: data.Recruiter_email,
-          vacancy: data.vacancy,
-          state: selectedState,
-          city: selectedCity,
-          status: "pending"
-        },
-      });
-      setError(false)
+      if (empProfile.authorized_person) {
+        props.requestAddJob({
+          token: emp.token,
+          data: {
+            company_name: emp.name,
+            company_id: emp.id,
+            title: data.title,
+            category:empProfile.industry,
+            gender: data.gender,
+            expiry_date: data.expiry_date,
+            salary_from: data.salary_from,
+            salary_to: data.salary_to,
+            desired_description: data.desired_description,
+            pincode: data.pincode,
+            remote: data.remote,
+            career_level: data.career_level,
+            experience: data.experience,
+            description: data.description,
+            degree_level: data.degree_level,
+            functional_area: data.functional_area,
+            vacancy: data.vacancy,
+            state: selectedState,
+            city: selectedCity,
+            // status: "pending"
+          
+            // position: data.position,
+            
+            // shift: data.shift,
+            // tag: data.tag,
+            // Recruiter_name: data.Recruiter_name,
+            // Recruiter_email: data.Recruiter_email,
+            // salary_period: data.salary_period,
+
+          }, 
+        });
+        setError(false)
+      } else {
+        localStorage.setItem("link1", "/postJob");
+        Swal.fire("Error!", `Please complete your profile.`, "error");
+        navigate("/empProfile");
+      }
     } else {
       setError(true)
     }
@@ -718,27 +752,6 @@ function PostJob(props) {
                         </div>
                         {/* <div class="col-lg-6 col-md-6">
                           <div class="form-group">
-                            <label>Job Types*</label>
-                            <select
-                              class="select"
-                              name="type"
-                              id="type"
-                              value={data.type}
-                              onBlur={validateType}
-                              onChange={onChangeData}
-                            >
-                              <option value="0">Select Job Type</option>
-                              {types.map((option) => (
-                                <option value={option.id}>{option.name}</option>
-                              ))}
-                            </select>
-                            {errorType && (
-                              <div style={mystyle}>{errorType}</div>
-                            )}
-                          </div>
-                        </div> */}
-                        <div class="col-lg-6 col-md-6">
-                          <div class="form-group">
                             <label>Industry Category*</label>
                             <select
                               class="select"
@@ -752,7 +765,7 @@ function PostJob(props) {
                               {categories.map((option) => {
                                 if (option.disable === "yes") {
                                   return (
-                                    <option key={option._id} value="0" style={{ color: "#964B00" }} disabled>{option.name}</option>
+                                    <option key={option._id} value="0" style={{ color: "#964B00" , fontSize:"20px"}} disabled>{option.name}</option>
                                   )
                                 } else {
                                   return (
@@ -765,7 +778,7 @@ function PostJob(props) {
                               <div style={mystyle}>{errorCategory}</div>
                             )}
                           </div>
-                        </div>
+                        </div> */}
 
                         <div class="col-lg-6 col-md-6">
                           <div style={{ color: "black" }}>
@@ -833,64 +846,6 @@ function PostJob(props) {
                             )}
                           </div>
                         </div>
-
-                        {/* <div class="col-lg-6 col-md-6">
-                          <div class="form-group">
-                            <label>Position*</label>
-                            <select
-                              class="select"
-                              name="position"
-                              id="position"
-                              value={data.position}
-                              onBlur={validatePosition}
-                              onChange={onChangeData}
-                            >
-                              <option value="0">Select Position</option>
-                              {position.map((option) => (
-                                <option value={option.id}>{option.name}</option>
-                              ))}
-                              <option value="Company level Manager">Company level Manager</option>
-                              <option value="Chief Executive Officer">Chief Executive Officer</option>
-                              <option value="Chief Operating Officer">Chief Operating Officer</option>
-                              <option value="CEO">CEO</option>
-                              <option value="Chief Financial Officer">Chief Financial Officer</option>
-                              <option value="Chief Technology OfficerChief Technology Officer">Chief Technology Officer</option>
-                              <option value="Chief Marketing Officer">Chief Marketing Officer</option>
-                              <option value="Chief Legal Officer">Chief Legal Officer</option>
-                              <option value="Accounts Manager">Accounts Manager</option>
-                              <option value="Recruitment Manager">Recruitment Manager</option>
-                              <option value="Technology Manager">Technology Manager</option>
-                              <option value="Store Manager">Store Manager</option>
-                              <option value="Regional Managers">Regional Managers</option>
-                              <option value="Functional Managers">Functional Managers</option>
-                              <option value="Departmental Managers">Departmental Managers</option>
-                              <option value="General Managers">General Managers</option>
-                              <option value="Employee">Employee</option>
-                            </select>
-                            {errorPosition && (
-                              <div style={mystyle}>{errorPosition}</div>
-                            )}
-                          </div>
-                        </div> */}
-
-                        {/* <div class="col-lg-6 col-md-6">
-                          <div class="form-group">
-                            <label>Expiry Date*</label>
-                            <input
-                              class="form-control"
-                              type="date"
-                              name="expiry_date"
-                              id="expiry_date"
-                              value={data.expiry_date}
-                              onBlur={validateExpiry}
-                              onChange={onChangeData}
-                              placeholder=""
-                            />
-                            {errorExpiry && (
-                              <div style={mystyle}>{errorExpiry}</div>
-                            )}
-                          </div>
-                        </div> */}
                         <div class="col-lg-6 col-md-6">
                           <div class="form-group">
                             <label>Salary From(per annum)</label>
@@ -902,7 +857,7 @@ function PostJob(props) {
                               value={data.salary_from}
                               onBlur={validateFrom}
                               onChange={onChangeData}
-                              placeholder=""
+                              placeholder="Enter Salary in lakhs"
                             />
                             {errorFrom && (
                               <div style={mystyle}>{errorFrom}</div>
@@ -920,81 +875,11 @@ function PostJob(props) {
                               value={data.salary_to}
                               onBlur={validateTo}
                               onChange={onChangeData}
-                              placeholder=""
+                              placeholder="Enter Salary in lakhs"
                             />
                             {errorTo && <div style={mystyle}>{errorTo}</div>}
                           </div>
                         </div>
-
-                        {/* <div class="col-lg-6 col-md-6">
-                          <div class="form-group">
-                            <label>Currency*</label>
-                            <select
-                              class="select"
-                              name="currency"
-                              id="currency"
-                              value={data.currency}
-                              // onBlur={validateCurrency}
-                              onChange={onChangeData}
-                            >
-                              <option value="0">Select Currency</option>
-                              {currencies.map((option) => (
-                                <option value={option.id}>
-                                  {option.currency_name}
-                                </option>
-                              ))}
-                            </select>
-                            {errorCurrency && (
-                              <div style={mystyle}>{errorCurrency}</div>
-                            )}
-                          </div>
-                        </div> 
-                        <div class="col-lg-6 col-md-6">
-                          <div class="form-group">
-                            <label>Salary Period*</label>
-                            <select
-                              class="select"
-                              name="salary_period"
-                              id="salary_period"
-                              value={data.salary_period}
-                              // onBlur={validatePeriod}
-                              onChange={onChangeData}
-                            >
-                              <option value="0">Select Salary Period</option>
-                              {SalaryPeriod.map((option) => (
-                                <option value={option.id}>
-                                  {option.period}
-                                </option>
-                              ))}
-                            </select>
-                            {errorPeriod && (
-                              <div style={mystyle}>{errorPeriod}</div>
-                            )}
-                          </div>
-                        </div> 
-                        <div class="col-lg-6 col-md-6">
-                          <div class="form-group">
-                            <label>Career Level*</label>
-                            <select
-                              class="select"
-                              name="career_level"
-                              id="career_level"
-                              value={data.career_level}
-                              onBlur={validateCareer}
-                              onChange={onChangeData}
-                            >
-                              <option value="0">Select Career Level</option>
-                              {career_levels.map((option) => (
-                                <option value={option.id}>
-                                  {option.level}
-                                </option>
-                              ))}
-                            </select>
-                            {errorCareer && (
-                              <div style={mystyle}>{errorCareer}</div>
-                            )}
-                          </div>
-                        </div> */}
                         <div class="col-lg-6 col-md-6">
                           <div class="form-group">
                             <label>Remote Option*</label>
@@ -1025,7 +910,7 @@ function PostJob(props) {
                               id="expiry_date"
                               value={data.expiry_date}
                               onChange={onChangeData}
-                              onBlur={validateExpiry}
+                            // onBlur={validateExpiry}
                             >
                               <option value="">Select a day</option>
                               {expiry_date.map((option) => (
@@ -1060,40 +945,6 @@ function PostJob(props) {
                             )}
                           </div>
                         </div>
-                        {/* <div class="col-lg-6 col-md-6">
-                              <div class="form-group">
-                                <label>Course*</label>
-                                <select
-                                  class="select"
-                                  name="Course"
-                                  id="Course"
-                                  value={data.Course}
-                                  onBlur={validate_course}
-                                  onChange={onChangeData}
-                                >
-                                  <option value="0">
-                                    Select Course
-                                  </option>
-                                  {functional_area.map((option) => {
-                                    // Filter options based on the currently selected educationLevel
-                                    if (option.name === data.education) {
-                                      return (
-                                        <option key={option.id} value={option.course}>
-                                          {option.course}
-                                        </option>
-                                      );
-                                    }
-                                    return null;
-                                  })}
-
-                                </select>
-                                {course && (
-                                  <div style={mystyle}>
-                                    {course}
-                                  </div>
-                                )}
-                              </div>
-                            </div> */}
                         <div class="col-lg-6 col-md-6">
                           <div class="form-group">
                             <label>Course</label>
@@ -1105,20 +956,20 @@ function PostJob(props) {
                               onBlur={validateFunctional}
                               onChange={onChangeData}
                             >
-                               <option value="0">
-                                    Select Course
-                                  </option>
-                                  {functional_area.map((option) => {
-                                    // Filter options based on the currently selected educationLevel
-                                    if (option.name === data.degree_level) {
-                                      return (
-                                        <option key={option.id} value={option.course}>
-                                          {option.course}
-                                        </option>
-                                      );
-                                    }
-                                    return null;
-                                  })}
+                              <option value="0">
+                                Select Course
+                              </option>
+                              {functional_area.map((option) => {
+                                // Filter options based on the currently selected educationLevel
+                                if (option.name === data.degree_level) {
+                                  return (
+                                    <option key={option.id} value={option.course}>
+                                      {option.course}
+                                    </option>
+                                  );
+                                }
+                                return null;
+                              })}
                             </select>
                             {errorFunctional && (
                               <div style={mystyle}>{errorFunctional}</div>
@@ -1139,39 +990,6 @@ function PostJob(props) {
                             />
                           </div>
                         </div>
-                        {/* <div class="col-lg-6 col-md-6">
-                          <div class="form-group">
-                            <label>Skill*</label>
-                            <select
-                              class="select"
-                              style={{ height: "200px" }}
-                              name="skill"
-                              onChange={onChangeSkill}
-                              multiple
-                            >
-                              {skills.map((option) => (
-                                <option value={option.id}>{option.name}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div> */}
-                        {/* <div class="col-lg-6 col-md-6">
-                          <div class="form-group">
-                            <label>Tag</label>
-                            <select
-                              class="select"
-                              style={{ height: "200px" }}
-                              name="tag"
-                              value={data.tag}
-                              onChange={onChangeData}
-                              multiple
-                            >
-                              {tags.map((option) => (
-                                <option value={option.id}>{option.name}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div> */}
                         <div class="col-lg-12">
                           <div class="form-group">
                             <label>Desired Skills Set</label>
@@ -1313,7 +1131,225 @@ function PostJob(props) {
                           )}
                         </div>
                       </div>
-                      {/* <div class="col-lg-6 col-md-6">
+ 
+                     {/* <div class="col-lg-6 col-md-6">
+                          <div class="form-group">
+                            <label>Job Types*</label>
+                            <select
+                              class="select"
+                              name="type"
+                              id="type"
+                              value={data.type}
+                              onBlur={validateType}
+                              onChange={onChangeData}
+                            >
+                              <option value="0">Select Job Type</option>
+                              {types.map((option) => (
+                                <option value={option.id}>{option.name}</option>
+                              ))}
+                            </select>
+                            {errorType && (
+                              <div style={mystyle}>{errorType}</div>
+                            )}
+                          </div>
+                        </div> */}
+                        
+                        {/* <div class="col-lg-6 col-md-6">
+                          <div class="form-group">
+                            <label>Position*</label>
+                            <select
+                              class="select"
+                              name="position"
+                              id="position"
+                              value={data.position}
+                              onBlur={validatePosition}
+                              onChange={onChangeData}
+                            >
+                              <option value="0">Select Position</option>
+                              {position.map((option) => (
+                                <option value={option.id}>{option.name}</option>
+                              ))}
+                              <option value="Company level Manager">Company level Manager</option>
+                              <option value="Chief Executive Officer">Chief Executive Officer</option>
+                              <option value="Chief Operating Officer">Chief Operating Officer</option>
+                              <option value="CEO">CEO</option>
+                              <option value="Chief Financial Officer">Chief Financial Officer</option>
+                              <option value="Chief Technology OfficerChief Technology Officer">Chief Technology Officer</option>
+                              <option value="Chief Marketing Officer">Chief Marketing Officer</option>
+                              <option value="Chief Legal Officer">Chief Legal Officer</option>
+                              <option value="Accounts Manager">Accounts Manager</option>
+                              <option value="Recruitment Manager">Recruitment Manager</option>
+                              <option value="Technology Manager">Technology Manager</option>
+                              <option value="Store Manager">Store Manager</option>
+                              <option value="Regional Managers">Regional Managers</option>
+                              <option value="Functional Managers">Functional Managers</option>
+                              <option value="Departmental Managers">Departmental Managers</option>
+                              <option value="General Managers">General Managers</option>
+                              <option value="Employee">Employee</option>
+                            </select>
+                            {errorPosition && (
+                              <div style={mystyle}>{errorPosition}</div>
+                            )}
+                          </div>
+                        </div> */}
+
+                        {/* <div class="col-lg-6 col-md-6">
+                          <div class="form-group">
+                            <label>Expiry Date*</label>
+                            <input
+                              class="form-control"
+                              type="date"
+                              name="expiry_date"
+                              id="expiry_date"
+                              value={data.expiry_date}
+                              onBlur={validateExpiry}
+                              onChange={onChangeData}
+                              placeholder=""
+                            />
+                            {errorExpiry && (
+                              <div style={mystyle}>{errorExpiry}</div>
+                            )}
+                          </div>
+                        </div> */}
+                       
+                        {/* <div class="col-lg-6 col-md-6">
+                          <div class="form-group">
+                            <label>Currency*</label>
+                            <select
+                              class="select"
+                              name="currency"
+                              id="currency"
+                              value={data.currency}
+                              // onBlur={validateCurrency}
+                              onChange={onChangeData}
+                            >
+                              <option value="0">Select Currency</option>
+                              {currencies.map((option) => (
+                                <option value={option.id}>
+                                  {option.currency_name}
+                                </option>
+                              ))}
+                            </select>
+                            {errorCurrency && (
+                              <div style={mystyle}>{errorCurrency}</div>
+                            )}
+                          </div>
+                        </div> 
+                        <div class="col-lg-6 col-md-6">
+                          <div class="form-group">
+                            <label>Salary Period*</label>
+                            <select
+                              class="select"
+                              name="salary_period"
+                              id="salary_period"
+                              value={data.salary_period}
+                              // onBlur={validatePeriod}
+                              onChange={onChangeData}
+                            >
+                              <option value="0">Select Salary Period</option>
+                              {SalaryPeriod.map((option) => (
+                                <option value={option.id}>
+                                  {option.period}
+                                </option>
+                              ))}
+                            </select>
+                            {errorPeriod && (
+                              <div style={mystyle}>{errorPeriod}</div>
+                            )}
+                          </div>
+                        </div> 
+                        <div class="col-lg-6 col-md-6">
+                          <div class="form-group">
+                            <label>Career Level*</label>
+                            <select
+                              class="select"
+                              name="career_level"
+                              id="career_level"
+                              value={data.career_level}
+                              onBlur={validateCareer}
+                              onChange={onChangeData}
+                            >
+                              <option value="0">Select Career Level</option>
+                              {career_levels.map((option) => (
+                                <option value={option.id}>
+                                  {option.level}
+                                </option>
+                              ))}
+                            </select>
+                            {errorCareer && (
+                              <div style={mystyle}>{errorCareer}</div>
+                            )}
+                          </div>
+                        </div> */}
+                       
+                        {/* <div class="col-lg-6 col-md-6">
+                              <div class="form-group">
+                                <label>Course*</label>
+                                <select
+                                  class="select"
+                                  name="Course"
+                                  id="Course"
+                                  value={data.Course}
+                                  onBlur={validate_course}
+                                  onChange={onChangeData}
+                                >
+                                  <option value="0">
+                                    Select Course
+                                  </option>
+                                  {functional_area.map((option) => {
+                                    // Filter options based on the currently selected educationLevel
+                                    if (option.name === data.education) {
+                                      return (
+                                        <option key={option.id} value={option.course}>
+                                          {option.course}
+                                        </option>
+                                      );
+                                    }
+                                    return null;
+                                  })}
+
+                                </select>
+                                {course && (
+                                  <div style={mystyle}>
+                                    {course}
+                                  </div>
+                                )}
+                              </div>
+                            </div> */}
+                                                {/* <div class="col-lg-6 col-md-6">
+                          <div class="form-group">
+                            <label>Skill*</label>
+                            <select
+                              class="select"
+                              style={{ height: "200px" }}
+                              name="skill"
+                              onChange={onChangeSkill}
+                              multiple
+                            >
+                              {skills.map((option) => (
+                                <option value={option.id}>{option.name}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div> */}
+                        {/* <div class="col-lg-6 col-md-6">
+                          <div class="form-group">
+                            <label>Tag</label>
+                            <select
+                              class="select"
+                              style={{ height: "200px" }}
+                              name="tag"
+                              value={data.tag}
+                              onChange={onChangeData}
+                              multiple
+                            >
+                              {tags.map((option) => (
+                                <option value={option.id}>{option.name}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div> */}
+                                             {/* <div class="col-lg-6 col-md-6">
                           <div class="form-group">
                             <label>Email</label>
                             <input

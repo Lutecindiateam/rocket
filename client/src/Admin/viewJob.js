@@ -25,14 +25,14 @@ function ViewJob(props) {
     let jobDeatilsData = props.data.jobDeatilsData;
     if (jobDeatilsData !== undefined) {
       setdata(jobDeatilsData.data.data.job[0]);
-      if (jobDeatilsData.data.data.job[0].employee_logo) {
-        setimg(
-          process.env.REACT_APP_API_HOST +
-          jobDeatilsData.data.data.job[0].employee_logo
-        );
-      } else {
+      // if (jobDeatilsData.data.data.job[0].employee_logo) {
+      //   setimg(
+      //     process.env.REACT_APP_API_HOST +
+      //     jobDeatilsData.data.data.job[0].employee_logo
+      //   );
+      // } else {
         setimg(image);
-      }
+      // }
     }
   }, [props.data.jobDeatilsData]);
 
@@ -101,11 +101,11 @@ function ViewJob(props) {
                               <hr />
                               <p>
                                 <b>Salary : </b>
-                                {data.currency_name} {data.salary_from}-{data.salary_to}
+                                <text>INR {data.salary_from}-{data.salary_to}</text> 
                               </p>
                               <p>
-                                <b>Shift : </b>
-                                {data.shift_name}
+                                <b>Desired description : </b>
+                                {data.desired_description}
                               </p>
                               <p>
                                 <b>Category: </b>
@@ -116,8 +116,8 @@ function ViewJob(props) {
                                 {data.level} {data.category_name}
                               </p>
                               <p>
-                                <b>Functional Area: </b>
-                                {data.functional_area_name}
+                                <b>Education: </b>
+                                {data.degree_level}
                               </p>
                               <p>
                                 <b>Description: </b>

@@ -29,6 +29,7 @@ function JobDetails(props) {
   const [check, setCheck] = useState({});
   const [img, setImg] = useState("");
   const [user, setuser] = useState({});
+  const[profile , setprofile] = useState({});
   const [emp, setEmp] = useState({});
   const [publish, setpublish] = useState([]);
   const [msg, setmsg] = useState("");
@@ -53,6 +54,11 @@ function JobDetails(props) {
   //   }
   //   localStorage.removeItem("link");
   // }, []);
+  useEffect(() => {
+    new WOW.WOW().init();
+    // localStorage.removeItem("link");
+    localStorage.removeItem("link1")
+  }, []);
 
   useEffect(() => {
     let comments = props.candidate.commentsData;
@@ -66,13 +72,23 @@ function JobDetails(props) {
 
   useEffect(() => {
     let loginData = props.candidate.loginData;
+    // console.log(props);
     if (loginData !== undefined) {
       if (loginData?.data?.status === "success") {
         setuser(loginData.data.data);
       }
     }
   }, [props.candidate.loginData]);
-
+  useEffect(() => {
+    let candidateData = props.candidate.getCandidateData;
+    // console.log(props);
+    if (candidateData !== undefined) {
+      if (candidateData?.data?.status === "success") {
+        setprofile(candidateData.data.data);
+      }
+    }
+  }, [props.candidate.candidateData]);
+// console.log(user);
   useEffect(() => {
     let empLoginData = props.employee.empLoginData;
     if (empLoginData !== undefined) {
@@ -105,10 +121,8 @@ function JobDetails(props) {
       }
     }
   }, [props.candidate.loginData]);
-
   useEffect(() => {
     let check = props.candidate.checkData;
-    console.log(props.candidate);
     if (check !== undefined) {
       if (check?.data?.status == "success") {
         setCheck(check.data.data);
@@ -132,15 +146,22 @@ function JobDetails(props) {
 
 // console.log(data);
   function applyJobs(id) {
-    // console.log(id);
     if (user.id) {
+      if(profile.id){
+        // console.log(profile);
       props.requestApplyJob({
         token: user.token,
         id: id,
         data: {},
       });
+    }else{
+      localStorage.setItem("link1", `/jobDetails/${params.id}`);
+      Swal.fire("Alert!", "Please complete your profile.", "error");
+      navigate("/profile");
+    }
     } else {
       localStorage.setItem("link", `/jobDetails/${params.id}`);
+      Swal.fire("Alert!", "Please register your account.", "error");
       navigate("/login");
     }
   }

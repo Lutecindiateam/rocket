@@ -180,9 +180,10 @@ function Register(props) {
           }
           // industry : data.industry,
       });
+      if(user){
       navigate("/empverify");
-
-      console.log(user);
+      }
+      // console.log(user);
       setError(false)
     }else{
       setError(true)

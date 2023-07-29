@@ -455,7 +455,7 @@ function Register(props) {
         });
         // console.log(user);
         if(user){
-        Swal.fire("Good job!", "Registration successfully.", "success");
+        // Swal.fire("Good job!", "Registration successfully.", "success");
         navigate('/verify')
         setIsSubmitting(false);
         setError(false);

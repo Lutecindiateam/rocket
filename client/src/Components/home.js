@@ -140,7 +140,7 @@ function Home(props) {
   //     let addBookmarkedData = props.candidate.addBookmarkedData;
   //     if (addBookmarkedData !== undefined) {
   //       if (addBookmarkedData?.data?.status == "success") {
-  //         Swal.fire("Good job!", "Bookmarked for Job successfully.", "success");
+          // Swal.fire("Good job!", "Bookmarked for Job successfully.", "success");
   //         props.candidate.addBookmarkedData = undefined;
   //         let loginData = props.candidate.loginData;
   //         if (loginData !== undefined) {
@@ -290,7 +290,6 @@ function Home(props) {
   //   navigate(`/jobDetails/${id}`);
   // }
 
-
   return (
     <>
       <Header name="Home" />
@@ -302,6 +301,8 @@ function Home(props) {
                 <div class="col-lg-4 co-12">
                   <div class="inner-content">
                     <div class="hero-text">
+                      <h4 class="wow fadeInUp" data-wow-delay=".3s">Welcome {emp.name} ...</h4>
+                      <br />
                       <h1 class="wow fadeInUp" data-wow-delay=".3s">
                         Find Your <br /> Career to Make <br />a Better Life
                       </h1>
@@ -337,6 +338,7 @@ function Home(props) {
                 <div class="col-lg-6 co-12">
                   <div class="inner-content">
                     <div class="hero-text">
+                      {}
                       <h1 class="wow fadeInUp" data-wow-delay=".3s">
                         Find Your Career <br />
                         to Make a Better Life

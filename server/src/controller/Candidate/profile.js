@@ -73,8 +73,6 @@ const authMiddleware = new AuthMiddleware();
 
 
 exports.getLoginDetails = async (req, res) => {
-
-
   try {
     const info = await candidate.findById(req.params.id).lean()
 
@@ -88,7 +86,6 @@ exports.getLoginDetails = async (req, res) => {
     }
 
     info.id = info._id;
-    //   details.created_at = details.createdAt;
     delete info._id;
 
     return res.status(200).json({
@@ -104,7 +101,6 @@ exports.getLoginDetails = async (req, res) => {
 
 
 exports.updateCandidateProfile = async (req, res) => {
-  // console.log(req.body);
   const userId = req.params.id
   // console.log(userId);
   try {
@@ -148,8 +144,8 @@ exports.updateCandidateProfile = async (req, res) => {
           first_name: first_name || candidate.first_name,
           last_name: last_name || candidate.last_name,
           notice_period: notice_period || candidate.notice_period,
-          state: state || candidate.state,
-          city: city || candidate.city,
+          state: state.name || candidate.state.name,
+          city: city.name || candidate.city.name,
           skills: skills || candidate.skills,
           gender: gender ?? candidate.gender,
           birth_date: birth_date || candidate.birth_date,
@@ -168,6 +164,7 @@ exports.updateCandidateProfile = async (req, res) => {
           current_ctc: current_ctc || candidate.current_ctc,
           total_experience: total_experience || candidate.total_experience,
           course: course || candidate.course,
+          education: education || candidate.education,
           pincode: pincode || candidate.pincode
         },
       },

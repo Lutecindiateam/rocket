@@ -13,6 +13,8 @@ env.config();
 
 const candidateRoutes = require('./src/routes/CandidateRoutes');
 const emploerRoutes = require('./src/routes/EmploerRoutes');
+const adminRoutes = require('./src/routes/Admin');
+
 
 const Connection = () => {
   try {
@@ -28,7 +30,7 @@ Connection();
 
 app.use('/api', candidateRoutes);
 app.use('/api', emploerRoutes);
-
+app.use('/api', adminRoutes)
 
 
 app.get('/', (req, res) => {

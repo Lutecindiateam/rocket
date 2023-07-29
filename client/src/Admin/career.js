@@ -30,7 +30,7 @@ function Career(props) {
     level: "",
   });
   const [editdata, seteditdata] = useState({
-    level: "",
+    name: "",
   });
   const params = useParams();
   const [addmodal, setaddModal] = useState(false);
@@ -106,13 +106,14 @@ function Career(props) {
   }, [props.data.addCareerData]);
 
   const edittoggle = (id) => {
+    console.log(id);
     if (editmodal === true) {
       seteditModal(!editmodal);
     } else {
       seteditModal(!editmodal);
       setid(id);
       seteditdata({
-        level: " ",
+        name: " ",
       });
       props.requestAdminCareer({
         id: id,
@@ -120,14 +121,15 @@ function Career(props) {
     }
   };
 
-  useEffect(() => {
-    let careerData = props.data.careerData;
-    if (careerData !== undefined) {
-      if (careerData.data) {
-        seteditdata(careerData.data.data.CareerLevel[0]);
-      }
-    }
-  }, [props.data.careerData]);
+  // useEffect(() => {
+  //   let careerData = props.data.careerData;
+  //   console.log(props);
+  //   if (careerData !== undefined) {
+  //     if (careerData.data) {
+  //       seteditdata(careerData.data.data.CareerLevel[0]);
+  //     }
+  //   }
+  // }, [props.data.careerData]);
 
   const saveedittoggle = (e) => {
     e.preventDefault();
@@ -135,11 +137,11 @@ function Career(props) {
       props.requestAdminEditCareer({
         id: id,
         data: {
-          level: editdata.level,
+          level: editdata.name,
         },
       });
       seteditdata({
-        level: "",
+        name: "",
       });
       setid(0);
       edittoggle();
@@ -172,7 +174,7 @@ function Career(props) {
   function onChangePageSize(e) {
     setpage_size(e.target.value);
     if (e.target.value > 0) {
-      navigate(`/admin/careerData/1/${e.target.value}`);
+      navigate(`/admin/career/1/${e.target.value}`);
     }
   }
 
@@ -284,7 +286,7 @@ function Career(props) {
                                 <RWebShare
                                   data={{
                                     text: "Job Portal",
-                                    url: `${window.location.protocol}//${window.location.host}/careerData/${params.page}/${params.page_size}`,
+                                    url: `${window.location.protocol}//${window.location.host}/career/${params.page}/${params.page_size}`,
                                     title: "Job Portal",
                                   }}
                                 >
@@ -363,19 +365,19 @@ function Career(props) {
                                         <td>
                                           <div class="d-flex ">
                                             <div>
-                                              <h6>{item.level}</h6>
+                                              <h6>{item.name}</h6>
                                             </div>
                                           </div>
                                         </td>
                                         <td>
-                                          <p>
+                                          {/* <p>
                                             {item.created_at.substring(0, 10)}
-                                          </p>
+                                          </p> */}
                                         </td>
                                         <td>
-                                          <p>
+                                          {/* <p>
                                             {item.updated_at.substring(0, 10)}
-                                          </p>
+                                          </p> */}
                                         </td>
                                         <td>
                                           <button
@@ -385,7 +387,7 @@ function Career(props) {
                                               marginLeft: "5px",
                                             }}
                                             onClick={() => {
-                                              edittoggle(item.id);
+                                              edittoggle(item.name);
                                             }}
                                           >
                                             <i class="fa fa-pencil-square-o"></i>
@@ -407,7 +409,7 @@ function Career(props) {
                                                       class="form-control"
                                                       placeholder="Level"
                                                       name="level"
-                                                      value={editdata.level}
+                                                      value={editdata.name}
                                                       onBlur={validateedit}
                                                       onChange={
                                                         onchangeeditdata
@@ -458,10 +460,11 @@ function Career(props) {
                               <div class="col-10">
                                 <div class="pagination center">
                                   <ul class="pagination-list">
+                                    {/* {console.log(pagination.current_page)} */}
                                     {pagination.current_page !== 1 && (
                                       <li>
                                         <a
-                                          href={`/admin/careerData/${params.page - 1}/${params.page_size
+                                          href={`/admin/career/${params.page - 1}/${params.page_size
                                             }`}
                                         >
                                           <i class="fa fa-long-arrow-left"></i>
@@ -472,7 +475,7 @@ function Career(props) {
                                       return pagination.current_page === i ? (
                                         <li class="active">
                                           <a
-                                            href={`/admin/careerData/${i}/${params.page_size}`}
+                                            href={`/admin/career/${i}/${params.page_size}`}
                                           >
                                             {i}
                                           </a>
@@ -480,7 +483,7 @@ function Career(props) {
                                       ) : (
                                         <li>
                                           <a
-                                            href={`/admin/careerData/${i}/${params.page_size}`}
+                                            href={`/admin/career/${i}/${params.page_size}`}
                                           >
                                             {i}
                                           </a>
@@ -491,7 +494,7 @@ function Career(props) {
                                       pagination.last_page && (
                                         <li>
                                           <a
-                                            href={`/admin/careerData/${Number(params.page) + 1
+                                            href={`/admin/career/${Number(params.page) + 1
                                               }/${params.page_size}`}
                                           >
                                             <i class="fa fa-long-arrow-right"></i>

@@ -84,56 +84,56 @@ function Login(props) {
   // function onSubmitForm(e) {
   //   e.preventDefault();
   //   props.userLogout();
-    // if (validateForm()) {
-    //   props.requestLogin({
-    //     data: {
-    //       email: data1.email,
-    //       password: data1.password,
-    //     },
-    //   });
-    //   setError(false)
-    // }else{
-    //   setError(true)
-    // }
+  // if (validateForm()) {
+  //   props.requestLogin({
+  //     data: {
+  //       email: data1.email,
+  //       password: data1.password,
+  //     },
+  //   });
+  //   setError(false)
+  // }else{
+  //   setError(true)
+  // }
   // }
   async function onSubmitForm(e) {
     e.preventDefault();
     props.userLogout();
     if (validateForm()) {
-    try {
+      try {
         const user = await Auth.signIn(data1.email, data1.password);
-        console.log(user.attributes.email_verified);
-        console.log(user);
-
-        setData(user)
+        // setData(user)
         if (user) {
           props.requestLogin({
             data: {
-              user
+              email: user.attributes.email,
+              family_name: user.attributes.family_name,
+              given_name: user.attributes.given_name,
+              sub:user.attributes.sub,
+              token:user.signInUserSession.idToken.jwtToken
             },
           });
-          alert("Authentication completed")
-          navigate("/home");
           setError(false)
-        }else{
+        } else {
           setError(true)
-        }       
-    } catch (error) {
+        }
+      } catch (error) {
+        alert(error.message)
         console.log('error signing in', error);
+      }
     }
   }
-}
-// console.log(data);
+  // console.log(data);
   useEffect(() => {
     if (error) {
-      if(erroremail){
+      if (erroremail) {
         document.getElementById("email").focus();
-      }else if(errorpassword){
+      } else if (errorpassword) {
         document.getElementById("password").focus();
       }
       setError(false)
     }
-  },[error]);
+  }, [error]);
 
   // function googleLogin(email) {
   //   props.userLogout();
@@ -146,12 +146,11 @@ function Login(props) {
 
   useEffect(() => {
     let loginData = props.candidate.loginData;
-        // const loginData = data
-          // console.log("loginData ::",loginData)
+    // const loginData = data
+    // console.log("loginData ::",loginData)
 
     if (loginData !== undefined) {
       if (loginData?.data?.status == "success") {
-        console.log(localStorage.getItem("link"));
         if (localStorage.getItem("link")) {
           navigate(localStorage.getItem("link"));
         } else {
@@ -287,17 +286,18 @@ function Login(props) {
                     <div class="form-check">
                       <input
                         class="form-check-input"
-                        style={{marginLeft:"10px"}}
-                                          type="checkbox"
+                        style={{ marginLeft: "10px" }}
+                        type="checkbox"
                         value=""
                         id="flexCheckDefault"
                       />
                       <label class="form-check-label" for="flexCheckDefault">
-                        &nbsp;Remember password 
+                        &nbsp;Remember password
                       </label>
                     </div>
                     <a
-                      href="/forgotPassword1"
+                      // href="/forgotPassword1"
+                      href="/forget"
                       class="font-size-3 text-dodger line-height-reset"
                     >
                       Forget Password

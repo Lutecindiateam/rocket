@@ -91,35 +91,35 @@ function Sidebar(props) {
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item" >
                                     <a class="nav-link" href="/admin/career/1/10">
-                                        <i class="fa fa-area-chart"> Career Levels </i>
+                                        <i class="fa fa-area-chart"> Industrial Category </i>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                {/* <li class="nav-item">
                                     <a class="nav-link" href="/admin/size/1/10">
                                         <i class="fa fa-signal"> Company Size</i>
                                     </a>
-                                </li>
+                                </li> */}
                                 <li class="nav-item">
                                     <a class="nav-link" href="/admin/degree/1/10">
-                                        <i class="fa fa-graduation-cap" > Degree Levels </i>
+                                        <i class="fa fa-graduation-cap" > Education </i>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/admin/functional/1/10">
-                                        <i class="fa fa-cogs"> Functional Area </i>
+                                        <i class="fa fa-cogs"> Course </i>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/admin/industries/1/10">
-                                        <i class="fa fa-industry"> Industries </i>
+                                        <i class="fa fa-industry"> Expiry </i>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                {/* <li class="nav-item">
                                     <a class="nav-link" href="/admin/categories/1/10">
                                         <i class="fa fa-th-large"> Job Categories </i>
                                     </a>
-                                </li>
-                                <li class="nav-item">
+                                </li> */}
+                                {/* <li class="nav-item">
                                     <a class="nav-link" href="/admin/shifts/1/10">
                                         <i class="fa fa-clock-o">  Job Shifts</i>
                                     </a>
@@ -158,7 +158,7 @@ function Sidebar(props) {
                                     <a class="nav-link" href="/admin/skill/1/10">
                                         <i class="fa fa-thumbs-up"> Skills</i>
                                     </a>
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                     </li>

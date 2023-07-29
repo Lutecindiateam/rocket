@@ -65,7 +65,7 @@ import {
  REQUEST_INTERVIEW_NOT_CONFIRM, receiveInterviewNotConfirm,
  REQUEST_DELETE, receiveDelete,
  REQUEST_EMP_DELETE, receiveEmpDelete,
-//  REQUEST_CHECK_BOOKMARK_APPLIED, receiveCheckBookmarkApplied,
+ REQUEST_CHECK_BOOKMARK_APPLIED, receiveCheckBookmarkApplied,
 //  REQUEST_ADD_COMMENT, receiveAddComment,
 //  REQUEST_GET_COMMENT, receiveGetComment,
  REQUEST_ADMIN_LOGIN,
@@ -359,7 +359,7 @@ import {
 import {
    login , googlelogin,addResume, register,empregister, emplogin, empJoblist, empdeleteJob, deleteBookmark, applyJobs, jobDetails, addBookmark, getAppliedJobs,
    jobAlert, deleteApplyJob, getCandidate, candidateForJob, empGetCandidate, approve, schedule, reject ,
-   searchJob, readNotification,  getJobs, getJobsCategoryWise,
+   searchJob, readNotification,  getJobs, getJobsCategoryWise,checkBookmarkApplied,
     addJob,editJob, getFormFields, emplogo, empprofile, getemp, candidatelogo, candidateprofile,candidateresume, getIterview, scheduleIterview,rescheduleIterview, interview,
     addcontact, countLastweekJob, recentlyJob, interviewApprove, interviewReject, confirmInterview, notconfirmInterview,
      empdeleteAccount
@@ -1215,14 +1215,14 @@ export function* loginCandidate(action) {
     }
   }
 
-  // export function*checkBookmarkAppliedCandidate(action) {
-  //   try {
-  //     const response = yield call(checkBookmarkApplied, action.obj)
-  //     yield put(receiveCheckBookmarkApplied(response))
-  //   } catch (e) {
-  //     console.log(e.message)
-  //   }
-  // }
+  export function*checkBookmarkAppliedCandidate(action) {
+    try {
+      const response = yield call(checkBookmarkApplied, action.obj)
+      yield put(receiveCheckBookmarkApplied(response))
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
 
   export function* confirmInterviewCandidate(action) {
     try {
@@ -1933,7 +1933,7 @@ export function* loginCandidate(action) {
     yield takeLatest(REQUEST_LOGIN, loginCandidate)
     // yield takeLatest(REQUEST_DELETE, deleteCandidate)
     yield takeLatest(REQUEST_GOOGLE_LOGIN, googleloginCandidate)
-    // yield takeLatest(REQUEST_CHECK_BOOKMARK_APPLIED, checkBookmarkAppliedCandidate)
+    yield takeLatest(REQUEST_CHECK_BOOKMARK_APPLIED, checkBookmarkAppliedCandidate)
     yield takeLatest(REQUEST_INTERVIEW_CONFIRM, confirmInterviewCandidate)
     yield takeLatest(REQUEST_INTERVIEW_NOT_CONFIRM, notconfirmInterviewCandidate)
     // yield takeLatest(REQUEST_COUNT_LASTWEEK_JOB, lastweekJobCandidate)

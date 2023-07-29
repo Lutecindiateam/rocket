@@ -33,7 +33,7 @@ function ViewResume(props) {
           id: params.id,
         });
       } else {
-        localStorage.setItem("link", `/empViewResume/${params.id}`);
+        localStorage.setItem("link", `/empViewResume/${params._id}`);
         navigate("/emplogin");
       }
     } else {
@@ -44,7 +44,6 @@ function ViewResume(props) {
 
   useEffect(() => {
     let empGetCandidateData = props.employee.empGetCandidateData;
-    console.log(empGetCandidateData);
     if (empGetCandidateData !== undefined) {
       if (empGetCandidateData?.data?.status == "success") {
         setData(empGetCandidateData.data.data[0]);
@@ -90,14 +89,14 @@ function ViewResume(props) {
                       </div>
                       <div class="salary-type col-auto order-sm-3">
                         <span class="badge">
-                          {data.career_level} {data.functional_area}
+                          {data.career_level} {data.profile_title}
                         </span>
                         <span
                           class="salary-range"
                           style={{ backgroundColor: "transparent" }}
                         >
-                          {data.experience
-                            ? data.experience + " year experienced"
+                          {data.total_experience
+                            ? data.total_experience + " year experienced"
                             : "Fresher"}
                         </span>
                       </div>
@@ -115,8 +114,9 @@ function ViewResume(props) {
                             </strong>
                             &nbsp;&nbsp;
                             {data.address && data.address + ", "}
-                            {data.city_name}, {data.state_name},{" "}
-                            {data.country_name}
+                            {/* {data.city.name}, {data.state.name} */}
+                            {/* ,{" "}
+                            {data.country_name} */}
                           </li>
                         </ul>
                       </div>

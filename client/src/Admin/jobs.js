@@ -151,16 +151,16 @@ function Jobs(props) {
                                                                                     </div>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <a href={`/admin/viewJob/${item.id}`}>  <h6>{item.title}</h6>
-                                                                                        <p>Category: {item.jobs_name}</p>
-                                                                                        <p>Function Area: {item.functional_area_name}</p></a>
+                                                                                    <a href={`/admin/viewJob/${item._id}`}>  <h6>{item.title}</h6>
+                                                                                        <p>Category: {item.category}</p>
+                                                                                        <p>Function Area: {item.degree_level}</p></a>
                                                                                 </td>
                                                                                 <td>
                                                                                     <h6>{item.currency_name} {item.salary_from}-{item.salary_to}</h6>
                                                                                     <p>{item.experience > 0 ? item.experience + "year experienced" : "Fresher"}</p>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <a href={`/admin/viewJob/${item.id}`}>
+                                                                                    <a href={`/admin/viewJob/${item._id}`}>
                                                                                         <button
                                                                                             class="badge badge-opacity-primary"
                                                                                             style={{ border: "0px" }}

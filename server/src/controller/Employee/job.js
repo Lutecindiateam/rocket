@@ -4,14 +4,22 @@ const { validationResult } = require('express-validator');
 const candidate = require('../../models/Candidate/candidate');
 
 exports.PostJob = async (req, res) => {
-    // console.log(req.body)
+    const today = new Date();
+    const numberOfDays = req.body.expiry_date;
+    const targetDate = new Date(today.getTime() + (numberOfDays * 24 * 60 * 60 * 1000));
+
+    const year = targetDate.getFullYear();
+    const month = targetDate.getMonth() + 1; // Months are zero-based, so add 1
+    const day = targetDate.getDate();
+    const formattedDate = year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+
     try {
         const job = await Job.create({
             company_name: req.body.company_name,
             title: req.body.title,
             description: req.body.description,
-            state: req.body.state,
-            city: req.body.city,
+            // state: req.body.state,
+            // city: req.body.city,
             city_name: req.body.city.name,
             state_name: req.body.state.name,
             position: req.body.position,
@@ -19,7 +27,7 @@ exports.PostJob = async (req, res) => {
             company_id: req.body.company_id,
             category: req.body.category,
             gender: req.body.gender,
-            expiry_date: req.body.expiry_date,
+            expiry_date: formattedDate,
             salary_from: req.body.salary_from,
             salary_to: req.body.salary_to,
             degree_level: req.body.degree_level,
@@ -46,6 +54,7 @@ exports.GetJobList = async (req, res) => {
     const JobId = req.params.id;
     try {
         const jobs = await Job.find({ company_id: JobId });
+        // console.log(jobs);
         if (jobs) {
             const modifiedJobs = jobs.map((job) => {
                 return {
@@ -213,7 +222,6 @@ exports.editjob = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(422).json({ error: errors.array()[0].msg });
         }
-
         const {
             company_id,
             title,

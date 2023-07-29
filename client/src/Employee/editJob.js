@@ -101,7 +101,7 @@ function EditJob(props) {
 
   useEffect(() => {
     let formfieldData = props.employee.formfieldData;
-    // console.log(formfieldData);
+    console.log(formfieldData);
     if (formfieldData !== undefined) {
       if (formfieldData?.data?.status === "success") {
         // setSalaryPeriod(formfieldData.data.data.SalaryPeriod);

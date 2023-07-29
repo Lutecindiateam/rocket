@@ -160,6 +160,7 @@ export const emplogin = (obj) => {
   return axios
     .post(`${url}/api/employer/login`, obj.data)
     .then((response) => {
+      // console.log(response);
       return response;
     })
     .catch((err) => {
@@ -386,7 +387,7 @@ export const empdeleteJob = (obj) => {
 };
 
 export const applyJobs = (obj) => {
-  console.log(obj);
+  // console.log(obj);
   return axios
     .post(`${url}/api/job/` + obj.id + "/apply", obj.data, {
       headers: { Authorization: `Bearer ${obj.token}` },
@@ -450,6 +451,7 @@ export const candidateprofile = (obj) => {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
+      // console.log(response);
       return response;
     })
     .catch((err) => {
@@ -512,17 +514,17 @@ export const jobAlert = (obj) => {
 //     });
 // };
 
-// export const checkBookmarkApplied = (obj) => {
-//   return axios
-//     .post("/job/checkbookmarksorappliedjob", obj.data)
-//     .then((response) => {
-//       return response;
-//     })
-//     .catch((err) => {
-//       console.log("Error", err.response.data.message);
-//       return err.response;
-//     });
-// };
+export const checkBookmarkApplied = (obj) => {
+  return axios
+    .post(`${url}/api/job/checkbookmarksorappliedjob`, obj.data)
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log("Error", err.response.data.message);
+      return err.response;
+    });
+};
 
 // export const deleteBookmark = (obj) => {
 //   return axios

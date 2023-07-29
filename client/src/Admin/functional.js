@@ -403,19 +403,19 @@ function FunctionalArea(props) {
                                         <td>
                                           <div class="d-flex ">
                                             <div>
-                                              <h6>{item.name}</h6>
+                                              <h6>{item.course}</h6>
                                             </div>
                                           </div>
                                         </td>
                                         <td>
-                                          <p>
+                                          {/* <p>
                                             {item.created_at.substring(0, 10)}
-                                          </p>
+                                          </p> */}
                                         </td>
                                         <td>
-                                          <p>
+                                          {/* <p>
                                             {item.updated_at.substring(0, 10)}
-                                          </p>
+                                          </p> */}
                                         </td>
                                         <td>
                                           <button

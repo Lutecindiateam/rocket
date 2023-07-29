@@ -186,6 +186,7 @@ function Degree(props) {
         setpagination(allDegreeData.data.meta);
         if (allDegreeData.data.meta.last_page < 5) {
           let array = [];
+          console.log(allDegreeData.data.meta.last_page);
           Array.from(Array(allDegreeData.data.meta.last_page), (e, i) =>
             array.push(i + 1)
           );
@@ -365,19 +366,19 @@ function Degree(props) {
                                         <td>
                                           <div class="d-flex ">
                                             <div>
-                                              <h6>{item.level}</h6>
+                                              <h6>{item.option}</h6>
                                             </div>
                                           </div>
                                         </td>
                                         <td>
-                                          <p>
+                                          {/* <p>
                                             {item.created_at.substring(0, 10)}
-                                          </p>
+                                          </p> */}
                                         </td>
                                         <td>
-                                          <p>
+                                          {/* <p>
                                             {item.updated_at.substring(0, 10)}
-                                          </p>
+                                          </p> */}
                                         </td>
                                         <td>
                                           <button

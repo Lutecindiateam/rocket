@@ -42,13 +42,13 @@ function Header(props) {
     if (getProfileData !== undefined) {
       if (getProfileData?.data?.status == "success") {
         setdata(getProfileData.data.data[0]);
-        if (getProfileData.data.data[0].profile) {
-          setprofileimg(
-            process.env.REACT_APP_API_HOST + getProfileData.data.data[0].profile
-          );
-        } else {
+        // if (getProfileData.data.data[0].profile) {
+        //   setprofileimg(
+        //     process.env.REACT_APP_API_HOST + getProfileData.data.data[0].profile
+        //   );
+        // } else {
           setprofileimg(profile);
-        }
+        // }
       }
     }
   }, [props.data.getProfileData]);

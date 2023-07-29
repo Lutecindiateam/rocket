@@ -35,7 +35,6 @@ function Home(props) {
   const [functionalCanditateData, setfunctionalCanditateData] = useState([]);
   const [functionalCanditateDatadata, setfunctionalCanditateDatadata] = useState([]);
 
-
   useEffect(() => {
     props.requestAdminCategoryJob();
     props.requestAdminAllCount();
@@ -61,7 +60,7 @@ function Home(props) {
   useEffect(() => {
     let lastSixJobData = props.data.lastSixJobData;
     if (lastSixJobData !== undefined) {
-      if (lastSixJobData?.data?.status == "sucess") {
+      if (lastSixJobData?.data?.status == "success") {
         setlastSixJobData(lastSixJobData.data.data);
       }
     }
@@ -70,7 +69,7 @@ function Home(props) {
   useEffect(() => {
     let lastSixEmpData = props.data.lastSixEmpData;
     if (lastSixEmpData !== undefined) {
-      if (lastSixEmpData?.data?.status == "sucess") {
+      if (lastSixEmpData?.data?.status == "success") {
         setlastSixEmpData(lastSixEmpData.data.data);
       }
     }
@@ -79,7 +78,7 @@ function Home(props) {
   useEffect(() => {
     let monthjob = props.data.monthjob;
     if (monthjob !== undefined) {
-      if (monthjob?.data?.status == "sucess") {
+      if (monthjob?.data?.status == "success") {
         setmonthjob(monthjob.data.data);
         monthJobfun();
       }
@@ -89,7 +88,7 @@ function Home(props) {
   useEffect(() => {
     let monthWiseAppliedjobData = props.data.monthWiseAppliedjobData;
     if (monthWiseAppliedjobData !== undefined) {
-      if (monthWiseAppliedjobData?.data?.status == "sucess") {
+      if (monthWiseAppliedjobData?.data?.status == "success") {
         setmonthWiseAppliedjobData(monthWiseAppliedjobData.data.data);
         monthAppliedJobfun();
       }
@@ -161,8 +160,9 @@ function Home(props) {
 
   useEffect(() => {
     let companyJobData = props.data.companyJobData;
+    // console.log(companyJobData);
     if (companyJobData !== undefined) {
-      if (companyJobData?.data?.status == "sucess") {
+      if (companyJobData?.data?.status == "success") {
         setcompanyJobData(companyJobData.data.data);
         companyJobData = companyJobData.data.data
         let companyJobDatadata = [];
@@ -577,9 +577,9 @@ function Home(props) {
                                                       </a>
                                                       <p>
                                                         <i class="fa fa-map-marker"></i>{" "}
-                                                        {item.city_name},{" "}
-                                                        {item.state_name},{" "}
-                                                        {item.country_name}
+                                                        {item.city},{" "}
+                                                        {item.state},{" "}
+                                                        {/* {item.country_name} */}
                                                       </p>
                                                     </div>
                                                   </div>
@@ -614,7 +614,7 @@ function Home(props) {
                                                   <h6>
                                                     {item.ownership_type_name}
                                                   </h6>
-                                                  <p>{item.industries_name}</p>
+                                                  <p>{item.industry}</p>
                                                 </td>
                                                 <td>
                                                   <a

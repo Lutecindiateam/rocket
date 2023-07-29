@@ -84,6 +84,10 @@ import AdminViewContact from "../Admin/viewContact";
 import AdminPosition from "../Admin/position";
 import Verify from "./otpverify";
 import Empverify from "../Employee/empotpverify";
+import { Forget_pass } from "./forget";
+import { Cnf_Password } from "./cnf_password";
+import { EmpForget_pass } from "../Employee/forget";
+import { EmpCnf_Password } from "../Employee/cnf_password";
 
 function App() {
   return (
@@ -123,6 +127,8 @@ function App() {
         />
         <Route path="/empViewResume/:id" element={<EmpViewResume />} />
         <Route path="/emplogin" element={<EmpLogin />} />
+        <Route path="/empforget" element={<EmpForget_pass />} />
+        <Route path="/empconfirm/:id" element={<EmpCnf_Password />} />
         <Route path="/home" element={<Home />} />
         <Route path="/resume" element={<Resume />} />
         <Route path="/appliedJobs" element={<AppliedJobs />} />
@@ -148,6 +154,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify" element={<Verify />} />
+        <Route path="/forget"  element={<Forget_pass />} />
+        <Route path="/confirm/:id" element={<Cnf_Password />} />
         <Route path="/admin/home" element={<AdminHome />} />
         <Route path="/admin/forgotPassword1" element={<AdminForgotPass1 />} />
         <Route path="/admin/forgotPassword2" element={<AdminForgotPass2 />} />

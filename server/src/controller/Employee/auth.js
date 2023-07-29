@@ -107,32 +107,22 @@ const employer = require('../../models/Employer/register');
 
 
 exports.EmployerLogin =async(req,  res)=>{
-  const token = req.body.user.signInUserSession.idToken.jwtToken
+  const {token, email, sub , name} = req.body
     try {
-        const user = await employer.findOne({ email: req.body.user.attributes.email }).exec();
+        const user = await employer.findOne({ email:email }).exec();
+        
         if(user)  return res.status(201).json({
           data :{id: user.id , token:token, name: user.name},
           status :"success",
           message:"Employer registered successfully"
-      
       })
-    
-        const{
-            name,
-            sub,
-            email
-                
-        } = req.body.user.attributes;
-
-        // const hash_password = await bcrypt.hash(password, 10,)
-
+       // const hash_password = await bcrypt.hash(password, 10,)
         const _user = new employer({
             name,
             sub,
-            email,
+            email
             // hash_password
         });
-  
         // console.log("USER :: ",_user)
   
         const savedUser = await _user.save();

@@ -50,7 +50,7 @@ function Profie(props) {
   const [cities, setcities] = useState([]);
   const [states, setstates] = useState([]);
   const [countries, setcountries] = useState([]);
-  const [size, setsize] = useState([]);
+  const [categories, setcategories] = useState([]);
   const [owner, setowner] = useState([]);
   const [industry, setindustry] = useState([]);
 
@@ -161,17 +161,41 @@ function Profie(props) {
     }
   }, [props.employee.empData]);
 
-  // console.log("Data ::", data);
+
   // useEffect(() => {
   //   let formfieldData = props.employee.formfieldData;
+  //   // console.log(formfieldData);
   //   if (formfieldData !== undefined) {
-  //     if (formfieldData?.data?.status === "success") {
-  //       setindustry(formfieldData.data.data.industries);
-  //       // setowner(formfieldData.data.data.ownertype);
-  //       // setsize(formfieldData.data.data.sizes);
+  //     if (formfieldData?.data?.status == "success") {
+  //       setcategories(formfieldData.data.data.categories[0].category);
+  //       setfunctional_area(formfieldData.data.data.categories[2].educationOptions);
+  //       setfunctional_area(formfieldData.data.data.categories[2].educationOptions);
+  //       setdegree_levels(formfieldData.data.data.categories[1].educationLevel);
+  //       setexpiry_date(formfieldData.data.data.categories[4].expiry_date);
+
+  //       // setSalaryPeriod(formfieldData.data.data.SalaryPeriod);
+  //       // setcareer_levels(formfieldData.data.data.career_levels);
+  //       // seteducation(formfieldData.data.data.categories[1].educationLevel);
+  //       // setnotice_period(formfieldData.data.data.categories[3].notice_period);
+  //       // setcurrencies(formfieldData.data.data.currencies);
+  //       // setfunctional_areas(formfieldData.data.data.functional_areas);
+  //       // setskills(formfieldData.data.data.skills);
+  //       // settags(formfieldData.data.data.tags);
+  //       // settypes(formfieldData.data.data.types);
+  //       // setposition(formfieldData.data.data.position);
   //     }
   //   }
   // }, [props.employee.formfieldData]);
+  useEffect(() => {
+    let formfieldData = props.employee.formfieldData;
+    if (formfieldData !== undefined) {
+      if (formfieldData?.data?.status === "success") {
+        setcategories(formfieldData.data.data.categories[0].category);
+        // setowner(formfieldData.data.data.ownertype);
+        // setsize(formfieldData.data.data.sizes);
+      }
+    }
+  }, [props.employee.formfieldData]);
 
   function onChangeData(e) {
     if (e.target.type === 'radio') {
@@ -545,7 +569,7 @@ function Profie(props) {
     //   formIsValid = false;
     //   seterrorwebsite("*Enter company website.");
     // } else
-     if (
+    if (
       !data["website"].match(
         /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
       )
@@ -719,15 +743,15 @@ function Profie(props) {
       // about_us &&
       // location &&
       // no_of_offices &&
-      address 
-      // website &&
-      // status &&
-      // is_featured &&
-      // facebook_url &&
-      // twitter_url &&
-      // linkedin_url &&
-      // google_plus_url &&
-      // pinterest_url;
+      address
+    // website &&
+    // status &&
+    // is_featured &&
+    // facebook_url &&
+    // twitter_url &&
+    // linkedin_url &&
+    // google_plus_url &&
+    // pinterest_url;
     return valid;
   }
 
@@ -765,6 +789,7 @@ function Profie(props) {
         },
       });
       setError(false)
+
     } else {
       setError(true)
     }
@@ -786,13 +811,13 @@ function Profie(props) {
       // } else if (erroris_featured) {
       //   document.getElementById("yes").focus();
       // }
-       else if (errorauthorized_person) {
+      else if (errorauthorized_person) {
         document.getElementById("authorized_person").focus();
       } else if (errorauthorized_mobile) {
         document.getElementById("authorized_mobile").focus();
       } else if (errorindustry) {
         document.getElementById("industry").focus();
-      } 
+      }
       // else if (errorownership_type) {
       //   document.getElementById("ownership_type").focus();
       // } else if (errorsize) {
@@ -807,7 +832,7 @@ function Profie(props) {
       // } else if (errorcountry) {
       //   document.getElementById("country").focus();
       // }
-       else if (errorstate) {
+      else if (errorstate) {
         document.getElementById("state").focus();
       } else if (errorcity) {
         document.getElementById("city").focus();
@@ -843,6 +868,11 @@ function Profie(props) {
           id: emp.id,
           token: emp.token,
         });
+        if (localStorage.getItem("link1")) {
+          navigate(localStorage.getItem("link1"));
+        } else {
+          navigate("/postJob");
+        }
       } else {
         Swal.fire("Error!", `Something went wrong while updating profile.`, "error");
         props.employee.empProfileData = undefined;
@@ -907,14 +937,14 @@ function Profie(props) {
                                   onBlur={validateemail}
                                   onChange={onChangeData}
                                   placeholder=""
-                                  // disabled
+                                // disabled
                                 />
                                 {erroremail && (
                                   <div style={mystyle}>{erroremail}</div>
                                 )}
                               </div>
                             </div>
-                            
+
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label>Company Website</label>
@@ -926,7 +956,7 @@ function Profie(props) {
                                   value={data.website}
                                   onBlur={validatewebsite}
                                   onChange={onChangeData}
-                                  placeholder=""
+                                  placeholder="Enter Company Website"
                                 />
                                 {errorwebsite && (
                                   <div style={mystyle}>{errorwebsite}</div>
@@ -1016,7 +1046,7 @@ function Profie(props) {
                                   value={data.authorized_person}
                                   onBlur={validateauthorized_person}
                                   onChange={onChangeData}
-                                  placeholder=""
+                                  placeholder="Enter Name of Authorized Person"
                                 />
                                 {errorauthorized_person && (
                                   <div style={mystyle}>{errorauthorized_person}</div>
@@ -1034,7 +1064,7 @@ function Profie(props) {
                                   value={data.authorized_mobile}
                                   onBlur={validateauthorized_mobile}
                                   onChange={onChangeData}
-                                  placeholder=""
+                                  placeholder="Enter Mobile Number of Authorized Person"
                                 />
                                 {errorauthorized_mobile && (
                                   <div style={mystyle}>
@@ -1055,19 +1085,22 @@ function Profie(props) {
                                   onChange={onChangeData}
                                 >
                                   <option value="0">Select Industry</option>
-                                  {industry.map((option) => (
-                                    <option value={option.id}>
-                                      {option.name}
-                                    </option>
-                                  ))}
-                                  <option value="mechanical">mechanical </option>
-                                <option value="civil">civil </option>
-                                <option value="bsc">bsc </option>
+                                  {categories.map((option) => {
+                                    if (option.disable === "yes") {
+                                      return (
+                                        <option key={option._id} value="0" style={{ color: "#964B00", fontSize: "20px" }} disabled>{option.name}</option>
+                                      )
+                                    } else {
+                                      return (
+                                        <option key={option._id} value={option._id}>{option.name}</option>
+                                      )
+                                    }
+                                  })}
                                 </select>
                                 {errorindustry && (
                                   <div style={mystyle}>{errorindustry}</div>
                                 )}
-                              </div>                             
+                              </div>
                             </div>
                             {/* <div class="col-lg-6 col-md-6">
                               <div class="form-group">
@@ -1223,24 +1256,24 @@ function Profie(props) {
                               <div class="form-group">
                                 <label>State</label>
                                 <Select
-                                placeholder="Select State"
-                                options={statesOfIndia}
-                                getOptionLabel={(options) => {
-                                  return options["name"];
-                                }}
-                                getOptionValue={(options) => {
-                                  return options["name"];
-                                }}
-                                value={selectedState || data.state}
-                                onChange={(item) => {
-                                  setSelectedState(item);
-                                  setSelectedCity(null);
-                                }}
-                                styles={selectStyles}
-                                menuPortalTarget={document.body}
-                                id="state"
-                                onBlur={validateState}
-                              />
+                                  placeholder="Select State"
+                                  options={statesOfIndia}
+                                  getOptionLabel={(options) => {
+                                    return options["name"];
+                                  }}
+                                  getOptionValue={(options) => {
+                                    return options["name"];
+                                  }}
+                                  value={selectedState || data.state}
+                                  onChange={(item) => {
+                                    setSelectedState(item);
+                                    setSelectedCity(null);
+                                  }}
+                                  styles={selectStyles}
+                                  menuPortalTarget={document.body}
+                                  id="state"
+                                  onBlur={validateState}
+                                />
                                 {errorstate && (
                                   <div style={mystyle}>{errorstate}</div>
                                 )}
@@ -1250,26 +1283,26 @@ function Profie(props) {
                               <div class="form-group">
                                 <label>City</label>
                                 <Select
-                                placeholder="Select City"
-                                options={City.getCitiesOfState(
-                                  selectedState?.countryCode,
-                                  selectedState?.isoCode
-                                )}
-                                getOptionLabel={(options) => {
-                                  return options["name"];
-                                }}
-                                getOptionValue={(options) => {
-                                  return options["name"];
-                                }}
-                                value={selectedCity}
-                                onChange={(item) => {
-                                  setSelectedCity(item);
-                                }}
-                                styles={selectStyles}
-                                menuPortalTarget={document.body}
-                                id="city"
-                                onBlur={validateCity}
-                              />
+                                  placeholder="Select City"
+                                  options={City.getCitiesOfState(
+                                    selectedState?.countryCode,
+                                    selectedState?.isoCode
+                                  )}
+                                  getOptionLabel={(options) => {
+                                    return options["name"];
+                                  }}
+                                  getOptionValue={(options) => {
+                                    return options["name"];
+                                  }}
+                                  value={selectedCity}
+                                  onChange={(item) => {
+                                    setSelectedCity(item);
+                                  }}
+                                  styles={selectStyles}
+                                  menuPortalTarget={document.body}
+                                  id="city"
+                                  onBlur={validateCity}
+                                />
                                 {errorcity && (
                                   <div style={mystyle}>{errorcity}</div>
                                 )}
@@ -1395,10 +1428,10 @@ function Profie(props) {
                               <input type="file" accept=".pdf,.doc,.docx" onChange={handleCertificateChange} />
                             </label>
                             <button type="submit"
-                            style={{
-                              width: "150px",
-                              height: "30px",
-                            }}>Upload Certificate</button>
+                              style={{
+                                width: "150px",
+                                height: "30px",
+                              }}>Upload Certificate</button>
                           </div>
                           <br />
 

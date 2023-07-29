@@ -42,17 +42,31 @@ exports.searchjobs = async (req, res) => {
        
       }else if(title && country){  
          data = await Job.aggregate([
-          {
-            $search: {
-              index: "default",
-              text: {
-                query:  `${req.body.title} ${req.body.country}`,
-                path: {
-                  wildcard: "*"
+          // {
+          //   $search: {
+          //     index: "default",
+          //     text: {
+          //       query:  `${req.body.title} ${req.body.country}`,
+          //       path: {
+          //         wildcard: "*"
+          //       }
+          //     }
+          //   }
+          // }
+          [
+            {
+              $search: {
+                index: "default",
+                text: {
+                  query: "<query>",
+                  path: {
+                    wildcard: "*"
+                  }
                 }
               }
             }
-          }])
+          ]
+        ])
          }}
           return res.status(200).json({
             data,
@@ -64,6 +78,20 @@ exports.searchjobs = async (req, res) => {
   }
 }
 
+exports.checkAppliedJobs= async(req, res) => {
+ try{
+  const {candidate_id, job_id} = req.body;
+  const AppliedJob = await jobApplication.findOne({candidate_id , job_id}).lean()
+  const appliedJob1 = !!AppliedJob;
+  return res.status(201).json({
+    data: {appliedJob: appliedJob1},
+message:"We have already done this job",
+status: "success"
+  })
+ }catch(err){
+  console.log(err.message);
+ }
+ }
 
  // return jobs;
     // }

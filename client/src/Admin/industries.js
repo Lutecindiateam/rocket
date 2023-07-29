@@ -454,7 +454,7 @@ function Industries(props) {
                               <table class="table select-table">
                                 <thead>
                                   <tr>
-                                    <th>Name</th>
+                                    <th>Days</th>
                                     <th>Description</th>
                                     <th>Created At</th>
                                     <th>Updated At</th>
@@ -468,7 +468,7 @@ function Industries(props) {
                                         <td>
                                           <div class="d-flex ">
                                             <div>
-                                              <h6>{item.name}</h6>
+                                              <h6>{item.day}</h6>
                                             </div>
                                           </div>
                                         </td>
@@ -476,10 +476,10 @@ function Industries(props) {
                                           <p>{item.description}</p>
                                         </td>
                                         <td>
-                                          <p>{item.created_at.substring(0, 10)}</p>
+                                          {/* <p>{item.created_at.substring(0, 10)}</p> */}
                                         </td>
                                         <td>
-                                          <p>{item.updated_at.substring(0, 10)}</p>
+                                          {/* <p>{item.updated_at.substring(0, 10)}</p> */}
                                         </td>
                                         <td>
                                           <button

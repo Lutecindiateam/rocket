@@ -26,8 +26,6 @@ function Profile(props) {
 
   const numbers = Array.from({ length: 51 }, (_, index) => index);
 
-
-
   useEffect(() => {
     new WOW.WOW().init();
     window.scrollTo(0, 0);
@@ -93,15 +91,12 @@ function Profile(props) {
   const [errorskills, seterrorskills] = useState("");
   const [errorPincode, seterrorPincode] = useState("");
   const [number, setNumber] = useState(0);
-
-
-
-
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const [emp, setEmp] = useState({});
-
-
+  const [educations, setEducations] = useState([
+    { education: "", course: "" } // Initial education section
+  ]);
 
 
   // useEffect(() => {
@@ -118,6 +113,14 @@ function Profile(props) {
     }),
   };
 
+  const addEducationSection = () => {
+    setEducations([...educations, { education: "", course: "" }]);
+  };
+  const removeEducationSection = (index) => {
+    const updatedEducations = [...educations];
+    updatedEducations.splice(index, 1);
+    setEducations(updatedEducations);
+  };
 
 
   useEffect(() => {
@@ -144,25 +147,28 @@ function Profile(props) {
 
   useEffect(() => {
     let getCandidateData = props.candidate.getCandidateData;
-    console.log(getCandidateData);
+    // console.log(getCandidateData);
     if (getCandidateData !== undefined) {
       if (getCandidateData?.data?.status === "success") {
         setData(getCandidateData.data.data);
-        if (getCandidateData.data.data.country) {
-          setcountryId(getCandidateData.data.data.country);
-          props.requestState({
-            id: getCandidateData.data.data.country,
-          });
-          if (getCandidateData.data.data.state) {
-            setstateId(getCandidateData.data.data.state);
-            props.requestCity({
-              id: getCandidateData.data.data.state,
-            });
-            if (getCandidateData.data.data.city) {
-              setcityId(getCandidateData.data.data.city);
-            }
-          }
-        }
+        setEducations(getCandidateData.data.data.education);
+        setSelectedState(getCandidateData.data.data.state);
+        setSelectedCity(getCandidateData.data.data.city)
+        // if (getCandidateData.data.data.country) {
+        //   setcountryId(getCandidateData.data.data.country);
+        //   props.requestState({
+        //     id: getCandidateData.data.data.country,
+        //   });
+        //   if (getCandidateData.data.data.state) {
+        //     setstateId(getCandidateData.data.data.state);
+        //     props.requestCity({
+        //       id: getCandidateData.data.data.state,
+        //     });
+        //     if (getCandidateData.data.data.city) {
+        //       setcityId(getCandidateData.data.data.city);
+        //     }
+        //   }
+        // }
 
       }
     }
@@ -195,6 +201,12 @@ function Profile(props) {
       }));
     }
   }
+  const onChangeEducation = (e, index) => {
+    const { name, value } = e.target;
+    const updatedEducations = [...educations];
+    updatedEducations[index][name] = value;
+    setEducations(updatedEducations);
+  };
 
   // function onChangeSkill(e) {
   //   selectedskill.push(e.target.value);
@@ -522,15 +534,16 @@ function Profile(props) {
 
   function validate_education() {
     let formIsValid = false;
-    if (!data["education"]) {
+
+    if (!educations[0].education) {
       formIsValid = false;
-      seterroreducation("*Select your career level.");
-    } else if (typeof data["education"] === "undefined") {
+      seterroreducation("*Select your education.");
+    } else if (typeof educations[0].education === "undefined") {
       formIsValid = false;
-      seterroreducation("*Select your career level.");
-    } else if (data["education"] === "0") {
+      seterroreducation("*Select your education .");
+    } else if (educations[0].education === "0") {
       formIsValid = false;
-      seterroreducation("*Select your career level.");
+      seterroreducation("*Select your education.");
     } else {
       formIsValid = true;
       seterroreducation("");
@@ -687,12 +700,12 @@ function Profile(props) {
   // }
   function validate_course() {
     let formIsValid = false;
-    if (!data["Course"]) {
+    if (!educations[0].course) {
       formIsValid = false;
       setcourse("*Select your course.");
-    } else if (data["Course"] === "0") {
+    } else if (educations[0].course === "0") {
       formIsValid = false;
-      setcourse("*Select your course.");
+      setcourse("*Select your coursewwww.");
     } else {
       formIsValid = true;
       setcourse("");
@@ -867,7 +880,6 @@ function Profile(props) {
       current_organization &&
       Cctc &&
       address &&
-
       total_experience &&
       education &&
       industry &&
@@ -887,7 +899,7 @@ function Profile(props) {
     // pinterest_url;
     return valid;
   }
-
+  // console.log(data.selectedCity);
   function submitForm(e) {
     e.preventDefault();
     if (validateForm()) {
@@ -905,8 +917,8 @@ function Profile(props) {
           marital_status: data.marital_status,
           pincode: data.pincode,
           total_experience: data.total_experience,
-          education: data.education,
-          course: data.Course,
+          education: educations,
+          // course: educations,
           industry: data.industry,
           profile_title: data.profile_title,
           profile_in_brief: data.profile_in_brief,
@@ -935,6 +947,7 @@ function Profile(props) {
 
         },
       });
+
       setError(false)
     } else {
       setError(true)
@@ -1027,7 +1040,12 @@ function Profile(props) {
           id: emp.id,
           token: emp.token,
         });
-        navigate("/settings");
+        if (localStorage.getItem("link1")) {
+          navigate(localStorage.getItem("link1"));
+        } else {
+          navigate("/settings");
+        }
+
       } else {
         Swal.fire("Error!", `Something went wrong while updating profile.`, "error");
         props.candidate.candidateProfileData = undefined;
@@ -1071,7 +1089,7 @@ function Profile(props) {
                                   value={data.first_name}
                                   onBlur={validatefirst_name}
                                   onChange={onChangeData}
-                                  placeholder=""
+                                  placeholder="Enter First Name"
                                 />
                                 {errorfirst_name && (
                                   <div style={mystyle}>{errorfirst_name}</div>
@@ -1089,7 +1107,7 @@ function Profile(props) {
                                   value={data.last_name}
                                   onBlur={validatelast_name}
                                   onChange={onChangeData}
-                                  placeholder=""
+                                  placeholder="Enter Last Name"
                                 />
                                 {errorlast_name && (
                                   <div style={mystyle}>{errorlast_name}</div>
@@ -1182,48 +1200,7 @@ function Profile(props) {
                                 )}
                               </div>
                             </div>
-                            {/* <div class="col-lg-4 col-md-4">
-                              <div style={{ color: "black" }}>
-                                <label for="immediate_available" class="label">
-                                  Immediate available
-                                </label>
-
-                                <br />
-                                <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    style={{ margin: "0px" }}
-                                    id="yes"
-                                    name="immediate_available"
-                                    value="1"
-                                    onBlur={validateimmediate_available}
-                                    checked={data.immediate_available === 1}
-                                    onChange={onChangeData}
-                                  />
-                                  <label class="form-check-label">Yes</label>
-                                </div> */}
-                            {/* <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    style={{ margin: "0px" }}
-                                    id="no"
-                                    name="immediate_available"
-                                    value="0"
-                                    onBlur={validateimmediate_available}
-                                    checked={data.immediate_available === 0}
-                                    onChange={onChangeData}
-                                  />
-                                  <label class="form-check-label">No</label>
-                                </div>
-                                {errorimmediate_available && (
-                                  <div style={mystyle}>
-                                    {errorimmediate_available}
-                                  </div>
-                                )}
-                              </div>
-                            </div> */}
+                            
 
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
@@ -1238,7 +1215,7 @@ function Profile(props) {
                                   value={data.birth_date}
                                   onBlur={validatebirth_date}
                                   onChange={onChangeData}
-                                  placeholder=""
+                                  placeholder="Enter DOB"
                                 />
                                 {errorbirth_date && (
                                   <div style={mystyle}>{errorbirth_date}</div>
@@ -1359,64 +1336,6 @@ function Profile(props) {
                                 <div style={mystyle}>{errorprofile_in_brief}</div>
                               )}
                             </div>
-
-
-                            {/* 
-                            <div class="form-group">
-                              <label>Languages</label>
-                              <input
-                                class="form-control"
-                                type="text"
-                                name="languages"
-                                id="languages"
-                                value={data.languages}
-                                onBlur={validatelanguages}
-                                onChange={onChangeData}
-                                placeholder=""
-                              />
-                              {errorlanguages && (
-                                <div style={mystyle}>{errorlanguages}</div>
-                              )}
-                            </div>
-
-                             <div class="col-lg-6 col-md-6">
-                              <div class="form-group">
-                                <label>Naionality</label>
-                                <input
-                                  class="form-control"
-                                  type="text"
-                                  name="nationality"
-                                  id="nationality"
-                                  value={data.nationality}
-                                  onBlur={validatenationality}
-                                  onChange={onChangeData}
-                                  placeholder=""
-                                />
-                                {errornationality && (
-                                  <div style={mystyle}>{errornationality}</div>
-                                )}
-                              </div>
-                            </div> */}
-                            {/* <div class="col-lg-6 col-md-6">
-                              <div class="form-group">
-                                <label>National ID Card</label>
-                                <input
-                                  class="form-control"
-                                  type="text"
-                                  name="national_id_card"
-                                  id="national_id_card"
-                                  value={data.national_id_card}
-                                  onBlur={validatenational_id_card}
-                                  onChange={onChangeData}
-                                  placeholder=""
-                                />
-                                {errornational_id_card && (
-                                  <div style={mystyle}>
-                                    {errornational_id_card}
-                                  </div>
-                                )}
-                              </div>
-                            </div> */}
                             <h3 class="title">Industry Information</h3>
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
@@ -1492,46 +1411,7 @@ function Profile(props) {
                                 )}
                               </div>
                             </div>
-                            {/* <div class="col-lg-6 col-md-6">
-                              <div class="form-group">
-                                <label>Current Salary</label>
-                                <input
-                                  class="form-control"
-                                  type="number"
-                                  name="current_salary"
-                                  id="current_salary"
-                                  value={data.current_salary}
-                                  onBlur={validatecurrent_salary}
-                                  onChange={onChangeData}
-                                  placeholder=""
-                                />
-                                {errorcurrent_salary && (
-                                  <div style={mystyle}>
-                                    {errorcurrent_salary}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                              <div class="form-group">
-                                <label>Expected Salary</label>
-                                <input
-                                  class="form-control"
-                                  type="number"
-                                  name="expected_salary"
-                                  id="expected_salary"
-                                  value={data.expected_salary}
-                                  onBlur={validateexpected_salary}
-                                  onChange={onChangeData}
-                                  placeholder=""
-                                />
-                                {errorexpected_salary && (
-                                  <div style={mystyle}>
-                                    {errorexpected_salary}
-                                  </div>
-                                )}
-                              </div>
-                            </div> */}
+                            
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label for="Current CTC" class="label">
@@ -1558,34 +1438,7 @@ function Profile(props) {
 
 
 
-                            {/* 
-                            <div class="col-lg-6 col-md-6">
-                              <div class="form-group">
-                                <label>Salary Currency</label>
-                                <select
-                                  class="select"
-                                  name="salary_currency"
-                                  id="salary_currency"
-                                  value={data.salary_currency}
-                                  onBlur={validatesalary_currency}
-                                  onChange={onChangeData}
-                                >
-                                  <option value="0">Select Industry</option>
-                                  {currency.map((option) => (
-                                    <option value={option.id}>
-                                      {option.currency_name}
-                                    </option>
-                                  ))}
-                                  <option value="indian RS">Indian RS</option>
-
-                                </select>
-                                {errorsalary_currency && (
-                                  <div style={mystyle}>
-                                    {errorsalary_currency}
-                                  </div>
-                                )}
-                              </div>
-                            </div> */}
+                          
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label>Notice Period*</label>
@@ -1610,152 +1463,89 @@ function Profile(props) {
 
                               </div>
                             </div>
-                            <h3 class="title"> Qualification Details</h3>
-                            <div class="col-lg-6 col-md-6">
-                              <div class="form-group">
-                                <label>Education*</label>
-                                <select
-                                  class="select"
-                                  name="education"
-                                  id="education"
-                                  value={data.education}
-                                  onBlur={validate_education}
-                                  onChange={onChangeData}
-                                >
-                                  <option value="0">Select Education</option>
-                                  {education.map((option) => (
-                                    <option value={option.option}>
-                                      {option.option}
-                                    </option>
-                                  ))}
-                                  {/* <option value="Deploma">Deploma</option>
-                                  <option value="Graduation">Graduation</option>
-                                  <option value="Post Graduation">Post Graduation</option> */}
+                            <div >
+                              {educations.map((educationData, index) => (
+                                <div key={index}>
+                                  <h3 class="title"> Qualification Details
+                                  &nbsp;
+                                    <button type="button" onClick={addEducationSection}>
+                                      +
+                                    </button>
+                                    &nbsp;
+                                    {index > 0 &&
+                                    <button type="button" onClick={() => removeEducationSection(index)}>
+                                      -
+                                    </button>
+                                  }
+                                  </h3>
+                                  <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                      <div class="form-group">
+                                        <label>Education*</label>
+                                        <select
+                                          class="select"
+                                          name="education"
+                                          id="education"
+                                          value={educationData.education}
+                                          onBlur={validate_education}
+                                          onChange={(e) => onChangeEducation(e, index)}
+                                        >
+                                          <option value="0">Select Education</option>
+                                          {education.map((option) => (
+                                            <option value={option.option}>
+                                              {option.option}
+                                            </option>
+                                          ))}
 
-                                </select>
-                                {erroreducation && (
-                                  <div style={mystyle}>{erroreducation}</div>
-                                )}
-                              </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                              <div class="form-group">
-                                <label>Course*</label>
-                                <select
-                                  class="select"
-                                  name="Course"
-                                  id="Course"
-                                  value={data.Course}
-                                  onBlur={validate_course}
-                                  onChange={onChangeData}
-                                >
-                                  <option value="0">
-                                    Select Course
-                                  </option>
-                                  {functional_area.map((option) => {
-                                    // Filter options based on the currently selected educationLevel
-                                    if (option.name === data.education) {
-                                      return (
-                                        <option key={option.id} value={option.course}>
-                                          {option.course}
-                                        </option>
-                                      );
-                                    }
-                                    return null;
-                                  })}
+                                        </select>
+                                        {erroreducation && (
+                                          <div style={mystyle}>{erroreducation}</div>
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                      <div class="form-group">
+                                        <label>Course*</label>
+                                        <select
+                                          class="select"
+                                          name="course"
+                                          id="course"
+                                          value={educationData.course}
+                                          onBlur={validate_course}
+                                          onChange={(e) => onChangeEducation(e, index)}
+                                        >
+                                          <option value="0">
+                                            Select Course
+                                          </option>
+                                          {functional_area.map((option) => {
+                                            // Filter options based on the currently selected educationLevel  
+                                            if (option.name === educationData.education) {
+                                              return (
+                                                <option key={option.id} value={option.course}>
+                                                  {option.course}
+                                                </option>
+                                              );
+                                            }
+                                            return null;
+                                          })}
 
-                                </select>
-                                {course && (
-                                  <div style={mystyle}>
-                                    {course}
+                                        </select>
+                                        {course && (
+                                          <div style={mystyle}>
+                                            {course}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
                                   </div>
-                                )}
-                              </div>
+                                  
+                                </div>
+                              ))}
+
                             </div>
-                            {/* <Multiselect 
-                             options={industry}
-                             displayValue="name"
-                             name="Courses"
-                             id="Courses"
-                             value={data.name}
-                             onSelect={onChangeData}
-                             onRemove={onChangeData}
-                            /> */}
 
 
                             <h3 class="title">Address Information</h3>
-                            {/* <div class="col-lg-6 col-md-6">
-                              <div class="form-group">
-                                <label>Country</label>
-                                <select
-                                  class="select"
-                                  name="country"
-                                  id="country"
-                                  value={countryId}
-                                  onBlur={validatecountry}
-                                  onChange={onChangeCountry}
-                                >
-                                  <option value="0">Select Country</option>
-                                  {countries.map((option) => (
-                                    <option value={option.id}>
-                                      {option.name}
-                                    </option>
-                                  ))}
-                                  <option value="indian RS">Indian RS</option>
-                                </select>
-                                {errorcountry && (
-                                  <div style={mystyle}>{errorcountry}</div>
-                                )}
-                              </div>
-                            </div> */}
-                            {/* <div class="col-lg-6 col-md-6">
-                            <div class="form-group">
-                              <label>State</label>
-                              <select
-                                class="select"
-                                name="state"
-                                id="state"
-                                value={stateId}
-                                onBlur={validatestate}
-                                onChange={onChangeState}
-                              >
-                                <option value="0">Select State</option>
-                                {states.map((option) => (
-                                  <option value={option.id}>
-                                    {option.name}
-                                  </option>
-                                ))}
-                                <option value="indian RS">Indian RS</option>
-                              </select>
-                              {errorstate && (
-                                <div style={mystyle}>{errorstate}</div>
-                              )}
-                            </div>
-                          </div>
-                          <div class="col-lg-6 col-md-6">
-                            <div class="form-group">
-                              <label>City</label>
-                              <select
-                                class="select"
-                                name="city"
-                                id="city"
-                                value={cityId}
-                                onBlur={validatecity}
-                                onChange={onChangeCity}
-                              >
-                                <option value="0">Select City</option>
-                                {cities.map((option) => (
-                                  <option value={option.id}>
-                                    {option.name}
-                                  </option>
-                                ))}
-                                <option value="indian RS">Indian RS</option>
-                              </select>
-                              {errorcity && (
-                                <div style={mystyle}>{errorcity}</div>
-                              )}
-                            </div>
-                          </div> */}
                             <div class="form-group">
                               <label>Address*</label>
                               <input
@@ -1853,6 +1643,260 @@ function Profile(props) {
                               </div>
                             </div>
                           </div>
+                          
+                          {/* <div class="col-lg-4 col-md-4">
+                              <div style={{ color: "black" }}>
+                                <label for="immediate_available" class="label">
+                                  Immediate available
+                                </label>
+
+                                <br />
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    style={{ margin: "0px" }}
+                                    id="yes"
+                                    name="immediate_available"
+                                    value="1"
+                                    onBlur={validateimmediate_available}
+                                    checked={data.immediate_available === 1}
+                                    onChange={onChangeData}
+                                  />
+                                  <label class="form-check-label">Yes</label>
+                                </div> */}
+                            {/* <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    style={{ margin: "0px" }}
+                                    id="no"
+                                    name="immediate_available"
+                                    value="0"
+                                    onBlur={validateimmediate_available}
+                                    checked={data.immediate_available === 0}
+                                    onChange={onChangeData}
+                                  />
+                                  <label class="form-check-label">No</label>
+                                </div>
+                                {errorimmediate_available && (
+                                  <div style={mystyle}>
+                                    {errorimmediate_available}
+                                  </div>
+                                )}
+                              </div>
+                            </div> */}
+
+  {/* 
+                            <div class="col-lg-6 col-md-6">
+                              <div class="form-group">
+                                <label>Salary Currency</label>
+                                <select
+                                  class="select"
+                                  name="salary_currency"
+                                  id="salary_currency"
+                                  value={data.salary_currency}
+                                  onBlur={validatesalary_currency}
+                                  onChange={onChangeData}
+                                >
+                                  <option value="0">Select Industry</option>
+                                  {currency.map((option) => (
+                                    <option value={option.id}>
+                                      {option.currency_name}
+                                    </option>
+                                  ))}
+                                  <option value="indian RS">Indian RS</option>
+
+                                </select>
+                                {errorsalary_currency && (
+                                  <div style={mystyle}>
+                                    {errorsalary_currency}
+                                  </div>
+                                )}
+                              </div>
+                            </div> */}
+                          {/* <Multiselect 
+                             options={industry}
+                             displayValue="name"
+                             name="Courses"
+                             id="Courses"
+                             value={data.name}
+                             onSelect={onChangeData}
+                             onRemove={onChangeData}
+                            /> */}
+{/* <div class="col-lg-6 col-md-6">
+                              <div class="form-group">
+                                <label>Current Salary</label>
+                                <input
+                                  class="form-control"
+                                  type="number"
+                                  name="current_salary"
+                                  id="current_salary"
+                                  value={data.current_salary}
+                                  onBlur={validatecurrent_salary}
+                                  onChange={onChangeData}
+                                  placeholder=""
+                                />
+                                {errorcurrent_salary && (
+                                  <div style={mystyle}>
+                                    {errorcurrent_salary}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                              <div class="form-group">
+                                <label>Expected Salary</label>
+                                <input
+                                  class="form-control"
+                                  type="number"
+                                  name="expected_salary"
+                                  id="expected_salary"
+                                  value={data.expected_salary}
+                                  onBlur={validateexpected_salary}
+                                  onChange={onChangeData}
+                                  placeholder=""
+                                />
+                                {errorexpected_salary && (
+                                  <div style={mystyle}>
+                                    {errorexpected_salary}
+                                  </div>
+                                )}
+                              </div>
+                            </div> */}
+
+
+                            {/* 
+                            <div class="form-group">
+                              <label>Languages</label>
+                              <input
+                                class="form-control"
+                                type="text"
+                                name="languages"
+                                id="languages"
+                                value={data.languages}
+                                onBlur={validatelanguages}
+                                onChange={onChangeData}
+                                placeholder=""
+                              />
+                              {errorlanguages && (
+                                <div style={mystyle}>{errorlanguages}</div>
+                              )}
+                            </div>
+
+                             <div class="col-lg-6 col-md-6">
+                              <div class="form-group">
+                                <label>Naionality</label>
+                                <input
+                                  class="form-control"
+                                  type="text"
+                                  name="nationality"
+                                  id="nationality"
+                                  value={data.nationality}
+                                  onBlur={validatenationality}
+                                  onChange={onChangeData}
+                                  placeholder=""
+                                />
+                                {errornationality && (
+                                  <div style={mystyle}>{errornationality}</div>
+                                )}
+                              </div>
+                            </div> */}
+                            {/* <div class="col-lg-6 col-md-6">
+                              <div class="form-group">
+                                <label>National ID Card</label>
+                                <input
+                                  class="form-control"
+                                  type="text"
+                                  name="national_id_card"
+                                  id="national_id_card"
+                                  value={data.national_id_card}
+                                  onBlur={validatenational_id_card}
+                                  onChange={onChangeData}
+                                  placeholder=""
+                                />
+                                {errornational_id_card && (
+                                  <div style={mystyle}>
+                                    {errornational_id_card}
+                                  </div>
+                                )}
+                              </div>
+                            </div> */}
+
+
+                          {/* <div class="col-lg-6 col-md-6">
+                              <div class="form-group">
+                                <label>Country</label>
+                                <select
+                                  class="select"
+                                  name="country"
+                                  id="country"
+                                  value={countryId}
+                                  onBlur={validatecountry}
+                                  onChange={onChangeCountry}
+                                >
+                                  <option value="0">Select Country</option>
+                                  {countries.map((option) => (
+                                    <option value={option.id}>
+                                      {option.name}
+                                    </option>
+                                  ))}
+                                  <option value="indian RS">Indian RS</option>
+                                </select>
+                                {errorcountry && (
+                                  <div style={mystyle}>{errorcountry}</div>
+                                )}
+                              </div>
+                            </div> */}
+                          {/* <div class="col-lg-6 col-md-6">
+                            <div class="form-group">
+                              <label>State</label>
+                              <select
+                                class="select"
+                                name="state"
+                                id="state"
+                                value={stateId}
+                                onBlur={validatestate}
+                                onChange={onChangeState}
+                              >
+                                <option value="0">Select State</option>
+                                {states.map((option) => (
+                                  <option value={option.id}>
+                                    {option.name}
+                                  </option>
+                                ))}
+                                <option value="indian RS">Indian RS</option>
+                              </select>
+                              {errorstate && (
+                                <div style={mystyle}>{errorstate}</div>
+                              )}
+                            </div>
+                          </div>
+                          <div class="col-lg-6 col-md-6">
+                            <div class="form-group">
+                              <label>City</label>
+                              <select
+                                class="select"
+                                name="city"
+                                id="city"
+                                value={cityId}
+                                onBlur={validatecity}
+                                onChange={onChangeCity}
+                              >
+                                <option value="0">Select City</option>
+                                {cities.map((option) => (
+                                  <option value={option.id}>
+                                    {option.name}
+                                  </option>
+                                ))}
+                                <option value="indian RS">Indian RS</option>
+                              </select>
+                              {errorcity && (
+                                <div style={mystyle}>{errorcity}</div>
+                              )}
+                            </div>
+                          </div> */}
+
 
                           {/* <h3 class="title">Social Links</h3>
                             <div class="col-lg-6 col-md-6">

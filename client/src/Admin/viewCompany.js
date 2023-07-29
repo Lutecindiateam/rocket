@@ -25,13 +25,13 @@ function ViewCompany(props) {
     let companyDeatilsData = props.data.companyDeatilsData;
     if (companyDeatilsData !== undefined) {
       setdata(companyDeatilsData.data.data[0]);
-      if (companyDeatilsData.data.data[0].logo) {
-        setimg(
-          process.env.REACT_APP_API_HOST + companyDeatilsData.data.data[0].logo
-        );
-      } else {
+      // if (companyDeatilsData.data.data[0].logo) {
+      //   setimg(
+      //     process.env.REACT_APP_API_HOST + companyDeatilsData.data.data[0].logo
+      //   );
+      // } else {
         setimg(image);
-      }
+      // }
     }
   }, [props.data.companyDeatilsData]);
 
@@ -79,6 +79,12 @@ function ViewCompany(props) {
                                   class="btn btn-otline-dark"
                                 >
                                   <i class="icon-printer"></i> Print
+                                </button>
+                                <button
+                                  onClick={console.log("hello")}
+                                  class="btn btn-otline-dark"
+                                >
+                                  <i class="icon-printer"></i> Delete
                                 </button>
                               </div>
                               <div>
@@ -137,8 +143,9 @@ function ViewCompany(props) {
                                   <h4>{data.name}</h4>
                                   <p>
                                     <i class="fa fa-map-marker"></i>{" "}
-                                    {data.location}, {data.city_name},{" "}
-                                    {data.state_name}, {data.country_name}
+                                    {data.location}, {data.city},{" "}
+                                    {data.state}
+                                    {/* , {data.country_name} */}
                                   </p>
                                 </div>
                               </div>
@@ -150,10 +157,10 @@ function ViewCompany(props) {
                                   {data.email}
                                 </a>
                               </p>
-                              <p>
+                              {/* <p>
                                 <b>Fax: </b>
                                 <a href={`callto:${data.fax}`}>{data.fax}</a>
-                              </p>
+                              </p> */}
                               <p>
                                 <b>Website: </b>
                                 <a href={data.website} target="_blank">

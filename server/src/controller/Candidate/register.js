@@ -124,54 +124,21 @@ const candidate = require('../../models/Candidate/candidate');
 exports.CandidateLogin =async(req,  res)=>{
   //  console.log(req.body.user.signInUserSession.idToken.jwtToken)
   //  return
-  const token =  req.body.user.signInUserSession.idToken.jwtToken;
+  const{ token, family_name, given_name, sub, email }=  req.body;
 
         try {
           // return res.status(200).json({data :{id: user.id , token:token}, status :"success",  message:"Login successful"})
 
-            const user = await candidate.findOne({ email: req.body.user.attributes.email }).exec();
+            const user = await candidate.findOne({ email: email }).exec();
             if(user){
-              return res.status(200).json({data :{id: user.id, token:req.body.user.signInUserSession.idToken.jwtToken}, status :"success",  message:"Login successful"})
+              return res.status(200).json({data :{id: user.id, token:token}, status :"success",  message:"Login successful"})
             }
             
-            
-            // return res.status(400).json({
-            //     message:' User already registered'
-            // });
-        
-            const{
-                given_name,
-               family_name,
-               email,
-               sub
-              } = req.body.user.attributes;
-
-                // phone,
-                // profile_title,
-                // profile_in_brief,
-                // current_organization,
-                // current_ctc,
-                // total_experience,
-                // gender,
-                // password,
-                // state,
-                // city,
-            //  console.log(req.body)
             
             const _user = new candidate({
               first_name :given_name,
               last_name:family_name,
-                // phone,
-                // profile_title,
-                // profile_in_brief,
-                // current_organization,
-                // current_ctc,
-                // total_experience,
-                // gender,
                 email,
-                // password,
-                // state,
-                // city,
                 sub,
             });
     
@@ -190,7 +157,7 @@ exports.CandidateLogin =async(req,  res)=>{
               // jwt.sign(payload,process.env.JWT_SECRET,{expiresIn : 31556926},(err,token) => {
                 // return res.status(200).json({status :"success", data : token})
                 return res.status(201).json({
-                  data :{id: savedUser.id ,token:req.body.user.signInUserSession.idToken.jwtToken},
+                  data :{id: savedUser.id ,token:token},
                   status :"success",
                   message:"Candidate registered successfully"
               

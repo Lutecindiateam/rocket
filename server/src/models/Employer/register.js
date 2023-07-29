@@ -7,7 +7,8 @@ const employerSchema = new mongoose.Schema(
       type: String,
       trim: true,
       min: 3,
-      max: 20
+      max: 20,
+      required : true
     },
     sub:{
       type: String
@@ -44,6 +45,10 @@ const employerSchema = new mongoose.Schema(
     city: {
       type: Object,
 
+    },
+    deleted: {
+      type: Boolean,
+      default: false
     }
       },
   { timestamps: true }
