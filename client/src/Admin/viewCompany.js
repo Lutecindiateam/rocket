@@ -9,12 +9,29 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { requestAdminCompanyDetails } from "../Redux/actions";
 import image from "../images/extraLogo.png";
+import { Storage } from 'aws-amplify';
+import {
+  requestAdminEditPosition,
+  requestAdminPosition
+} from "../Redux/actions";
+
 
 function ViewCompany(props) {
 
   const params = useParams();
   const [data, setdata] = useState({});
   const [img, setimg] = useState({});
+  const [certificate, setCertificate] = useState(null)
+  const [status, setStatus] = useState("")
+  const [data1, setData1] = useState({})
+
+  function onChangeData(e) {
+    setData1((data1) => ({
+      ...data1,
+      [e.target.name]: e.target.value,
+    }));
+  }
+
   useEffect(() => {
     props.requestAdminCompanyDetails({
       id: params.id,
@@ -25,15 +42,82 @@ function ViewCompany(props) {
     let companyDeatilsData = props.data.companyDeatilsData;
     if (companyDeatilsData !== undefined) {
       setdata(companyDeatilsData.data.data[0]);
+      props.requestAdminPosition({
+        id: params.id,
+      });
       // if (companyDeatilsData.data.data[0].logo) {
       //   setimg(
       //     process.env.REACT_APP_API_HOST + companyDeatilsData.data.data[0].logo
       //   );
       // } else {
-        setimg(image);
+      setimg(image);
       // }
     }
   }, [props.data.companyDeatilsData]);
+
+  // useEffect(() => {
+
+
+  // })
+
+  const getCertificate = async () => {
+    // if(data._id === )
+    const s3Key = `employerCertificate/${data._id}`;
+    try {
+      const response = await Storage.list(s3Key);
+      if (response.results.length) {
+        const certificateUrl = await Storage.get(s3Key);
+        if (certificateUrl) {
+          setCertificate(
+            certificateUrl
+          );
+        }
+      }
+    } catch (error) {
+      console.error(error.message)
+    }
+
+  }
+
+
+  async function saveStatus(e) {
+    e.preventDefault();
+    try {
+      await props.requestAdminEditPosition({
+        id: params.id,
+        data: {
+          status: data1.status,
+        },
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+
+  useEffect(() => {
+    let editPosition = props.data.editPositionData;
+    if (editPosition !== undefined) {
+      if (editPosition.data.status) {
+        setStatus(editPosition.data.status)
+      } else {
+        setStatus(undefined);
+      }
+    }
+  }, [props.data.editPositionData]);
+
+  useEffect(() => {
+    let position = props.data.positionData;
+    if (position !== undefined) {
+      if (position.data.data.status) {
+        setStatus(position.data.data.status)
+      } else {
+        setStatus(undefined);
+      }
+    }
+  }, [props.data.positionData]);
+
+
 
   function printPage() {
     var printContents =
@@ -44,6 +128,7 @@ function ViewCompany(props) {
     window.print();
     document.body.innerHTML = originalContents;
   }
+
 
   return (
     <>
@@ -87,7 +172,20 @@ function ViewCompany(props) {
                                   <i class="icon-printer"></i> Delete
                                 </button>
                               </div>
-                              <div>
+                              {status == "Approved" ? (
+                                <b style={{ color: "green" }}>Approved</b>
+                              ) : (status == "Rejected" ? (
+                                <b style={{ color: "red" }}>Rejected</b>
+
+                              ) : (
+                                status == "Onhold" ? (
+                                  <b style={{ color: "orange" }}>on hold</b>
+                                ) : (
+                                  <b style={{ color: "yellow" }}>Pending</b>
+                                )
+                              ))
+                              }
+                              {/* <div>
                                 <a href={data.facebook_url} target="_blank">
                                   <button
                                     class="btn btn-primary btn-md text-white mb-0 me-0"
@@ -133,7 +231,42 @@ function ViewCompany(props) {
                                     <i class="fa fa-pinterest-p"></i>
                                   </button>
                                 </a>
-                              </div>
+                              </div> */}
+                              <form onSubmit={saveStatus}>
+
+                                <div class="col-lg-6 col-md-6">
+                                  <div class="form-group">
+                                    <label>Status</label>
+                                    <select
+                                      class="select"
+                                      name="status"
+                                      id="status"
+                                      value={data1.status}
+                                      onChange={onChangeData}
+                                    // onBlur={validateExpiry}
+                                    >
+                                      <option value="">Select a day</option>
+                                      <option value="Approved">Approved</option>
+                                      <option value="Onhold">on hold</option>
+                                      <option value="Rejected">Rejected</option>
+
+                                      {/* {expiry_date.map((option) => (
+                                <option value={option.day}>
+                                  {option.day}
+                                </option>
+                              ))} */}
+                                    </select>
+                                  </div>
+                                </div>
+                                <div>
+                                  
+                                </div>
+                                <div class="form-group mb-8 button">
+                                  <button class="btn "
+                                    style={{ color: "white" }}
+                                  >Submit</button>
+                                </div>
+                              </form>
                             </div>
                             <br />
                             <div id="printme">
@@ -143,7 +276,7 @@ function ViewCompany(props) {
                                   <h4>{data.name}</h4>
                                   <p>
                                     <i class="fa fa-map-marker"></i>{" "}
-                                    {data.location}, {data.city},{" "}
+                                    {data.address},{data.city},{" "}
                                     {data.state}
                                     {/* , {data.country_name} */}
                                   </p>
@@ -168,11 +301,30 @@ function ViewCompany(props) {
                                 </a>
                               </p>
                               <p>
-                                <b>About Us: </b> {data.about_us}
+                                <b>Industry: </b> {data.industry}
                               </p>
                               <p>
-                                <b>Company Details: </b> {data.employer_details}
+                                <b>Company Authorized Person Details: </b> {data.authorized_person}
                               </p>
+                              <p>
+                                <b>Company Registartion Certificate: </b>
+                              </p>
+                              <br />
+                              <button
+                                type="submit"
+                                onClick={getCertificate}
+                                class="btn btn-primary me-2"
+                                style={{ color: "white" }}
+                              >
+                                View Certificate
+                              </button>
+                              {
+                                certificate == null ? (
+                                  <b>Click On View Certificate</b>
+                                ) : (
+                                  <iframe src={certificate} width="100%" height="1000" />
+                                )
+                              }
                             </div>
                           </div>
                         </div>
@@ -194,6 +346,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ requestAdminCompanyDetails }, dispatch);
+  bindActionCreators({ requestAdminCompanyDetails, requestAdminEditPosition, requestAdminPosition }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCompany);

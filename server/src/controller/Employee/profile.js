@@ -41,7 +41,8 @@ exports.updateEmployerprofile = async (req, res) => {
             authorized_mobile,
             address,
             website,
-            email
+            email,
+            pincode
         } = req.body
 
         const update = await Employer.findByIdAndUpdate(
@@ -56,7 +57,9 @@ exports.updateEmployerprofile = async (req, res) => {
                     authorized_person: authorized_person || Employer.authorized_person,
                     authorized_mobile: authorized_mobile || Employer.authorized_mobile,
                     industry: industry || Employer.industry,
-                    address: address || Employer.address
+                    address: address || Employer.address,
+                    pincode: pincode || Employer.pincode,
+                    status : false
                 },
             },
             { new: true }
@@ -65,7 +68,7 @@ exports.updateEmployerprofile = async (req, res) => {
         if (!update) {
             return res.status(404)({ error: "Employer Not Found" })
         }
-        // console.log(Employer);
+        // console.log(update);
 
         return res.status(200).json({
             code: 200,

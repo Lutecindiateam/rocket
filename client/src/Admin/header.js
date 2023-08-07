@@ -128,7 +128,7 @@ function Header(props) {
                   </h4>
                 </div>
               </div>
-            </a>
+            </a> 
             {/* <a class="navbar-brand brand-logo-mini" href="/admin/home">
               <img src={minimg} alt="logo" />
             </a> */}

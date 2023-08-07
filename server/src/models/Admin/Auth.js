@@ -7,7 +7,7 @@ const AdminSchema = new mongoose.Schema(
             type: String,
             required:true
         },
-        AdminPass:{
+        sub:{
             type: String,
             required:true
         },

@@ -8,50 +8,57 @@ const employerSchema = new mongoose.Schema(
       trim: true,
       min: 3,
       max: 20,
-      required : true
+      required: true
     },
-    sub:{
+    sub: {
       type: String
     },
-      industry:{
-       type: String,
-       trim: true
-      },
-      address:{
-        type: String
-      },
-       website:{
-        type: String,
-       },
-       email: {
-        type: String,
-        trim: true,
-        lowercase: true
-      },
-      
-      hash_password: {
-        type: String,
-      },
-      authorized_person:{
-        type: String
-      },
+    industry: {
+      type: String,
+      trim: true
+    },
+    address: {
+      type: String
+    },
+    website: {
+      type: String,
+    },
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true
+    },
+
+    hash_password: {
+      type: String,
+    },
+    authorized_person: {
+      type: String
+    },
     authorized_mobile: {
       type: String,
     },
-   state: {
-      type: Object,
-      
+    state: {
+      type: String,
+
     },
     city: {
-      type: Object,
+      type: String,
 
+    },
+    pincode: {
+      type: String
     },
     deleted: {
       type: Boolean,
       default: false
+    },
+    status: {
+      type: String,
+      default: "Onhold"
     }
-      },
+  },
   { timestamps: true }
 );
 
- module.exports= mongoose.model('Employer', employerSchema);
+module.exports = mongoose.model('Employer', employerSchema);

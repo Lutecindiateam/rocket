@@ -13,7 +13,7 @@ import {
   requestAdminAllPosition,
   requestAdminPosition,
   requestAdminDeletePosition,
-  requestAdminEditPosition,
+  // requestAdminEditPosition,
 } from "../Redux/actions";
 import Swal from "sweetalert2";
 
@@ -178,24 +178,24 @@ function Position(props) {
     }
   }, [props.data.positionData]);
 
-  const saveedittoggle = (e) => {
-    e.preventDefault();
-    if (validateEditForm()) {
-      props.requestAdminEditPosition({
-        id: id,
-        data: {
-          name: editdata.name,
-          description: editdata.description,
-        },
-      });
-      seteditdata({
-        name: "",
-        description: "",
-      });
-      setid(0);
-      edittoggle();
-    }
-  };
+  // const saveedittoggle = (e) => {
+  //   e.preventDefault();
+  //   if (validateEditForm()) {
+  //     props.requestAdminEditPosition({
+  //       id: id,
+        // data: {
+        //   name: editdata.name,
+        //   description: editdata.description,
+        // },
+  //     });
+  //     seteditdata({
+  //       name: "",
+  //       description: "",
+  //     });
+  //     setid(0);
+  //     edittoggle();
+  //   }
+  // };
 
   useEffect(() => {
     let editPositionData = props.data.editPositionData;
@@ -435,7 +435,7 @@ function Position(props) {
                                       <button
                                         type="submit"
                                         class="btn btn-primary me-2"
-                                        onClick={saveaddtoggle}
+                                        // onClick={saveaddtoggle}
                                       >
                                         Submit
                                       </button>
@@ -548,7 +548,7 @@ function Position(props) {
                                                   <button
                                                     type="submit"
                                                     class="btn btn-primary me-2"
-                                                    onClick={saveedittoggle}
+                                                    // onClick={saveedittoggle}
                                                   >
                                                     Submit
                                                   </button>
@@ -674,7 +674,7 @@ const mapDispatchToProps = (dispatch) =>
       requestAdminAllPosition,
       requestAdminPosition,
       requestAdminDeletePosition,
-      requestAdminEditPosition,
+      // requestAdminEditPosition,
     },
     dispatch
   );

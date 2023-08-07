@@ -109,6 +109,11 @@ function PostJob(props) {
     }),
   };
 
+  useEffect(() => {
+    new WOW.WOW().init();
+    // localStorage.removeItem("link");
+    localStorage.removeItem("link2")
+  }, []);
 
   useEffect(() => {
     let empLoginData = props.employee.empLoginData;
@@ -550,9 +555,6 @@ function PostJob(props) {
     // let Name = validateName();
     // let Email = validateEmail();
 
-
-
-
     let valid =
       Title &&
       remote &&
@@ -584,14 +586,14 @@ function PostJob(props) {
   function submitForm(e) {
     e.preventDefault();
     if (validateForm()) {
-      if (empProfile.authorized_person) {
+      if (empProfile.status === true) {
         props.requestAddJob({
           token: emp.token,
           data: {
             company_name: emp.name,
             company_id: emp.id,
             title: data.title,
-            category:empProfile.industry,
+            category: empProfile.industry,
             gender: data.gender,
             expiry_date: data.expiry_date,
             salary_from: data.salary_from,
@@ -607,22 +609,20 @@ function PostJob(props) {
             vacancy: data.vacancy,
             state: selectedState,
             city: selectedCity,
-            // status: "pending"
-          
-            // position: data.position,
-            
+            // status: "pending"          
+            // position: data.position,            
             // shift: data.shift,
             // tag: data.tag,
             // Recruiter_name: data.Recruiter_name,
             // Recruiter_email: data.Recruiter_email,
             // salary_period: data.salary_period,
 
-          }, 
+          },
         });
         setError(false)
       } else {
-        localStorage.setItem("link1", "/postJob");
-        Swal.fire("Error!", `Please complete your profile.`, "error");
+        localStorage.setItem("link2", "/postJob");
+        Swal.fire("Error!", `Your Request is Pending Please Check Profille Status.`, "error");
         navigate("/empProfile");
       }
     } else {
@@ -686,7 +686,7 @@ function PostJob(props) {
 
   useEffect(() => {
     let empAddJobData = props.employee.empAddJobData;
-    // console.log(empAddJobData)
+    console.log(empAddJobData)
     if (empAddJobData !== undefined) {
       if (empAddJobData?.data?.status == "success") {
         Swal.fire("Good job!", "Job added successfully.", "success");
@@ -783,7 +783,7 @@ function PostJob(props) {
                         <div class="col-lg-6 col-md-6">
                           <div style={{ color: "black" }}>
                             <label for="gender" class="label">
-                              Gender
+                              Gender*
                             </label>
                             <br />
                             <br />
@@ -848,6 +848,26 @@ function PostJob(props) {
                         </div>
                         <div class="col-lg-6 col-md-6">
                           <div class="form-group">
+                            <label>Expiry Days*</label>
+                            <select
+                              class="select"
+                              name="expiry_date"
+                              id="expiry_date"
+                              value={data.expiry_date}
+                              onChange={onChangeData}
+                            // onBlur={validateExpiry}
+                            >
+                              <option value="">Select a day</option>
+                              {expiry_date.map((option) => (
+                                <option value={option.day}>
+                                  {option.day}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="form-group">
                             <label>Salary From(per annum)</label>
                             <input
                               class="form-control"
@@ -880,47 +900,8 @@ function PostJob(props) {
                             {errorTo && <div style={mystyle}>{errorTo}</div>}
                           </div>
                         </div>
-                        <div class="col-lg-6 col-md-6">
-                          <div class="form-group">
-                            <label>Remote Option*</label>
-                            <select
-                              class="select"
-                              name="remote"
-                              id="remote"
-                              value={data.remote}
-                              onBlur={validateremote}
-                              onChange={onChangeData}
-                            >
-                              <option value="0">Select Remote Option</option>
-                              <option value="yes">Yes</option>
-                              <option value="No">No</option>
+                       
 
-                            </select>
-                            {errorRemote && (
-                              <div style={mystyle}>{errorRemote}</div>
-                            )}
-                          </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6">
-                          <div class="form-group">
-                            <label>Expiry Date*</label>
-                            <select
-                              class="select"
-                              name="expiry_date"
-                              id="expiry_date"
-                              value={data.expiry_date}
-                              onChange={onChangeData}
-                            // onBlur={validateExpiry}
-                            >
-                              <option value="">Select a day</option>
-                              {expiry_date.map((option) => (
-                                <option value={option.day}>
-                                  {option.day}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
 
                         <div class="col-lg-6 col-md-6">
                           <div class="form-group">
@@ -947,7 +928,7 @@ function PostJob(props) {
                         </div>
                         <div class="col-lg-6 col-md-6">
                           <div class="form-group">
-                            <label>Course</label>
+                            <label>Educational Course*</label>
                             <select
                               class="select"
                               name="functional_area"
@@ -973,6 +954,27 @@ function PostJob(props) {
                             </select>
                             {errorFunctional && (
                               <div style={mystyle}>{errorFunctional}</div>
+                            )}
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <div class="form-group">
+                            <label>Remote Option*</label>
+                            <select
+                              class="select"
+                              name="remote"
+                              id="remote"
+                              value={data.remote}
+                              onBlur={validateremote}
+                              onChange={onChangeData}
+                            >
+                              <option value="0">Select Remote Option</option>
+                              <option value="yes">Yes</option>
+                              <option value="No">No</option>
+
+                            </select>
+                            {errorRemote && (
+                              <div style={mystyle}>{errorRemote}</div>
                             )}
                           </div>
                         </div>
@@ -1131,8 +1133,8 @@ function PostJob(props) {
                           )}
                         </div>
                       </div>
- 
-                     {/* <div class="col-lg-6 col-md-6">
+
+                      {/* <div class="col-lg-6 col-md-6">
                           <div class="form-group">
                             <label>Job Types*</label>
                             <select
@@ -1153,8 +1155,8 @@ function PostJob(props) {
                             )}
                           </div>
                         </div> */}
-                        
-                        {/* <div class="col-lg-6 col-md-6">
+
+                      {/* <div class="col-lg-6 col-md-6">
                           <div class="form-group">
                             <label>Position*</label>
                             <select
@@ -1193,7 +1195,7 @@ function PostJob(props) {
                           </div>
                         </div> */}
 
-                        {/* <div class="col-lg-6 col-md-6">
+                      {/* <div class="col-lg-6 col-md-6">
                           <div class="form-group">
                             <label>Expiry Date*</label>
                             <input
@@ -1211,8 +1213,8 @@ function PostJob(props) {
                             )}
                           </div>
                         </div> */}
-                       
-                        {/* <div class="col-lg-6 col-md-6">
+
+                      {/* <div class="col-lg-6 col-md-6">
                           <div class="form-group">
                             <label>Currency*</label>
                             <select
@@ -1281,8 +1283,8 @@ function PostJob(props) {
                             )}
                           </div>
                         </div> */}
-                       
-                        {/* <div class="col-lg-6 col-md-6">
+
+                      {/* <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label>Course*</label>
                                 <select
@@ -1316,7 +1318,7 @@ function PostJob(props) {
                                 )}
                               </div>
                             </div> */}
-                                                {/* <div class="col-lg-6 col-md-6">
+                      {/* <div class="col-lg-6 col-md-6">
                           <div class="form-group">
                             <label>Skill*</label>
                             <select
@@ -1332,7 +1334,7 @@ function PostJob(props) {
                             </select>
                           </div>
                         </div> */}
-                        {/* <div class="col-lg-6 col-md-6">
+                      {/* <div class="col-lg-6 col-md-6">
                           <div class="form-group">
                             <label>Tag</label>
                             <select
@@ -1349,7 +1351,7 @@ function PostJob(props) {
                             </select>
                           </div>
                         </div> */}
-                                             {/* <div class="col-lg-6 col-md-6">
+                      {/* <div class="col-lg-6 col-md-6">
                           <div class="form-group">
                             <label>Email</label>
                             <input

@@ -2,6 +2,7 @@
 import axios from "axios";
 
 export const adminlogin = (obj) => {
+  console.log(obj.data);
     return axios
       .post("/admin/login", obj.data)
       .then((response) => {
@@ -1134,9 +1135,10 @@ export const adminlogin = (obj) => {
       });
   };
   
+  //running
   export const editPosition = (obj) => {
     return axios
-      .patch("/admin/editPartiCularPosition/" + obj.id, obj.data)
+      .patch("/admin/editPartiCularPosition/" + obj.id , obj.data)
       .then((response) => {
         return response;
       })

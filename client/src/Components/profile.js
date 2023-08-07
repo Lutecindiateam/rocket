@@ -3,7 +3,7 @@ import Header from "./header";
 import ManageAccount from "./manageAccount";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import {
   requestLogin,
@@ -20,6 +20,8 @@ import Breadcrumbs from "../Section/breadcrumbsSection";
 import { Country, State, City } from "country-state-city";
 import Select from "react-select";
 import { Multiselect } from 'multiselect-react-dropdown';
+import { Storage } from 'aws-amplify';
+import { Document, Page, pdfjs } from "react-pdf";
 
 
 function Profile(props) {
@@ -97,8 +99,8 @@ function Profile(props) {
   const [educations, setEducations] = useState([
     { education: "", course: "" } // Initial education section
   ]);
-
-
+  const [pdf, setPdf] = useState()
+  const [selectedFile, setSelectedFile] = useState()
   // useEffect(() => {
   //   console.log(selectedState);
   //   console.log(selectedCity);
@@ -113,6 +115,14 @@ function Profile(props) {
     }),
   };
 
+  const onSelectFile = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined);
+    } else {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
   const addEducationSection = () => {
     setEducations([...educations, { education: "", course: "" }]);
   };
@@ -125,6 +135,7 @@ function Profile(props) {
 
   useEffect(() => {
     let loginData = props.candidate.loginData;
+    console.log(loginData);
     if (loginData !== undefined) {
       if (loginData?.data?.status == "success") {
         setEmp(loginData.data.data);
@@ -145,15 +156,39 @@ function Profile(props) {
     }
   }, [props.candidate.loginData]);
 
+
   useEffect(() => {
     let getCandidateData = props.candidate.getCandidateData;
-    // console.log(getCandidateData);
     if (getCandidateData !== undefined) {
       if (getCandidateData?.data?.status === "success") {
         setData(getCandidateData.data.data);
-        setEducations(getCandidateData.data.data.education);
-        setSelectedState(getCandidateData.data.data.state);
-        setSelectedCity(getCandidateData.data.data.city)
+        if (getCandidateData.data.data.education) {
+          setEducations(getCandidateData.data.data.education);
+        }
+        const getResume = async () => {
+          const s3Key = `candidateResume/${emp.id}`;
+          try {
+            // List objects in the S3 bucket with the specified s3Key
+            const response = await Storage.list(s3Key);
+            // If the response is an array and it's not empty, the object exists
+            if (response.results.length > 0) {
+              // Fetch the object using the get method
+              const pdfUrl = await Storage.get(s3Key);
+              if (pdfUrl) {
+                setPdf(pdfUrl);
+              }
+            } else {
+              // Handle the case when the object is not present in S3
+              console.error("PDF object not found in S3.");
+            }
+          } catch (error) {
+            // Handle errors
+            console.error("Error fetching the PDF from S3:", error);
+          }
+        }
+        getResume();
+        // setSelectedState(getCandidateData.data.data.state);
+        // setSelectedCity(getCandidateData.data.data.city)
         // if (getCandidateData.data.data.country) {
         //   setcountryId(getCandidateData.data.data.country);
         //   props.requestState({
@@ -903,56 +938,61 @@ function Profile(props) {
   function submitForm(e) {
     e.preventDefault();
     if (validateForm()) {
-      props.requestCandidateProfile({
-        id: emp.id,
-        token: emp.token,
-        data: {
-          given_name: data.first_name,
-          family_name: data.last_name,
-          gender: data.gender,
-          skills: data.skills,
-          state: selectedState,
-          city: selectedCity,
-          birth_date: data.birth_date,
-          marital_status: data.marital_status,
-          pincode: data.pincode,
-          total_experience: data.total_experience,
-          education: educations,
-          // course: educations,
-          industry: data.industry,
-          profile_title: data.profile_title,
-          profile_in_brief: data.profile_in_brief,
-          phone: data.phone,
-          current_organization: data.current_organization,
-          current_ctc: data.current_ctc,
-          languages: data.languages,
-          notice_period: data.notice_period,
-          address: data.address,
-          email: data.email
-          // skill: selectedskill,       
-          // nationality: data.nationality,
-          // national_id_card: data.national_id_card,
-          // functional_area: data.functional_area,
-          // current_salary: data.current_salary,
-          // expected_salary: data.expected_salary,
-          // salary_currency: data.salary_currency,
-          // immediate_available: data.immediate_available,
-          // facebook_url: data.facebook_url,
-          // twitter_url: data.twitter_url,
-          // linkedin_url: data.linkedin_url,
-          // google_plus_url: data.google_plus_url,
-          // pinterest_url: data.pinterest_url,
+      if (pdf !== undefined) {
+        props.requestCandidateProfile({
+          id: emp.id,
+          token: emp.token,
+          data: {
+            given_name: data.first_name,
+            family_name: data.last_name,
+            gender: data.gender,
+            skills: data.skills,
+            state: selectedState,
+            city: selectedCity,
+            birth_date: data.birth_date,
+            marital_status: data.marital_status,
+            pincode: data.pincode,
+            total_experience: data.total_experience,
+            education: educations,
+            // course: educations,
+            industry: data.industry,
+            profile_title: data.profile_title,
+            profile_in_brief: data.profile_in_brief,
+            phone: data.phone,
+            current_organization: data.current_organization,
+            current_ctc: data.current_ctc,
+            languages: data.languages,
+            notice_period: data.notice_period,
+            address: data.address,
+            email: data.email
+            // skill: selectedskill,       
+            // nationality: data.nationality,
+            // national_id_card: data.national_id_card,
+            // functional_area: data.functional_area,
+            // current_salary: data.current_salary,
+            // expected_salary: data.expected_salary,
+            // salary_currency: data.salary_currency,
+            // immediate_available: data.immediate_available,
+            // facebook_url: data.facebook_url,
+            // twitter_url: data.twitter_url,
+            // linkedin_url: data.linkedin_url,
+            // google_plus_url: data.google_plus_url,
+            // pinterest_url: data.pinterest_url,
 
-          // Cours: data.Coursess.map(course => course.name)
+            // Cours: data.Coursess.map(course => course.name)
 
-        },
-      });
+          },
+        });
 
-      setError(false)
+        setError(false)
+      } else {
+        Swal.fire("Error!", `Please upload Your Resume.`, "error");
+      }
     } else {
       setError(true)
     }
   }
+
   useEffect(() => {
     if (error) {
       if (errorfirst_name) {
@@ -1056,6 +1096,29 @@ function Profile(props) {
       }
     }
   }, [props.candidate.candidateProfileData]);
+
+  async function addResume(e) {
+    e.preventDefault();
+    if (selectedFile) {
+      const s3Key = `candidateResume/${emp.id}`;
+      const result = await Storage.put(s3Key, selectedFile, {
+        contentType: selectedFile.type,
+      });
+      if (result) {
+        Swal.fire("Good job!", "Your Resume Uploaded Successfully.", "success");
+        setPdf(result)
+      } else {
+        console.log("semething went wrong");
+      }
+    } else {
+      Swal.fire(
+        "Error!",
+        "Please select png or jpg or jpeg file for profile picture.",
+        "error"
+      );
+    }
+  }
+
 
   return (
     <>
@@ -1200,7 +1263,7 @@ function Profile(props) {
                                 )}
                               </div>
                             </div>
-                            
+
 
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
@@ -1411,7 +1474,7 @@ function Profile(props) {
                                 )}
                               </div>
                             </div>
-                            
+
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label for="Current CTC" class="label">
@@ -1438,7 +1501,7 @@ function Profile(props) {
 
 
 
-                          
+
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label>Notice Period*</label>
@@ -1467,16 +1530,16 @@ function Profile(props) {
                               {educations.map((educationData, index) => (
                                 <div key={index}>
                                   <h3 class="title"> Qualification Details
-                                  &nbsp;
+                                    &nbsp;
                                     <button type="button" onClick={addEducationSection}>
                                       +
                                     </button>
                                     &nbsp;
                                     {index > 0 &&
-                                    <button type="button" onClick={() => removeEducationSection(index)}>
-                                      -
-                                    </button>
-                                  }
+                                      <button type="button" onClick={() => removeEducationSection(index)}>
+                                        -
+                                      </button>
+                                    }
                                   </h3>
                                   <div class="row">
                                     <div class="col-lg-6 col-md-6">
@@ -1538,7 +1601,7 @@ function Profile(props) {
                                       </div>
                                     </div>
                                   </div>
-                                  
+
                                 </div>
                               ))}
 
@@ -1643,7 +1706,39 @@ function Profile(props) {
                               </div>
                             </div>
                           </div>
-                          
+                          <div>
+                            {pdf ? (
+                              <>
+                                <text style={{color: "green" }}>Your Resume Uploaded.</text>
+                                <Link to="/resume">
+                                  <button
+                                    type="submit"
+                                    class="btn btn-primary me-2"
+                                    style={{ color: "white" }}
+                                  >
+                                    View Resume
+                                  </button>
+                                </Link>
+
+                                <br />
+                              </>
+                            ) : (
+                              <>
+                                <h6>Upload Your Resume.</h6>
+                                <input type="file" accept=".pdf,.doc,.docx" onChange={onSelectFile} />
+
+                                <button
+                                  type="submit"
+                                  onClick={addResume}
+                                  class="btn btn-primary me-2"
+                                  style={{ color: "white" }}
+                                >
+                                  Add Rresume
+                                </button>
+                              </>
+                            )}
+                          </div>
+
                           {/* <div class="col-lg-4 col-md-4">
                               <div style={{ color: "black" }}>
                                 <label for="immediate_available" class="label">
@@ -1665,7 +1760,7 @@ function Profile(props) {
                                   />
                                   <label class="form-check-label">Yes</label>
                                 </div> */}
-                            {/* <div class="form-check form-check-inline">
+                          {/* <div class="form-check form-check-inline">
                                   <input
                                     class="form-check-input"
                                     type="radio"
@@ -1687,7 +1782,7 @@ function Profile(props) {
                               </div>
                             </div> */}
 
-  {/* 
+                          {/* 
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label>Salary Currency</label>
@@ -1724,7 +1819,7 @@ function Profile(props) {
                              onSelect={onChangeData}
                              onRemove={onChangeData}
                             /> */}
-{/* <div class="col-lg-6 col-md-6">
+                          {/* <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label>Current Salary</label>
                                 <input
@@ -1766,7 +1861,7 @@ function Profile(props) {
                             </div> */}
 
 
-                            {/* 
+                          {/* 
                             <div class="form-group">
                               <label>Languages</label>
                               <input
@@ -1802,7 +1897,7 @@ function Profile(props) {
                                 )}
                               </div>
                             </div> */}
-                            {/* <div class="col-lg-6 col-md-6">
+                          {/* <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label>National ID Card</label>
                                 <input

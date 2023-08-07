@@ -147,8 +147,8 @@ function JobDetails(props) {
 // console.log(data);
   function applyJobs(id) {
     if (user.id) {
-      if(profile.id){
-        // console.log(profile);
+      console.log(profile);
+      if(profile.status === true){
       props.requestApplyJob({
         token: user.token,
         id: id,
@@ -291,7 +291,7 @@ function JobDetails(props) {
       }
     );
   }, [params.id, data]);
-
+// console.log(data);
   return (
     <>
       <Header />
@@ -457,7 +457,8 @@ function JobDetails(props) {
                         </strong>
                       </li>
                       <li>
-                        {data.city_name}, {data.state_name}, {data.country_name}
+                        {data.city_name}, {data.state_name}
+                        {/* , {data.country_name} */}
                       </li>
                     </ul>
                   </div>
@@ -510,7 +511,7 @@ function JobDetails(props) {
                       <div
                         class="col-xl-auto col-lg-12 col-sm-auto col-12 p-2"
                         onClick={() => {
-                          applyJobs(data.id);
+                          applyJobs(data._id);
                         }}
                       >
                         <a class="d-block btn btn-alt">

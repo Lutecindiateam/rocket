@@ -52,14 +52,14 @@ function ManageAccount(props) {
               <i class="fa fa-black-tie"></i> Iterviews
             </Link>
           </li> */}
-          <li>
+          {/* <li>
             <Link
               class={`nav-item ${props.name === "Messages" && "active"} `}
               to="/empMessages"
             >
               <i class="fa fa-comments-o"></i> Messages
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               class={`nav-item ${props.name === "Settings" && "active"} `}

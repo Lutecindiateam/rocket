@@ -4,10 +4,11 @@ const { AllCount, getAdminProfile, getlastSixJobs, getJobDetails, getLastSixComp
 const { getAllCandidates, getCandidateDetails, getAllJobs, getAllCompanies, getCompaniyWise } = require('../controller/Admin/Allusers');
 const { MonthWiseCount, MonthWiseCountAppliedJobs } = require('../controller/Admin/Monthwise');
 const { getIndutries, getEducation, getCourse, getNoticePeriod, getExpiry } = require('../controller/Admin/Options');
+const { changePosition, getPostionStatus } = require('../controller/Admin/StatusChange');
 const router =express.Router();
 
 
-router.post('/admin/signup' ,AdminSignup);
+// router.post('/admin/signup' ,AdminSignup);
 router.post('/admin/login', AdminLogin);
 router.get('/Allcount', AllCount);
 router.get('/admin/simple/:id', getAdminProfile);
@@ -26,6 +27,7 @@ router.get('/admin/getcareer_levels', getIndutries)
 router.get('/admin/getDegreeLevel', getEducation)
 router.get('/admin/getFunctionalArea', getCourse)
 router.get('/admin/getIndustry', getExpiry)
-
+router.patch('/admin/editPartiCularPosition/:id', changePosition)
+router.get('/admin/editPosition/:id', getPostionStatus )
 
 module.exports= router;

@@ -17,7 +17,6 @@ class AuthMiddleware {
 
   verifyToken(req, resp, next) {
     const { token } = req.body;
-    console.log(token);
     if (!token) return resp.status(401).end();
 
     let decodedJwt = jwt.decode(token, { complete: true });
@@ -165,7 +164,8 @@ exports.updateCandidateProfile = async (req, res) => {
           total_experience: total_experience || candidate.total_experience,
           course: course || candidate.course,
           education: education || candidate.education,
-          pincode: pincode || candidate.pincode
+          pincode: pincode || candidate.pincode,
+          status: true
         },
       },
       { new: true }
@@ -192,11 +192,13 @@ exports.getAllJob = async (req, res) => {
 
   const pageNumber = parseInt(page) || 1;
   const pageSize = parseInt(page_size) || 10;
-  const skipCount = (pageNumber - 1) * pageSize + 6;
+  const skipCount = 0;
+  // const skipCount = (pageNumber - 1) * pageSize + 6;
 
   try {
     const totalJobs = await Job.countDocuments();
-    const lastPage = Math.ceil((totalJobs - 6) / pageSize);
+    const lastPage = Math.ceil(totalJobs / pageSize);
+    // const lastPage = Math.ceil((totalJobs - 6) / pageSize);
 
     const jobs = await Job.find()
       .skip(skipCount)
@@ -386,14 +388,14 @@ exports.getAppliedJobs = async (req, res) => {
         .then((jobResults) => {
           jobs.push(...jobResults);
 
-          const modifiedJobs = jobs.map((job) => {
-            const { _id, ...rest } = job._doc;
-            return { id: _id, ...rest };
-          });
+          // const modifiedJobs = jobs.map((job) => {
+          //   const { _id, ...rest } = job._doc;
+          //   return { id: _id, ...rest };
+          // });
 
           return res.status(200).json({
             code: 200,
-            data: { jobs: modifiedJobs },
+            data: { jobs: jobs },
             message: "Jobs found",
             status: "success",
           });

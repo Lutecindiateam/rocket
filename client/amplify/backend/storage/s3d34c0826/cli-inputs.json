@@ -1,0 +1,13 @@
+{
+  "resourceName": "s3d34c0826",
+  "policyUUID": "d34c0826",
+  "bucketName": "rocket42082ab690ff489b8517424a718b6796",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "groupAccess": {}
+}

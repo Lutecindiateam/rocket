@@ -98,7 +98,8 @@ function AppliedJobs(props) {
   function addData(){
     navigate('/jobList/1/10')
   }
-console.log(data);
+
+
   return (
     <>
       <Header />
@@ -122,7 +123,7 @@ console.log(data);
                               <div class="col-lg-1 col-md-1 col-12">
                                 <div class="title-img">
                                   <div class="can-img">
-                                    <Link to={`/jobDetails/${item.id}`}>
+                                    <Link to={`/jobDetails/${item._id}`}>
                                       <img src={img} alt="logo" />
                                     </Link>
                                   </div>
@@ -134,7 +135,7 @@ console.log(data);
                                   style={{ paddingLeft: "10px" }}
                                 >
                                   <h3>
-                                    <Link to={`/jobDetails/${item.id}`}>
+                                    <Link to={`/jobDetails/${item._id}`}>
                                       {" "}
                                       {item.company_name}
                                     </Link>
@@ -150,7 +151,7 @@ console.log(data);
 
                               <div class="col-lg-3 col-md-3 col-12">
                                 <div class="title-img">
-                                  <Link to={`/jobDetails/${item.id}`}>
+                                  <Link to={`/jobDetails/${item._id}`}>
                                     <h3>
                                       {item.title}
                                       <span>{item.jobs_name}</span>

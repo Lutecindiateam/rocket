@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { requestAdminCandidateDetails } from "../Redux/actions";
 import image from "../images/profile.png";
+import { Storage } from 'aws-amplify';
 
 function ViewCandidate(props) {
 
@@ -31,14 +32,40 @@ function ViewCandidate(props) {
       //     process.env.REACT_APP_API_HOST + candidateDeatilsData.data.data[0].profile
       //   );
       // } else {
-        setimg(image);
+      setimg(image);
       // }
 
-      setresume(
-        process.env.REACT_APP_API_HOST + candidateDeatilsData.data.data[0].resume
-      );
+      // setresume(
+      //   process.env.REACT_APP_API_HOST + candidateDeatilsData.data.data[0].resume
+      // );
     }
   }, [props.data.candidateDeatilsData]);
+  const viewResume = async () => {
+    const s3Key = `candidateResume/${data._id}`;
+    try {
+      // List objects in the S3 bucket with the specified s3Key
+      const response = await Storage.list(s3Key);
+      // If the response is an array and it's not empty, the object exists
+      if (response.results.length > 0) {
+        // Fetch the object using the get method
+        const pdfUrl = await Storage.get(s3Key);
+        
+        if (pdfUrl) {
+          console.log("hello");
+          setresume(pdfUrl);
+        }
+      } else {
+        // Handle the case when the object is not present in S3
+        console.error("PDF object not found in S3.");
+        // Perform any necessary actions for handling the absence of the object
+        // For example, you can set the pdfUrl to null or display an error message to the user.
+      }
+    } catch (error) {
+      // Handle errors
+      console.error("Error fetching the PDF from S3:", error);
+    }
+  }
+
 
   function printPage() {
     var printContents =
@@ -86,7 +113,7 @@ function ViewCandidate(props) {
                                   <i class="icon-printer"></i> Print
                                 </button>
                               </div>
-                              <div>
+                              {/* <div>
                                 <a href={data.facebook_url} target="_blank">
                                   <button
                                     class="btn btn-primary btn-md text-white mb-0 me-0"
@@ -144,7 +171,7 @@ function ViewCandidate(props) {
                                     <i class="fa fa-pinterest-p"></i>
                                   </button>
                                 </a>
-                              </div>
+                              </div> */}
                             </div>
                             <br />
                             <div id="printme">
@@ -156,8 +183,9 @@ function ViewCandidate(props) {
                                   </h4>
                                   <p>
                                     <i class="fa fa-map-marker"></i>{" "}
-                                    {data.address}, {data.city_name},{" "}
-                                    {data.state_name}, {data.country_name}
+                                    {data.address}, {data.city},{" "}
+                                    {data.state}
+                                    {/* , {data.country_name} */}
                                   </p>
                                 </div>
                               </div>
@@ -182,7 +210,10 @@ function ViewCandidate(props) {
                                   : "Fresher in "}
                                 {data.functional_area1}
                               </p>
-                              {data.resume ? <iframe src={resume} width="1000" height="1100" /> : <p>Resume is not Uploaded.</p>}
+                              <p>
+                              <button onClick={viewResume}>View Resume</button>
+                              </p>
+                              {resume ? <iframe src={resume} width="1000" height="1100" /> : <p>Click On View Resume.</p>}
                             </div>
                           </div>
                         </div>

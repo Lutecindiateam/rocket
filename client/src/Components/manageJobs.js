@@ -121,7 +121,7 @@ function ManageJobs(props) {
                             </div>
                             <div class="col-lg-3 col-md-3 col-12">
                               <p>
-                                <span class="time">{item.expiry_date}</span>
+                                <span class="time">{item.expiry_date.split("T")[0]}</span>
                               </p>
                             </div>
                             <div class="col-lg-3 col-md-3 col-12">

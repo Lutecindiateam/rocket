@@ -15,6 +15,7 @@ import camera from "../images/camera.png";
 import img1 from "../images/extraLogo.png";
 import Swal from "sweetalert2";
 import Breadcrumbs from "../Section/breadcrumbsSection";
+import { Storage } from 'aws-amplify';
 
 function Logo(props) {
 
@@ -58,16 +59,37 @@ function Logo(props) {
     }
   };
 
-  function submitForm(e) {
+  // function submitForm(e) {
+  //   e.preventDefault();
+  //   if (selectedFile) {
+  //     const formData = new FormData();
+  //     formData.append("logo", selectedFile);
+  //     props.requestEmpLogo({
+  //       id: emp.id,
+  //       data: formData,
+  //       token: emp.token,
+  //     });
+  //   } else {
+  //     Swal.fire(
+  //       "Error!",
+  //       "Please select png or jpg or jpeg file for company logo.",
+  //       "error"
+  //     );
+  //   }
+  // }
+  async function submitForm(e) {
     e.preventDefault();
     if (selectedFile) {
-      const formData = new FormData();
-      formData.append("logo", selectedFile);
-      props.requestEmpLogo({
-        id: emp.id,
-        data: formData,
-        token: emp.token,
+      const s3Key = `employerProfile/${emp.id}`;
+      const result = await Storage.put(s3Key, selectedFile, {
+        contentType: selectedFile.type,
+
       });
+      if (result) {
+        alert("successful");
+      } else {
+        console.log("semething went wrong");
+      }
     } else {
       Swal.fire(
         "Error!",
@@ -82,11 +104,30 @@ function Logo(props) {
     if (empData !== undefined) {
       if (empData?.data?.status == "success") {
         setData(empData.data.data);
-        if (empData.data.data.logo) {
-          setimg(process.env.REACT_APP_API_HOST + empData.data.data.logo);
-        } else {
-          setimg(img1);
+        const getImage = async () => {
+          const s3Key = `employerProfile/${emp.id}`;
+          try {
+            const response = await Storage.list(s3Key);
+            if (response.results.length > 0) {
+              const imageUrl = await Storage.get(s3Key);
+              if (imageUrl) {
+                setimg(
+                  imageUrl
+                );
+              } else {
+                setimg(img1);
+              }
+            } else {
+              setimg(img1);
+            }
+          } catch (error) {
+            setimg(img1);
+            console.error(error.message)
+          }
+
         }
+        getImage();
+
       }
     }
   }, [props.employee.empData]);
@@ -148,7 +189,7 @@ function Logo(props) {
                                     }}
                                   >
                                     <img
-                                    alt=""
+                                      alt=""
                                       src={img}
                                       width="250"
                                       style={{

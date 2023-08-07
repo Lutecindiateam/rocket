@@ -1,3 +1,4 @@
+import { Auth } from "aws-amplify";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
@@ -69,19 +70,46 @@ function Login(props) {
     return valid;
   }
 
-  function onSubmitForm(e) {
+  // function onSubmitForm(e) {
+  //   e.preventDefault();
+  //   props.userLogout();
+  //   if (validateForm()) {
+  //     props.requestAdminLogin({
+  //       data: {
+  //         email: data.email,
+  //         password: data.password,
+  //       },
+  //     });
+  //     setError(false)
+  //   }else{
+  //     setError(true)
+  //   }
+  // }
+  async function onSubmitForm(e) {
     e.preventDefault();
     props.userLogout();
     if (validateForm()) {
-      props.requestAdminLogin({
-        data: {
-          email: data.email,
-          password: data.password,
-        },
-      });
-      setError(false)
-    }else{
-      setError(true)
+      try {
+        const user = await Auth.signIn(data.email, data.password);
+        console.log(user);
+        // setData(user)
+        if (user) {
+          props.requestAdminLogin({
+            data: {
+              email: user.attributes.email,
+              name:user.attributes.name,
+              sub:user.attributes.sub,
+              token:user.signInUserSession.idToken.jwtToken
+            },
+          });
+          setError(false)
+        } else {
+          setError(true)
+        }
+      } catch (error) {
+        alert(error.message)
+        console.log('error signing in', error);
+      }
     }
   }
 

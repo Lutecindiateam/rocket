@@ -19,8 +19,18 @@ import Swal from "sweetalert2";
 import Breadcrumbs from "../Section/breadcrumbsSection";
 import { Country, State, City } from "country-state-city";
 import Select from "react-select";
+import { Storage } from 'aws-amplify';
 
+// AWS.config.update({
+//   accessKeyId: 'AKIAQZRDJDKRYTCUS27Z',
+//   secretAccessKey: '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',
+//   region: 'ap-southeast-1',
+// });
 
+// const s3 = new AWS.S3({
+//   apiVersion: '2006-03-01',
+//   params: { Bucket: 'lookbook8937d88bda3e47498ad4e75fd1c30485102628-dev' },
+// });
 
 
 function Profie(props) {
@@ -66,23 +76,22 @@ function Profie(props) {
   const [erroremployer_details, seterroremployer_details] = useState("");
   const [errorauthorized_mobile, seterrorauthorized_mobile] = useState("");
   const [errorabout_us, seterrorabout_us] = useState("");
-  const [errorlocation, seterrorlocation] = useState("");
+  const [errorpincode, seterrorpincode] = useState("");
   const [errorno_of_offices, seterrorno_of_offices] = useState("");
   const [erroraddress, seterroraddress] = useState("");
   const [errorwebsite, seterrorwebsite] = useState("");
-  const [errorstatus, seterrorstatus] = useState("");
-  const [erroris_featured, seterroris_featured] = useState("");
-  const [errorfacebook_url, seterrorfacebook_url] = useState("");
-  const [errortwitter_url, seterrortwitter_url] = useState("");
-  const [errorlinkedin_url, seterrorlinkedin_url] = useState("");
-  const [errorgoogle_plus_url, seterrorgoogle_plus_url] = useState("");
-  const [errorpinterest_url, seterrorpinterest_url] = useState("");
+  // const [errorstatus, seterrorstatus] = useState("");
+  // const [erroris_featured, seterroris_featured] = useState("");
+  // const [errorfacebook_url, seterrorfacebook_url] = useState("");
+  // const [errortwitter_url, seterrortwitter_url] = useState("");
+  // const [errorlinkedin_url, seterrorlinkedin_url] = useState("");
+  // const [errorgoogle_plus_url, seterrorgoogle_plus_url] = useState("");
+  // const [errorpinterest_url, seterrorpinterest_url] = useState("");
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const [emp, setEmp] = useState({});
   const [certificateFile, setCertificateFile] = useState(null);
-
-
+  const [certificate, setCertificate] = useState(null)
 
   // useEffect(() => {
   //   console.log(selectedState);
@@ -98,22 +107,36 @@ function Profie(props) {
     }),
   };
 
+
   const handleCertificateChange = (event) => {
     const file = event.target.files[0];
     setCertificateFile(file);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  async function uploadfile(e) {
+    e.preventDefault();
     if (certificateFile) {
-      // Perform actions with the selected certificate file, such as uploading or processing
-      console.log('Selected certificate file:', certificateFile);
+      const s3Key = `employerCertificate/${emp.id}`;
+      const result = await Storage.put(s3Key, certificateFile, {
+        contentType: certificateFile.type,
+
+      });
+      if (result) {
+        alert("successful");
+        setCertificate(
+          result
+        );
+      } else {
+        console.log("semething went wrong");
+      }
     } else {
-      alert('Please select a certificate file.');
+      Swal.fire(
+        "Error!",
+        "Please select png or jpg or jpeg file for profile picture.",
+        "error"
+      );
     }
-  };
-
-
+  }
 
   useEffect(() => {
     let empLoginData = props.employee.empLoginData;
@@ -138,6 +161,29 @@ function Profie(props) {
   }, [props.employee.empLoginData]);
 
   useEffect(() => {
+    const getCertificate = async () => {
+      const s3Key = `employerCertificate/${emp.id}`;
+      try {
+
+        const response = await Storage.list(s3Key);
+        if (response.results.length) {
+          const certificateUrl = await Storage.get(s3Key);
+          if (certificateUrl) {
+            setCertificate(
+              certificateUrl
+            );
+          }
+        }
+      } catch (error) {
+        console.error(error.message)
+      }
+
+    }
+    getCertificate();
+
+  })
+
+  useEffect(() => {
     let empData = props.employee.empData;
     if (empData !== undefined) {
       if (empData?.data?.status == "success") {
@@ -160,7 +206,6 @@ function Profie(props) {
       }
     }
   }, [props.employee.empData]);
-
 
   // useEffect(() => {
   //   let formfieldData = props.employee.formfieldData;
@@ -224,12 +269,12 @@ function Profie(props) {
     }
   }, [props.candidate.countryData]);
 
-  function onChangeCountry(e) {
-    setcountryId(e.target.value);
-    props.requestState({
-      id: e.target.value,
-    });
-  }
+  // function onChangeCountry(e) {
+  //   setcountryId(e.target.value);
+  //   props.requestState({
+  //     id: e.target.value,
+  //   });
+  // }
 
   useEffect(() => {
     let stateData = props.candidate.stateData;
@@ -240,12 +285,12 @@ function Profie(props) {
     }
   }, [props.candidate.stateData]);
 
-  function onChangeState(e) {
-    setstateId(e.target.value);
-    props.requestCity({
-      id: e.target.value,
-    });
-  }
+  // function onChangeState(e) {
+  //   setstateId(e.target.value);
+  //   props.requestCity({
+  //     id: e.target.value,
+  //   });
+  // }
 
   useEffect(() => {
     let cityData = props.candidate.cityData;
@@ -256,9 +301,9 @@ function Profie(props) {
     }
   }, [props.candidate.cityData]);
 
-  function onChangeCity(e) {
-    setcityId(e.target.value);
-  }
+  // function onChangeCity(e) {
+  //   setcityId(e.target.value);
+  // }
 
   function validatename() {
     let formIsValid = false;
@@ -295,23 +340,23 @@ function Profie(props) {
     }
     return formIsValid;
   }
-  function validatecountry() {
-    let formIsValid = false;
-    if (!countryId) {
-      formIsValid = false;
-      seterrorcountry("*Select your country.");
-    } else if (typeof countryId === "undefined") {
-      formIsValid = false;
-      seterrorcountry("*Select your country.");
-    } else if (countryId === "0") {
-      formIsValid = false;
-      seterrorcountry("*Select your country.");
-    } else {
-      formIsValid = true;
-      seterrorcountry("");
-    }
-    return formIsValid;
-  }
+  // function validatecountry() {
+  //   let formIsValid = false;
+  //   if (!countryId) {
+  //     formIsValid = false;
+  //     seterrorcountry("*Select your country.");
+  //   } else if (typeof countryId === "undefined") {
+  //     formIsValid = false;
+  //     seterrorcountry("*Select your country.");
+  //   } else if (countryId === "0") {
+  //     formIsValid = false;
+  //     seterrorcountry("*Select your country.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorcountry("");
+  //   }
+  //   return formIsValid;
+  // }
   function validateState() {
     let formIsValid = false;
     if (!selectedState) {
@@ -415,54 +460,54 @@ function Profie(props) {
     }
     return formIsValid;
   }
-  function validateownership_type() {
-    let formIsValid = false;
-    if (!data["ownership_type"]) {
-      formIsValid = false;
-      seterrorownership_type("*Select your ownership type.");
-    } else if (typeof data["ownership_type"] === "undefined") {
-      formIsValid = false;
-      seterrorownership_type("*Select your ownership type.");
-    } else if (data["ownership_type"] === "0") {
-      formIsValid = false;
-      seterrorownership_type("*Select your ownership type.");
-    } else {
-      formIsValid = true;
-      seterrorownership_type("");
-    }
-    return formIsValid;
-  }
-  function validatesize() {
-    let formIsValid = false;
-    if (!data["size"]) {
-      formIsValid = false;
-      seterrorsize("*Select your company size.");
-    } else if (typeof data["size"] === "undefined") {
-      formIsValid = false;
-      seterrorsize("*Select your company size.");
-    } else if (data["size"] === "0") {
-      formIsValid = false;
-      seterrorsize("*Select your company size.");
-    } else {
-      formIsValid = true;
-      seterrorsize("");
-    }
-    return formIsValid;
-  }
-  function validateemployer_details() {
-    let formIsValid = false;
-    if (!data["employer_details"]) {
-      formIsValid = false;
-      seterroremployer_details("*Enter company details.");
-    } else if (typeof data["employer_details"] === "undefined") {
-      formIsValid = false;
-      seterroremployer_details("*Enter company details.");
-    } else {
-      formIsValid = true;
-      seterroremployer_details("");
-    }
-    return formIsValid;
-  }
+  // function validateownership_type() {
+  //   let formIsValid = false;
+  //   if (!data["ownership_type"]) {
+  //     formIsValid = false;
+  //     seterrorownership_type("*Select your ownership type.");
+  //   } else if (typeof data["ownership_type"] === "undefined") {
+  //     formIsValid = false;
+  //     seterrorownership_type("*Select your ownership type.");
+  //   } else if (data["ownership_type"] === "0") {
+  //     formIsValid = false;
+  //     seterrorownership_type("*Select your ownership type.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorownership_type("");
+  //   }
+  //   return formIsValid;
+  // }
+  // function validatesize() {
+  //   let formIsValid = false;
+  //   if (!data["size"]) {
+  //     formIsValid = false;
+  //     seterrorsize("*Select your company size.");
+  //   } else if (typeof data["size"] === "undefined") {
+  //     formIsValid = false;
+  //     seterrorsize("*Select your company size.");
+  //   } else if (data["size"] === "0") {
+  //     formIsValid = false;
+  //     seterrorsize("*Select your company size.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorsize("");
+  //   }
+  //   return formIsValid;
+  // }
+  // function validateemployer_details() {
+  //   let formIsValid = false;
+  //   if (!data["employer_details"]) {
+  //     formIsValid = false;
+  //     seterroremployer_details("*Enter company details.");
+  //   } else if (typeof data["employer_details"] === "undefined") {
+  //     formIsValid = false;
+  //     seterroremployer_details("*Enter company details.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterroremployer_details("");
+  //   }
+  //   return formIsValid;
+  // }
   function validateauthorized_mobile() {
     // const currentYear = new Date().getFullYear();
     let formIsValid = false;
@@ -485,48 +530,48 @@ function Profie(props) {
     }
     return formIsValid;
   }
-  function validateabout_us() {
+  // function validateabout_us() {
+  //   let formIsValid = false;
+  //   if (!data["about_us"]) {
+  //     formIsValid = false;
+  //     seterrorabout_us("*Enter company about.");
+  //   } else if (typeof data["about_us"] === "undefined") {
+  //     formIsValid = false;
+  //     seterrorabout_us("*Enter company about.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorabout_us("");
+  //   }
+  //   return formIsValid;
+  // }
+  function validatepincode() {
     let formIsValid = false;
-    if (!data["about_us"]) {
+    if (!data["pincode"]) {
       formIsValid = false;
-      seterrorabout_us("*Enter company about.");
-    } else if (typeof data["about_us"] === "undefined") {
+      seterrorpincode("*Enter company pincode.");
+    } else if (typeof data["pincode"] === "undefined") {
       formIsValid = false;
-      seterrorabout_us("*Enter company about.");
+      seterrorpincode("*Enter company pincode.");
     } else {
       formIsValid = true;
-      seterrorabout_us("");
+      seterrorpincode("");
     }
     return formIsValid;
   }
-  function validatelocation() {
-    let formIsValid = false;
-    if (!data["location"]) {
-      formIsValid = false;
-      seterrorlocation("*Enter company location.");
-    } else if (typeof data["location"] === "undefined") {
-      formIsValid = false;
-      seterrorlocation("*Enter company location.");
-    } else {
-      formIsValid = true;
-      seterrorlocation("");
-    }
-    return formIsValid;
-  }
-  function validateno_of_offices() {
-    let formIsValid = false;
-    if (!data["no_of_offices"]) {
-      formIsValid = false;
-      seterrorno_of_offices("*Enter company no. of offices.");
-    } else if (typeof data["no_of_offices"] === "undefined") {
-      formIsValid = false;
-      seterrorno_of_offices("*Enter company no. of offices.");
-    } else {
-      formIsValid = true;
-      seterrorno_of_offices("");
-    }
-    return formIsValid;
-  }
+  // function validateno_of_offices() {
+  //   let formIsValid = false;
+  //   if (!data["no_of_offices"]) {
+  //     formIsValid = false;
+  //     seterrorno_of_offices("*Enter company no. of offices.");
+  //   } else if (typeof data["no_of_offices"] === "undefined") {
+  //     formIsValid = false;
+  //     seterrorno_of_offices("*Enter company no. of offices.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorno_of_offices("");
+  //   }
+  //   return formIsValid;
+  // }
   function validateaddress() {
     let formIsValid = false;
     if (!data["address"]) {
@@ -582,126 +627,126 @@ function Profie(props) {
     }
     return formIsValid;
   }
-  function validatestatus() {
-    let formIsValid = false;
-    if (data["status"] === "0") {
-      formIsValid = false;
-      seterrorstatus("*Select your status.");
-    } else if (typeof data["status"] === "undefined") {
-      formIsValid = false;
-      seterrorstatus("*Select your status.");
-    } else {
-      formIsValid = true;
-      seterrorstatus("");
-    }
-    return formIsValid;
-  }
-  function validateis_featured() {
-    let formIsValid = false;
-    if (typeof data["is_featured"] === "undefined") {
-      formIsValid = false;
-      seterroris_featured("*Select whether company is featured or not.");
-    } else {
-      formIsValid = true;
-      seterroris_featured("");
-    }
-    return formIsValid;
-  }
-  function validatefacebook_url() {
-    let formIsValid = false;
-    if (!data["facebook_url"]) {
-      formIsValid = true;
-      seterrorfacebook_url("");
-    } else if (typeof data["facebook_url"] === "undefined") {
-      formIsValid = true;
-      seterrorfacebook_url("");
-    } else if (!data["facebook_url"].match(
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
-    )) {
-      formIsValid = false;
-      seterrorfacebook_url("*Please enter valid facebook URL.");
-    } else {
-      formIsValid = true;
-      seterrorfacebook_url("");
-    }
-    return formIsValid;
-  }
-  function validatetwitter_url() {
-    let formIsValid = false;
-    if (!data["twitter_url"]) {
-      formIsValid = true;
-      seterrortwitter_url("");
-    } else if (typeof data["twitter_url"] === "undefined") {
-      formIsValid = true;
-      seterrortwitter_url("");
-    } else if (!data["twitter_url"].match(
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
-    )) {
-      formIsValid = false;
-      seterrortwitter_url("*Please enter valid twitter URL.");
-    } else {
-      formIsValid = true;
-      seterrortwitter_url("");
-    }
-    return formIsValid;
-  }
-  function validatelinkedin_url() {
-    let formIsValid = false;
-    if (!data["linkedin_url"]) {
-      formIsValid = true;
-      seterrorlinkedin_url("");
-    } else if (typeof data["linkedin_url"] === "undefined") {
-      formIsValid = true;
-      seterrorlinkedin_url("");
-    } else if (!data["linkedin_url"].match(
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
-    )) {
-      formIsValid = false;
-      seterrorlinkedin_url("*Please enter valid linkedin URL.");
-    } else {
-      formIsValid = true;
-      seterrorlinkedin_url("");
-    }
-    return formIsValid;
-  }
-  function validategoogle_plus_url() {
-    let formIsValid = false;
-    if (!data["google_plus_url"]) {
-      formIsValid = true;
-      seterrorgoogle_plus_url("");
-    } else if (typeof data["google_plus_url"] === "undefined") {
-      formIsValid = true;
-      seterrorgoogle_plus_url("");
-    } else if (!data["google_plus_url"].match(
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
-    )) {
-      formIsValid = false;
-      seterrorgoogle_plus_url("*Please enter valid google plus URL.");
-    } else {
-      formIsValid = true;
-      seterrorgoogle_plus_url("");
-    }
-    return formIsValid;
-  }
-  function validatepinterest_url() {
-    let formIsValid = false;
-    if (!data["pinterest_url"]) {
-      formIsValid = true;
-      seterrorpinterest_url("");
-    } else if (typeof data["pinterest_url"] === "undefined") {
-      formIsValid = true;
-      seterrorpinterest_url("");
-    } else if (!data["pinterest_url"].match(
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
-    )) {
-      formIsValid = false;
-      seterrorpinterest_url("*Please enter valid pinterest URL.");
-    } else {
-      formIsValid = true;
-      seterrorpinterest_url("");
-    }
-    return formIsValid;
-  }
+  // function validatestatus() {
+  //   let formIsValid = false;
+  //   if (data["status"] === "0") {
+  //     formIsValid = false;
+  //     seterrorstatus("*Select your status.");
+  //   } else if (typeof data["status"] === "undefined") {
+  //     formIsValid = false;
+  //     seterrorstatus("*Select your status.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorstatus("");
+  //   }
+  //   return formIsValid;
+  // }
+  // function validateis_featured() {
+  //   let formIsValid = false;
+  //   if (typeof data["is_featured"] === "undefined") {
+  //     formIsValid = false;
+  //     seterroris_featured("*Select whether company is featured or not.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterroris_featured("");
+  //   }
+  //   return formIsValid;
+  // }
+  // function validatefacebook_url() {
+  //   let formIsValid = false;
+  //   if (!data["facebook_url"]) {
+  //     formIsValid = true;
+  //     seterrorfacebook_url("");
+  //   } else if (typeof data["facebook_url"] === "undefined") {
+  //     formIsValid = true;
+  //     seterrorfacebook_url("");
+  //   } else if (!data["facebook_url"].match(
+  //     /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+  //   )) {
+  //     formIsValid = false;
+  //     seterrorfacebook_url("*Please enter valid facebook URL.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorfacebook_url("");
+  //   }
+  //   return formIsValid;
+  // }
+  // function validatetwitter_url() {
+  //   let formIsValid = false;
+  //   if (!data["twitter_url"]) {
+  //     formIsValid = true;
+  //     seterrortwitter_url("");
+  //   } else if (typeof data["twitter_url"] === "undefined") {
+  //     formIsValid = true;
+  //     seterrortwitter_url("");
+  //   } else if (!data["twitter_url"].match(
+  //     /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+  //   )) {
+  //     formIsValid = false;
+  //     seterrortwitter_url("*Please enter valid twitter URL.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrortwitter_url("");
+  //   }
+  //   return formIsValid;
+  // }
+  // function validatelinkedin_url() {
+  //   let formIsValid = false;
+  //   if (!data["linkedin_url"]) {
+  //     formIsValid = true;
+  //     seterrorlinkedin_url("");
+  //   } else if (typeof data["linkedin_url"] === "undefined") {
+  //     formIsValid = true;
+  //     seterrorlinkedin_url("");
+  //   } else if (!data["linkedin_url"].match(
+  //     /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+  //   )) {
+  //     formIsValid = false;
+  //     seterrorlinkedin_url("*Please enter valid linkedin URL.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorlinkedin_url("");
+  //   }
+  //   return formIsValid;
+  // }
+  // function validategoogle_plus_url() {
+  //   let formIsValid = false;
+  //   if (!data["google_plus_url"]) {
+  //     formIsValid = true;
+  //     seterrorgoogle_plus_url("");
+  //   } else if (typeof data["google_plus_url"] === "undefined") {
+  //     formIsValid = true;
+  //     seterrorgoogle_plus_url("");
+  //   } else if (!data["google_plus_url"].match(
+  //     /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+  //   )) {
+  //     formIsValid = false;
+  //     seterrorgoogle_plus_url("*Please enter valid google plus URL.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorgoogle_plus_url("");
+  //   }
+  //   return formIsValid;
+  // }
+  // function validatepinterest_url() {
+  //   let formIsValid = false;
+  //   if (!data["pinterest_url"]) {
+  //     formIsValid = true;
+  //     seterrorpinterest_url("");
+  //   } else if (typeof data["pinterest_url"] === "undefined") {
+  //     formIsValid = true;
+  //     seterrorpinterest_url("");
+  //   } else if (!data["pinterest_url"].match(
+  //     /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+  //   )) {
+  //     formIsValid = false;
+  //     seterrorpinterest_url("*Please enter valid pinterest URL.");
+  //   } else {
+  //     formIsValid = true;
+  //     seterrorpinterest_url("");
+  //   }
+  //   return formIsValid;
+  // }
   function validateForm() {
     let name = validatename();
     let email = validateemail();
@@ -716,7 +761,7 @@ function Profie(props) {
     // let employer_details = validateemployer_details();
     let authorized_mobile = validateauthorized_mobile();
     // let about_us = validateabout_us();
-    // let location = validatelocation();
+    let pincode = validatepincode();
     // let no_of_offices = validateno_of_offices();
     let address = validateaddress();
     // let website = validatewebsite();
@@ -741,7 +786,7 @@ function Profie(props) {
       // employer_details &&
       authorized_mobile &&
       // about_us &&
-      // location &&
+      pincode &&
       // no_of_offices &&
       address
     // website &&
@@ -758,38 +803,42 @@ function Profie(props) {
   function submitForm(e) {
     e.preventDefault();
     if (validateForm()) {
-      props.requestEmpProfile({
-        id: emp.id,
-        token: emp.token,
-        data: {
-          name: data.name,
-          email: data.email,
-          // country: countryId,
-          state: selectedState,
-          website: data.website,
-          city: selectedCity,
-          authorized_person: data.authorized_person,
-          industry: data.industry,
-          // ownership_type: data.ownership_type,
-          // size: data.size,
-          employer_details: data.employer_details,
-          authorized_mobile: data.authorized_mobile,
-          // about_us: data.about_us,
-          // location: data.location,
-          // no_of_offices: data.no_of_offices,
-          address: data.address,
-          // website: data.website,
-          // status: data.status,
-          // is_featured: data.is_featured,
-          // facebook_url: data.facebook_url,
-          // twitter_url: data.twitter_url,
-          // linkedin_url: data.linkedin_url,
-          // google_plus_url: data.google_plus_url,
-          // pinterest_url: data.pinterest_url,
-        },
-      });
-      setError(false)
-
+      if (certificate) {
+        props.requestEmpProfile({
+          id: emp.id,
+          token: emp.token,
+          data: {
+            name: data.name,
+            email: data.email,
+            // country: countryId,
+            state: selectedState,
+            website: data.website,
+            city: selectedCity,
+            authorized_person: data.authorized_person,
+            industry: data.industry,
+            // ownership_type: data.ownership_type,
+            // size: data.size,
+            employer_details: data.employer_details,
+            authorized_mobile: data.authorized_mobile,
+            // about_us: data.about_us,
+            pincode: data.pincode,
+            // no_of_offices: data.no_of_offices,
+            address: data.address,
+            // website: data.website,
+            // status: data.status,
+            // is_featured: data.is_featured,
+            // facebook_url: data.facebook_url,
+            // twitter_url: data.twitter_url,
+            // linkedin_url: data.linkedin_url,
+            // google_plus_url: data.google_plus_url,
+            // pinterest_url: data.pinterest_url,
+          },
+        });
+        setError(false)
+      } else {
+        alert("Please Upload Company Registration Certificate")
+        setError(true)
+      }
     } else {
       setError(true)
     }
@@ -837,8 +886,8 @@ function Profie(props) {
       } else if (errorcity) {
         document.getElementById("city").focus();
       }
-      //  else if (errorlocation) {
-      //   document.getElementById("location").focus();
+      //  else if (errorpincode) {
+      //   document.getElementById("pincode").focus();
       // } else if (errorfacebook_url) {
       //   document.getElementById("facebook_url").focus();
       // } else if (errortwitter_url) {
@@ -868,10 +917,8 @@ function Profie(props) {
           id: emp.id,
           token: emp.token,
         });
-        if (localStorage.getItem("link1")) {
-          navigate(localStorage.getItem("link1"));
-        } else {
-          navigate("/postJob");
+        if (localStorage.getItem("link2")) {
+          navigate(localStorage.getItem("link2"));
         }
       } else {
         Swal.fire("Error!", `Something went wrong while updating profile.`, "error");
@@ -883,6 +930,8 @@ function Profie(props) {
       }
     }
   }, [props.employee.empProfileData]);
+
+
 
   return (
     <>
@@ -983,8 +1032,8 @@ function Profie(props) {
                                   <div style={mystyle}>{errorstatus}</div>
                                 )}
                               </div>
-                            </div> */}
-                            {/* <div class="col-lg-6 col-md-6">
+                            </div> 
+                          <div class="col-lg-6 col-md-6">
                               <div style={{ color: "black" }}>
                                 <label for="gender" class="label">
                                   Is Featured
@@ -1033,7 +1082,7 @@ function Profie(props) {
                                   <div style={mystyle}>{erroris_featured}</div>
                                 )}
                               </div>
-                            </div> */}
+                                </div> */}
                             <h3 class="title">Company Profile</h3>
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
@@ -1128,8 +1177,8 @@ function Profie(props) {
                                   </div>
                                 )}
                               </div>
-                            </div> */}
-                            {/* <div class="col-lg-6 col-md-6">
+                            </div>
+                            <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label>Size of Company</label>
                                 <select
@@ -1151,8 +1200,8 @@ function Profie(props) {
                                   <div style={mystyle}>{errorsize}</div>
                                 )}
                               </div>
-                            </div> */}
-                            {/* <div class="col-lg-6 col-md-6">
+                            </div> 
+                            <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label>No. of offices</label>
                                 <input
@@ -1171,8 +1220,8 @@ function Profie(props) {
                                   </div>
                                 )}
                               </div>
-                            </div> */}
-                            {/* <div class="col-lg-12">
+                            </div>
+                            <div class="col-lg-12">
                               <div class="form-group">
                                 <label>Company Details</label>
                                 <textarea
@@ -1191,8 +1240,8 @@ function Profie(props) {
                                   </div>
                                 )}
                               </div>
-                            </div> */}
-                            {/* <div class="col-lg-12">
+                            </div> 
+                             <div class="col-lg-12">
                               <div class="form-group">
                                 <label>About Us</label>
                                 <textarea
@@ -1209,9 +1258,8 @@ function Profie(props) {
                                   <div style={mystyle}>{errorabout_us}</div>
                                 )}
                               </div>
-                            </div> */}
-                            <h3 class="title">Address Information</h3>
-                            {/* <div class="col-lg-6 col-md-6">
+                            </div> 
+                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label>Country</label>
                                 <select
@@ -1233,7 +1281,9 @@ function Profie(props) {
                                   <div style={mystyle}>{errorcountry}</div>
                                 )}
                               </div>
-                            </div> */}
+                            </div>  */}
+
+                            <h3 class="title">Address Information</h3>
                             <div class="col-lg-12">
                               <div class="form-group">
                                 <label>Address*</label>
@@ -1308,25 +1358,63 @@ function Profie(props) {
                                 )}
                               </div>
                             </div>
-                            {/* <div class="col-lg-6 col-md-6">
+                            <div class="col-lg-6 col-md-6">
                               <div class="form-group">
-                                <label>Location</label>
+                                <label>pincode</label>
                                 <input
                                   class="form-control"
                                   type="text"
-                                  name="location"
-                                  id="location"
-                                  value={data.location}
-                                  onBlur={validatelocation}
+                                  name="pincode"
+                                  id="pincode"
+                                  value={data.pincode}
+                                  onBlur={validatepincode}
                                   onChange={onChangeData}
                                   placeholder=""
                                 />
-                                {errorlocation && (
-                                  <div style={mystyle}>{errorlocation}</div>
+                                {errorpincode && (
+                                  <div style={mystyle}>{errorpincode}</div>
                                 )}
                               </div>
-                            </div> */}
-                            {/* <h3 class="title">Social Links</h3>
+                            </div>
+                            <div>
+                              {certificate ? (
+                                <div >
+                                  <label>
+                                    Change Company Registration Certificate:
+                                  </label>&nbsp;&nbsp;
+                                  <text style={{ color: "green" }}>Uploaded</text>
+                                  <br />
+                                  <br />
+                                  <input type="file" accept=".pdf,.doc,.docx" onChange={handleCertificateChange} />
+                                  <button type="submit"
+                                    class="btn btn-primary me-2"
+                                    style={{
+                                      color: "white",
+                                      width: "200px",
+                                      height: "50px",
+                                    }} onClick={uploadfile}>Upload Certificate</button>
+                                </div>
+                              ) : (
+                                <div>
+                                  <label>
+                                    Upload Company Registration Certificate:
+                                  </label>
+                                  <br />
+                                  <input type="file" accept=".pdf,.doc,.docx" onChange={handleCertificateChange} />
+
+                                  <button type="submit"
+                                    class="btn btn-primary me-2"
+                                    style={{
+                                      color: "white",
+                                      width: "200px",
+                                      height: "50px",
+                                    }} onClick={uploadfile}>Upload Certificate</button>
+                                </div>
+                              )
+                              }
+                            </div>
+
+                            {/*  <h3 class="title">Social Links</h3>
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
                                 <label>Facebook URL</label>
@@ -1420,18 +1508,7 @@ function Profie(props) {
                                   </div>
                                 )}
                               </div>
-                            </div> */}
-                          </div>
-                          <div>
-                            <label>
-                              Select Company Registration Certificate:
-                              <input type="file" accept=".pdf,.doc,.docx" onChange={handleCertificateChange} />
-                            </label>
-                            <button type="submit"
-                              style={{
-                                width: "150px",
-                                height: "30px",
-                              }}>Upload Certificate</button>
+                            </div>  */}
                           </div>
                           <br />
 

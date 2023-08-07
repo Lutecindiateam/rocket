@@ -134,7 +134,7 @@ function Candidates(props) {
                                   <tr>
                                     <th>Name</th>
                                     <th>Contact</th>
-                                    <th>Functional Area</th>
+                                    <th>Industrial Category</th>
                                     <th>Action</th>
                                   </tr>
                                 </thead>
@@ -167,8 +167,9 @@ function Candidates(props) {
                                               </a>
                                               <p>
                                                 <i class="fa fa-map-marker"></i>{" "}
-                                                {/* {item.city.name},{" "}
-                                                {item.state.name},{" "} */}
+                                                {item.city},{" "}
+                                                {item.state}
+                                                {/* ,{" "} */}
                                                 {/* {item.country_name} */}
                                               </p>
                                             </div>
@@ -189,7 +190,7 @@ function Candidates(props) {
                                           )}
                                         </td>
                                         <td>
-                                          <h6>{item.functional_area1}</h6>
+                                          <h6>{item.industry}</h6>
                                           <p>{item.industries_name}</p>
                                         </td>
                                         <td>

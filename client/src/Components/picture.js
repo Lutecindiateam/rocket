@@ -15,6 +15,7 @@ import camera from "../images/camera.png";
 import img1 from "../images/profile.png";
 import Swal from "sweetalert2";
 import Breadcrumbs from "../Section/breadcrumbsSection";
+import { Storage } from 'aws-amplify';
 
 function Picture(props) {
 
@@ -57,17 +58,29 @@ function Picture(props) {
     }
   };
 
-  function submitForm(e) {
+  //Uploading candidate image to aws s3 
+
+  async function submitForm(e) {
     e.preventDefault();
     if (selectedFile) {
-      const formData = new FormData();
-      formData.append("profile", selectedFile);
-      props.requestCandidateLogo({
-        id: emp.id,
-        data: formData,
-        token: emp.token,
+      // const formData = new FormData();
+      // formData.append("profile", selectedFile);
+      // props.requestCandidateLogo({
+      //   id: emp.id,
+      //   data: formData,
+      //   token: emp.token,
+      // });
+      const s3Key = `candidateProfile/${emp.id}`;
+      const result = await Storage.put(s3Key, selectedFile, {
+        contentType: selectedFile.type,
+
       });
-    }else{
+      if (result) {
+        alert("successful");
+      } else {
+        console.log("semething went wrong");
+      }
+    } else {
       Swal.fire(
         "Error!",
         "Please select png or jpg or jpeg file for profile picture.",
@@ -75,19 +88,40 @@ function Picture(props) {
       );
     }
   }
-
+  // const params = { Bucket: 'xxx-xx-xxx', Key: '1.jpg' };
+  // const promise = s3.getSignedUrlPromise('getObject', params);
+  // promise.then(function (url) {
+  //   res.send(url)
+  // }, function (err) { console.log(err) });
   useEffect(() => {
     let getCandidateData = props.candidate.getCandidateData;
     if (getCandidateData !== undefined) {
       if (getCandidateData?.data?.status == "success") {
         setData(getCandidateData.data.data);
-        if (getCandidateData.data.data.profile) {
-          setimg(
-            process.env.REACT_APP_API_HOST + getCandidateData.data.data.profile
-          );
-        } else {
-          setimg(img1);
+        const getImage = async () => {
+          const s3Key = `candidateProfile/${emp.id}`;
+          try {
+            const response = await Storage.list(s3Key);
+            if (response.results.length > 0) {
+              const imageUrl = await Storage.get(s3Key);
+              if (imageUrl) {
+                setimg(
+                  imageUrl
+                );
+              } else {
+                setimg(img1);
+              }
+            } else {
+              setimg(img1);
+            }
+          } catch (error) {
+            console.error(error.message)
+            setimg(img1);
+          }
+
         }
+        getImage();
+
       }
     }
   }, [props.candidate.getCandidateData]);

@@ -46,11 +46,11 @@ exports.getlastSixJobs = async (req, res) => {
         const jobs = await Job.find()
             .sort({ created_at: -1 })
             .limit(6)
-            .populate('company_id', 'name logo website country state city')
-            .populate('category', 'name')
-            .populate('state', 'name')
-            .populate('city', 'name')
-            .populate('degree_level', 'level')
+            // .populate('company_id', 'name logo website country state city')
+            // .populate('category', 'name')
+            // .populate('state', 'name')
+            // .populate('city', 'name')
+            // .populate('degree_level', 'level')
             .lean();
 
 

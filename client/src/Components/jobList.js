@@ -14,6 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { RWebShare } from "react-web-share";
 import Swal from "sweetalert2";
 import Breadcrumbs from "../Section/breadcrumbsSection";
+import { Storage } from 'aws-amplify';
 
 function JobList(props) {
 
@@ -24,7 +25,7 @@ function JobList(props) {
   const [pages, setpages] = useState([]);
   const params = useParams();
   const [page_size, setpage_size] = useState(0);
-
+  const [img, setImg] = useState()
   useEffect(() => {
     new WOW.WOW().init();
     window.scrollTo(0, 0);
@@ -177,6 +178,24 @@ function JobList(props) {
           <div class="single-head">
             <div class="row">
               {jobs.map((item, index) => {
+                // console.log(item);
+                // (async () => {
+                //   const s3key = `employerProfile/${item.company_id}`;
+                //   try {
+                //     const response = await Storage.list(s3key);
+                //     if (response.results.length > 0) {
+                //       const img = await Storage.get(s3key);
+                //       // setImg(getImg)
+                //     }
+                //     // Do something with the image URL (img)
+                //     console.log(image); // You can log the image URL or use it as needed
+                //     // Here, you can set the image URL to the state or use it in any other way
+                //   } catch (error) {
+                //     setImg(image)
+                //     console.error(`Error fetching image for job ${item.company_id}:`, error);
+                //     // Handle the error, e.g., set a default image URL or handle the absence of the image
+                //   }
+                // })();
                 const img = item.employee_logo
                   ? process.env.REACT_APP_API_HOST + item.employee_logo
                   : image;

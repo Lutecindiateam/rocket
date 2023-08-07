@@ -38,7 +38,6 @@ exports.PostJob = async (req, res) => {
             status: req.body.status,
             functional_area: req.body.status
         });
-        // console.log(job)
         res.status(201).json({
             status: "success",
             job
@@ -88,9 +87,6 @@ exports.GetJobList = async (req, res) => {
                 data: { jobs: modifiedJobs },
             });
         }
-
-
-
     } catch (error) {
         console.log(error.message);
     }
@@ -102,23 +98,7 @@ exports.getRecentlyAddedJobs = async (req, res) => {
         const jobs = await Job.find()
             .sort({ created_at: -1 })
             .limit(6)
-            .populate('company_id', 'name logo website country state city')
-            .populate('category', 'name')
-            .populate('state', 'name')
-            .populate('city', 'name')
-            .populate('degree_level', 'level')
             .lean();
-
-        //   if (candidateId) {
-        // for (const job of jobs) {
-        //   const data = await Bookmarks.findOne({
-        //     job_id: job._id,
-        //     candidate_id: candidateId,
-        //   }).exec();
-
-        //   job.isbookmarkJob = !!data;
-        // }
-        //   }
 
 
         const modifiedJobs = jobs.map(job => {
@@ -160,12 +140,6 @@ exports.getJobDetails = async (req, res) => {
                 status: 'error',
             });
         }
-
-        details.id = details._id;
-        // details.created_at = details.createdAt;
-        delete details._id;
-
-        // console.log(details);
 
         return res.status(200).json({
             code: "200",

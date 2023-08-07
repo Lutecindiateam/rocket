@@ -78,11 +78,11 @@ const candidateSchema = new mongoose.Schema(
      
     },
     state: {
-      type: Object,
+      type: String,
      
     },
     city: {
-      type: Object,
+      type: String,
     },
     notice_period : {
       type: String
@@ -91,6 +91,10 @@ const candidateSchema = new mongoose.Schema(
       type: String
     },
     deleted: {
+      type: Boolean,
+      default: false
+    },
+    status: {
       type: Boolean,
       default: false
     }

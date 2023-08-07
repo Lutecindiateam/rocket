@@ -621,7 +621,7 @@ function ViewApplication(props) {
                                   </h3>
                                   <span>
                                     <i class="fa fa-map-marker"> </i>{" "}
-                                    {item.city.name}, {item.state.name}
+                                    {item.city}, {item.state}
                                   </span>
                                 </div>
                               </div>
