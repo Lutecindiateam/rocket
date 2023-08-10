@@ -135,7 +135,6 @@ function Profile(props) {
 
   useEffect(() => {
     let loginData = props.candidate.loginData;
-    console.log(loginData);
     if (loginData !== undefined) {
       if (loginData?.data?.status == "success") {
         setEmp(loginData.data.data);
@@ -1415,7 +1414,7 @@ function Profile(props) {
                                   {industry.map((option) => {
                                     if (option.disable === "yes") {
                                       return (
-                                        <option key={option._id} value="0" style={{ color: "gray" }} disabled>{option.name}</option>
+                                        <option key={option._id} value="0" style={{ color: "#964B00",fontSize: "20px" }} disabled>{option.name}</option>
                                       )
                                     } else {
                                       return (

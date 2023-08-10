@@ -59,7 +59,6 @@ exports.updateEmployerprofile = async (req, res) => {
                     industry: industry || Employer.industry,
                     address: address || Employer.address,
                     pincode: pincode || Employer.pincode,
-                    status : false
                 },
             },
             { new: true }

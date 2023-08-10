@@ -7,12 +7,14 @@ const Admin = require('../../models/Admin/Auth')
 
 exports.changePosition = async (req, res) => {
     const empid = req.params.id;
+    // console.log(req.body);
     try {
         const company = await employer.findByIdAndUpdate(
             { _id: empid },
             {
                 $set: {
-                    status: req.body.status
+                    status: req.body.status,
+                    reason : req.body.reason
                 },
             },
             { new: true }

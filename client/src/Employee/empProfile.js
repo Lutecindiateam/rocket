@@ -1413,7 +1413,15 @@ function Profie(props) {
                               )
                               }
                             </div>
-
+                            <br/>
+                            {data.status ? (
+                              <>
+                              <text><b>Current Status :</b> {data.status}</text>
+                              <text><b>Reason :</b> {data.reason}</text>
+                              </>
+                            ) : (
+                              <b>Current Status : Please Wait</b>
+                            )}
                             {/*  <h3 class="title">Social Links</h3>
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">

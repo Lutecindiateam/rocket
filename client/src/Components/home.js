@@ -546,6 +546,7 @@ function Home(props) {
                 <div class="row">
                   {
                   jobs.map((item, index) => {
+                    console.log(item);
                     const img = item.employee_logo
                       ? process.env.REACT_APP_API_HOST + item.employee_logo
                       : image;
@@ -579,11 +580,11 @@ function Home(props) {
                                 <li>
                                   <i class="lni lni-website"></i>
                                   <a
-                                    href={`${item.employee_website}`}
+                                    href={`${item.website}`}
                                     target="_blank"
                                   >
                                     {" "}
-                                    {item.employee_website}
+                                    {item.website}
                                   </a>
                                 </li>
                                 <li>

@@ -84,9 +84,9 @@ const jobSchema = new mongoose.Schema({
     position_status : {
         type: String
     },
-    // status:{
-    //     type: String
-    // }
+    website:{
+        type: String
+    }
 
 }, { timestamps: true })
 

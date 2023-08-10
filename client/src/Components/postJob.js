@@ -9,6 +9,7 @@ import {
   requestEmpLogin,
   requestFormField,
   requestAddJob,
+  requestGetEmp
 } from "../Redux/actions";
 import WOW from "wowjs";
 import Swal from "sweetalert2";
@@ -122,6 +123,10 @@ function PostJob(props) {
       if (empLoginData?.data?.status == "success") {
         setEmp(empLoginData.data.data);
         props.requestFormField({
+          token: empLoginData.data.data.token,
+        });
+        props.requestGetEmp({
+          id: empLoginData.data.data.id,
           token: empLoginData.data.data.token,
         });
       } else {
@@ -582,11 +587,12 @@ function PostJob(props) {
 
     return valid;
   }
-
+console.log(empProfile);
   function submitForm(e) {
     e.preventDefault();
     if (validateForm()) {
-      if (empProfile.status === true) {
+      if(empProfile.industry !== undefined){
+      if (empProfile.status === "Approved") {
         props.requestAddJob({
           token: emp.token,
           data: {
@@ -610,7 +616,7 @@ function PostJob(props) {
             state: selectedState,
             city: selectedCity,
             // status: "pending"          
-            // position: data.position,            
+             website: emp.website,            
             // shift: data.shift,
             // tag: data.tag,
             // Recruiter_name: data.Recruiter_name,
@@ -620,9 +626,14 @@ function PostJob(props) {
           },
         });
         setError(false)
-      } else {
+      }else{
         localStorage.setItem("link2", "/postJob");
         Swal.fire("Error!", `Your Request is Pending Please Check Profille Status.`, "error");
+        navigate("/empProfile");
+        }
+      }else {
+        localStorage.setItem("link2", "/postJob");
+        Swal.fire("Error!", `Please Complete Your Profile.`, "error");
         navigate("/empProfile");
       }
     } else {
@@ -1395,7 +1406,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
-    { requestEmpLogin, requestFormField, requestAddJob },
+    { requestEmpLogin, requestFormField, requestAddJob, requestGetEmp },
     dispatch
   );
 

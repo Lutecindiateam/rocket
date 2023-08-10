@@ -55,7 +55,11 @@ const employerSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "Onhold"
+      default: "Pending"
+    },
+    reason:{
+      type : String,
+      default:"Please wait, processing your request"
     }
   },
   { timestamps: true }

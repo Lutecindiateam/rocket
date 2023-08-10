@@ -9,6 +9,7 @@ import WOW from "wowjs";
 import ManageAccount from "./manageAccount";
 import image from "../images/profile.png";
 import Breadcrumbs from "../Section/breadcrumbsSection";
+import { Storage } from 'aws-amplify';
 
 function ViewResume(props) {
 
@@ -47,17 +48,43 @@ function ViewResume(props) {
     if (empGetCandidateData !== undefined) {
       if (empGetCandidateData?.data?.status == "success") {
         setData(empGetCandidateData.data.data[0]);
+        const getResume = async () => {
+          const s3Key = `candidateResume/${params.id}`;
+          try {
+            // List objects in the S3 bucket with the specified s3Key
+            const response = await Storage.list(s3Key);
+            // If the response is an array and it's not empty, the object exists
+            if (response.results.length > 0) {
+              // Fetch the object using the get method
+              const pdfUrl = await Storage.get(s3Key);
+              
+              if (pdfUrl) {
+                setResume(pdfUrl);
+              }
+            } else {
+              // Handle the case when the object is not present in S3
+              console.error("PDF object not found in S3.");
+              // Perform any necessary actions for handling the absence of the object
+              // For example, you can set the pdfUrl to null or display an error message to the user.
+            }
+          } catch (error) {
+            // Handle errors
+            console.error("Error fetching the PDF from S3:", error);
+          }
+        }
+        getResume();
+
+
         setImg(
           process.env.REACT_APP_API_HOST + empGetCandidateData.data.data[0].profile
         );
-        setResume(
-          process.env.REACT_APP_API_HOST + empGetCandidateData.data.data[0].resume
-        );
+        // setResume(
+        //   process.env.REACT_APP_API_HOST + empGetCandidateData.data.data[0].resume
+        // );
       }
     }
   }, [props.employee.empGetCandidateData]);
 
-  
   return (
     <>
       <Header />
@@ -127,7 +154,7 @@ function ViewResume(props) {
                       </b>
                       <br />
                       <br />
-                      {data.resume ? (
+                      {resume ? (
                         <iframe src={resume} width="790" height="1000" />
                       ) : (
                         <p>Resume is not Uploaded.</p>

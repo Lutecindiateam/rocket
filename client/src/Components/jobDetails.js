@@ -12,6 +12,7 @@ import {
   requestEmpLogin,
   requestAddComment,
   requestGetComment,
+  requestGetCandidate
 } from "../Redux/actions";
 import { useEffect, useState } from "react";
 import WOW from "wowjs";
@@ -79,15 +80,15 @@ function JobDetails(props) {
       }
     }
   }, [props.candidate.loginData]);
+
   useEffect(() => {
     let candidateData = props.candidate.getCandidateData;
-    // console.log(props);
     if (candidateData !== undefined) {
       if (candidateData?.data?.status === "success") {
         setprofile(candidateData.data.data);
       }
     }
-  }, [props.candidate.candidateData]);
+  }, [props.candidate.getCandidateData]);
 // console.log(user);
   useEffect(() => {
     let empLoginData = props.employee.empLoginData;
@@ -118,6 +119,10 @@ function JobDetails(props) {
             job_id: params.id,
           },
         });
+        props.requestGetCandidate({
+          id: loginData.data.data.id,
+          token: loginData.data.data.token,
+        });
       }
     }
   }, [props.candidate.loginData]);
@@ -144,10 +149,9 @@ function JobDetails(props) {
     }
   }, [props.candidate.jobDetailsData]);
 
-// console.log(data);
+
   function applyJobs(id) {
     if (user.id) {
-      console.log(profile);
       if(profile.status === true){
       props.requestApplyJob({
         token: user.token,
@@ -291,7 +295,7 @@ function JobDetails(props) {
       }
     );
   }, [params.id, data]);
-// console.log(data);
+
   return (
     <>
       <Header />
@@ -345,7 +349,8 @@ function JobDetails(props) {
                         </strong>
                       </li>
                       <li>
-                        {data.city_name}, {data.state_name}, {data.country_name}
+                        {data.city_name}, {data.state_name}
+                        {/* , {data.country_name} */}
                       </li>
                     </ul>
                   </div>
@@ -693,6 +698,7 @@ const mapDispatchToProps = (dispatch) =>
       requestEmpLogin,
       requestAddComment,
       requestGetComment,
+      requestGetCandidate
     },
     dispatch
   );

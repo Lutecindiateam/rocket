@@ -226,6 +226,7 @@ exports.getAllJob = async (req, res) => {
           state: job.state,
           city: job.city,
           company_id: job.company_id,
+          website : job.website,
           createdAt: job.createdAt,
           updatedAt: job.updatedAt,
           __v: job.__v,

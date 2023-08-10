@@ -36,7 +36,8 @@ exports.PostJob = async (req, res) => {
             pincode: req.body.pincode,
             remote: req.body.remote,
             status: req.body.status,
-            functional_area: req.body.status
+            functional_area: req.body.status,
+            website: req.body.website
         });
         res.status(201).json({
             status: "success",
@@ -74,6 +75,7 @@ exports.GetJobList = async (req, res) => {
                     state: job.state,
                     city: job.city,
                     company_id: job.company_id,
+                    website:job.website,
                     createdAt: job.createdAt,
                     updatedAt: job.updatedAt,
                     __v: job.__v,

@@ -87,6 +87,7 @@ function ViewCompany(props) {
         id: params.id,
         data: {
           status: data1.status,
+          reason : data1.reason
         },
       });
     } catch (error) {
@@ -172,6 +173,9 @@ function ViewCompany(props) {
                                   <i class="icon-printer"></i> Delete
                                 </button>
                               </div>
+                              </div>
+                              <br />
+                              <b>Current Status: </b>
                               {status == "Approved" ? (
                                 <b style={{ color: "green" }}>Approved</b>
                               ) : (status == "Rejected" ? (
@@ -183,8 +187,9 @@ function ViewCompany(props) {
                                 ) : (
                                   <b style={{ color: "yellow" }}>Pending</b>
                                 )
-                              ))
-                              }
+                              ))}
+                              <br />
+                              <br />
                               {/* <div>
                                 <a href={data.facebook_url} target="_blank">
                                   <button
@@ -236,7 +241,7 @@ function ViewCompany(props) {
 
                                 <div class="col-lg-6 col-md-6">
                                   <div class="form-group">
-                                    <label>Status</label>
+                                    <b>Change Status :</b>
                                     <select
                                       class="select"
                                       name="status"
@@ -245,7 +250,7 @@ function ViewCompany(props) {
                                       onChange={onChangeData}
                                     // onBlur={validateExpiry}
                                     >
-                                      <option value="">Select a day</option>
+                                      <option value="">Change Status</option>
                                       <option value="Approved">Approved</option>
                                       <option value="Onhold">on hold</option>
                                       <option value="Rejected">Rejected</option>
@@ -258,16 +263,31 @@ function ViewCompany(props) {
                                     </select>
                                   </div>
                                 </div>
-                                <div>
-                                  
-                                </div>
+                                <div class="col-lg-6 col-md-6">
+                              <div class="form-group">
+                                <b>Write Reason :</b>
+                                <input
+                                  class="form-control"
+                                  type="text"
+                                  name="reason"
+                                  id="reason"
+                                  value={data1.reason}
+                                  // onBlur={validatewebsite}
+                                  onChange={onChangeData}
+                                  placeholder="Enter Reason"
+                                />
+                                {/* {errorwebsite && (
+                                  <div style={mystyle}>{errorwebsite}</div>
+                                )} */}
+                              </div>
+                             </div>
                                 <div class="form-group mb-8 button">
                                   <button class="btn "
                                     style={{ color: "white" }}
                                   >Submit</button>
                                 </div>
                               </form>
-                            </div>
+                            
                             <br />
                             <div id="printme">
                               <div class="d-flex ">

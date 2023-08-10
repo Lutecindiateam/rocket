@@ -204,7 +204,7 @@ function JobList(props) {
                     <div class="col-lg-6 col-12" key={index}>
 
                       <div class="single-job">
-                        <h3><a href={`/jobDetails/${item.id}`}>{item.company_name}</a></h3>
+                        <b><a href={`/jobDetails/${item.id}`}>{item.company_name}</a></b>
                         <br />
                         <div class="job-image">
                           <a href={`/jobDetails/${item.id}`}>
@@ -231,18 +231,18 @@ function JobList(props) {
                             <li>
                               <i class="lni lni-website"></i>
                               <a
-                                href={`${item.employee_website}`}
+                                href={`${item.website}`}
                                 target="_blank"
                               >
                                 {" "}
-                                {item.employee_website}
+                                {item.website}
                               </a>
                             </li>
                             <li>
                               <a href={`/jobDetails/${item.id}`}>
                                 {" "}
-                                {item.currency_name} {item.salary_from}-
-                                {item.salary_to}
+                                <text>INR {item.salary_from}-
+                                {item.salary_to}</text> 
                               </a>
                             </li>
                             <li>
