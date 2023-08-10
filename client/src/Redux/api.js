@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Auth } from 'aws-amplify';
 
 // for Developement
 // const url = `http://localhost:5000`
