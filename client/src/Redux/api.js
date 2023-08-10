@@ -1,8 +1,11 @@
 import axios from "axios";
 import { Auth } from 'aws-amplify';
 
+// for Developement
+// const url = `http://localhost:5000`
 
-const url = `http://localhost:5000`
+// for production
+const url =''
 //===================candidate=================
 
 export const login = (obj) => {
