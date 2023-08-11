@@ -2,7 +2,6 @@
 import axios from "axios";
 
 export const adminlogin = (obj) => {
-  console.log(obj.data);
     return axios
       .post("/admin/login", obj.data)
       .then((response) => {

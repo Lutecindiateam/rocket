@@ -546,7 +546,6 @@ function Home(props) {
                 <div class="row">
                   {
                   jobs.map((item, index) => {
-                    console.log(item);
                     const img = item.employee_logo
                       ? process.env.REACT_APP_API_HOST + item.employee_logo
                       : image;

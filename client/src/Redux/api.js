@@ -1,16 +1,10 @@
 import axios from "axios";
 
-// for Developement
-// const url = `http://localhost:5000`
-
-// for production
-const url =''
 //===================candidate=================
 
 export const login = (obj) => {
-  // console.log(obj);
   return axios
-    .post(`${url}/api/candidate/login`, obj.data)
+    .post("/candidate/login", obj.data)
     .then((response) => {
       return response;
     })
@@ -95,7 +89,7 @@ export const addResume = (obj) => {
 export const recentlyJob = (obj) => {
   // console.log(obj)
   return axios
-    .get(`${url}/api/job/Recentlyadded-jobs`, {
+    .get("/job/Recentlyadded-jobs", {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -135,7 +129,7 @@ export const recentlyJob = (obj) => {
 
 export const register = (obj) => {
   return axios
-    .post(`${url}/api/candidate/register`, obj.data)
+    .post("/candidate/register", obj.data)
     .then((response) => {
       return response;
     })
@@ -147,7 +141,7 @@ export const register = (obj) => {
 
 export const empregister = (obj) => {
   return axios
-    .post(`${url}/api/employer/register`, obj.data)
+    .post("/employer/register", obj.data)
     .then((response) => {
       return response;
     })
@@ -160,7 +154,7 @@ export const empregister = (obj) => {
 export const emplogin = (obj) => {
   // console.log(obj.data);
   return axios
-    .post(`${url}/api/employer/login`, obj.data)
+    .post("/employer/login", obj.data)
     .then((response) => {
       // console.log(response);
       return response;
@@ -201,7 +195,7 @@ export const emplogo = (obj) => {
 
 export const getemp = (obj) => {
   return axios
-    .get(`${url}/api/employer/` + obj.id, {
+    .get("/employer/" + obj.id, {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -215,7 +209,7 @@ export const getemp = (obj) => {
 
 export const empprofile = (obj) => {
   return axios
-    .patch(`${url}/api/employer/` + obj.id, obj.data, {
+    .patch("/employer/" + obj.id, obj.data, {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -230,7 +224,7 @@ export const empprofile = (obj) => {
 export const getJobs = (obj) => {
   // console.log(obj);
   return axios
-    .get(`${url}/api/job?page=` + obj.page + "&page_size=" + obj.page_size, {
+    .get("/job?page=" + obj.page + "&page_size=" + obj.page_size, {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -245,7 +239,7 @@ export const getJobs = (obj) => {
 export const getFormFields = (obj) => {
   // console.log(obj);
   return axios
-    .post(`${url}/api/job/form-fields`, {
+    .post("/job/form-fields", {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -260,7 +254,7 @@ export const getFormFields = (obj) => {
 export const addJob = (obj) => {
   // console.log(obj.data);
   return axios
-    .post(`${url}/api/employer/postjob`, obj.data, {
+    .post("/employer/postjob", obj.data, {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -274,7 +268,7 @@ export const addJob = (obj) => {
 
 export const editJob = (obj) => {
   return axios
-    .patch(`${url}/api/job/` + obj.id, obj.data, {
+    .patch("/job/" + obj.id, obj.data, {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -310,7 +304,7 @@ export const getJobsCategoryWise = (obj) => {
 
 export const jobDetails = (obj) => {
   return axios
-    .get(`${url}/api/job/` + obj.id)
+    .get("/job/" + obj.id)
     .then((response) => {
       return response;
     })
@@ -362,7 +356,7 @@ export const jobDetails = (obj) => {
 export const empJoblist = (obj) => {
   // console.log(obj.id, "obj ::",obj);
   return axios
-    .get(`${url}/api/employer/` + obj.id + "/jobs", {
+    .get("/employer/" + obj.id + "/jobs", {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -391,7 +385,7 @@ export const empdeleteJob = (obj) => {
 export const applyJobs = (obj) => {
   // console.log(obj);
   return axios
-    .post(`${url}/api/job/` + obj.id + "/apply", obj.data, {
+    .post("/job/" + obj.id + "/apply", obj.data, {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -420,7 +414,7 @@ export const deleteApplyJob = (obj) => {
 export const getCandidate = (obj) => {
   // console.log(obj);
   return axios
-    .get(`${url}/api/candidate/` + obj.id, {
+    .get("/candidate/" + obj.id, {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -449,7 +443,7 @@ export const candidatelogo = (obj) => {
 export const candidateprofile = (obj) => {
   // console.log(obj);
   return axios
-    .patch(`${url}/api/candidate/` + obj.id, obj.data, {
+    .patch("/candidate/" + obj.id, obj.data, {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -476,7 +470,7 @@ export const candidateresume = (obj) => {
 
 export const getAppliedJobs = (obj) => {
   return axios
-    .get(`${url}/api/candidate/` + obj.id + "/jobs", {
+    .get("/candidate/" + obj.id + "/jobs", {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {
@@ -518,7 +512,7 @@ export const jobAlert = (obj) => {
 
 export const checkBookmarkApplied = (obj) => {
   return axios
-    .post(`${url}/api/job/checkbookmarksorappliedjob`, obj.data)
+    .post("/job/checkbookmarksorappliedjob", obj.data)
     .then((response) => {
       return response;
     })
@@ -573,7 +567,7 @@ export const checkBookmarkApplied = (obj) => {
 
 export const candidateForJob = (obj) => {
   return axios
-    .get(`${url}/api/job/getCandidateParticular-Job/` + obj.id)
+    .get("/job/getCandidateParticular-Job/" + obj.id)
     .then((response) => {
       return response;
     })
