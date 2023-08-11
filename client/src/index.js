@@ -13,7 +13,9 @@ Amplify.configure(awsExports)
 
 {/* <sendBird /> */}
 
-axios.defaults.baseURL = `${process.env.REACT_APP_API_HOST}/api`
+// axios.defaults.baseURL = `${process.env.REACT_APP_API_HOST}/api`
+axios.defaults.baseURL = "/api"
+
 ReactDOM.render(
   <React.StrictMode>
     <DartThemeProvider>
