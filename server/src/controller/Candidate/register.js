@@ -131,7 +131,7 @@ exports.CandidateLogin =async(req,  res)=>{
 
             const user = await candidate.findOne({ email: email }).exec();
             if(user){
-              return res.status(200).json({data :{id: user.id, token:token}, status :"success",  message:"Login successful"})
+              return res.status(200).json({data :{id: user.id, token:token , first_name:user.first_name , last_name:user.last_name}, status :"success",  message:"Login successful"})
             }
             
             
@@ -157,7 +157,7 @@ exports.CandidateLogin =async(req,  res)=>{
               // jwt.sign(payload,process.env.JWT_SECRET,{expiresIn : 31556926},(err,token) => {
                 // return res.status(200).json({status :"success", data : token})
                 return res.status(201).json({
-                  data :{id: savedUser.id ,token:token},
+                  data :{id: savedUser.id ,token:token , first_name:first_name , last_name:last_name},
                   status :"success",
                   message:"Candidate registered successfully"
               

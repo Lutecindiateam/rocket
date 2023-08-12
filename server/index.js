@@ -3,7 +3,7 @@ const env = require('dotenv');
 const app = express();
 const mongoose = require('mongoose');
 // var cors = require('cors')
-var helmet = require('helmet')
+const helmet = require('helmet')
 
 app.use(express.json());
 

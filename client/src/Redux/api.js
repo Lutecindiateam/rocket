@@ -13,26 +13,6 @@ export const login = (obj) => {
       return err.response;
     });
 };
-//         const user = await Auth.signIn(data1.email, data1.password);
-// export const login = async(obj) => {
-//   try {
-//     const response = await Auth.signIn(obj.data.email, obj.data.password);
-//     const data = response;
-//     return data;
-//   } catch (error) {
-//     console.log("Error", error.response.data.message);
-//     return error.response;
-//   }
-  // return axios
-  //   .post(`${url}/api/candidate/login`, obj.data)
-    // .then((response) => {
-    //   return response;
-    // })
-    // .catch((err) => {
-    //   console.log("Error", err.response.data.message);
-    //   return err.response;
-    // });
-// };
 
 export const googlelogin = (obj) => {
   return axios

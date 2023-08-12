@@ -86,23 +86,15 @@ function Home(props) {
     }
   }, [props.employee.empLoginData]);
 
-  // useEffect(() => {
-  //   let loginData = props.candidate.loginData;
-  //   if (loginData !== undefined) {
-  //     if (loginData?.data?.status == "success") {
-  //       setUSer(loginData.data.data);
-  //     }
-  //   }
-  // }, [props.candidate.loginData]);
-
   useEffect(() => {
     let loginData = props.candidate.loginData;
     if (loginData !== undefined) {
-      if (loginData?.attributes?.email_verified === "true") {
-        setUSer(loginData.attributes);
+      if (loginData?.data?.status == "success") {
+        setUSer(loginData.data.data);
       }
     }
   }, [props.candidate.loginData]);
+
 
   // useEffect(() => {
   //   let lastweekjob = props.candidate.lastWeekJobCount;
@@ -140,7 +132,7 @@ function Home(props) {
   //     let addBookmarkedData = props.candidate.addBookmarkedData;
   //     if (addBookmarkedData !== undefined) {
   //       if (addBookmarkedData?.data?.status == "success") {
-          // Swal.fire("Good job!", "Bookmarked for Job successfully.", "success");
+  // Swal.fire("Good job!", "Bookmarked for Job successfully.", "success");
   //         props.candidate.addBookmarkedData = undefined;
   //         let loginData = props.candidate.loginData;
   //         if (loginData !== undefined) {
@@ -338,8 +330,11 @@ function Home(props) {
                 <div class="col-lg-6 co-12">
                   <div class="inner-content">
                     <div class="hero-text">
-                      {}
+                      { }
                       <h1 class="wow fadeInUp" data-wow-delay=".3s">
+                        {user.first_name !== undefined ? (
+                          <h5>Welcome {user.first_name + " " + user.last_name}...</h5>
+                        ) : null}
                         Find Your Career <br />
                         to Make a Better Life
                       </h1>
@@ -545,64 +540,64 @@ function Home(props) {
               <div class="single-head">
                 <div class="row">
                   {
-                  jobs.map((item, index) => {
-                    const img = item.employee_logo
-                      ? process.env.REACT_APP_API_HOST + item.employee_logo
-                      : image;
-                    return (
-                      <>
-                        <div class="col-lg-6 col-12" key={index}>
-                          <div class="single-job">
-                            <div class="job-image">
-                              <a href={`/jobDetails/${item.id}`}>
-                                <img
-                                  src={img}
-                                  alt="logo"
-                                  height="50"
-                                  style={{ marginTop: "5px" }}
-                                />
-                              </a>
-                            </div>
-                            <div class="job-content">
-                              <h4>
+                    jobs.map((item, index) => {
+                      const img = item.employee_logo
+                        ? process.env.REACT_APP_API_HOST + item.employee_logo
+                        : image;
+                      return (
+                        <>
+                          <div class="col-lg-6 col-12" key={index}>
+                            <div class="single-job">
+                              <div class="job-image">
                                 <a href={`/jobDetails/${item.id}`}>
-                                  {item.title}
+                                  <img
+                                    src={img}
+                                    alt="logo"
+                                    height="50"
+                                    style={{ marginTop: "5px" }}
+                                  />
                                 </a>
-                              </h4>
-                              <a href={`/jobDetails/${item.id}`}>
-                                <p>
-                                  {item.description &&
-                                    item.description.substring(0, 120)}
-                                </p>
-                              </a>
-                              <ul>
-                                <li>
-                                  <i class="lni lni-website"></i>
-                                  <a
-                                    href={`${item.website}`}
-                                    target="_blank"
-                                  >
-                                    {" "}
-                                    {item.website}
-                                  </a>
-                                </li>
-                                <li>
+                              </div>
+                              <div class="job-content">
+                                <h4>
                                   <a href={`/jobDetails/${item.id}`}>
-                                    {" "}
-                                    {item.currency_name} {item.salary_from}-
-                                    {item.salary_to}
+                                    {item.title}
                                   </a>
-                                </li>
-                                <li>
-                                  <a href={`/jobDetails/${item.id}`}>
-                                    {" "}
-                                    <i class="lni lni-map-marker"></i>{" "}
-                                    {item.city_name}, {item.state_name},{" "}
-                                    {item.country_name}
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
+                                </h4>
+                                <a href={`/jobDetails/${item.id}`}>
+                                  <p>
+                                    {item.description &&
+                                      item.description.substring(0, 120)}
+                                  </p>
+                                </a>
+                                <ul>
+                                  <li>
+                                    <i class="lni lni-website"></i>
+                                    <a
+                                      href={`${item.website}`}
+                                      target="_blank"
+                                    >
+                                      {" "}
+                                      {item.website}
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href={`/jobDetails/${item.id}`}>
+                                      {" "}
+                                      {item.currency_name} {item.salary_from}-
+                                      {item.salary_to}
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href={`/jobDetails/${item.id}`}>
+                                      {" "}
+                                      <i class="lni lni-map-marker"></i>{" "}
+                                      {item.city_name}, {item.state_name},{" "}
+                                      {item.country_name}
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
                               {/* <div class="job-button ">
                               <ul>
                                 <li>
@@ -664,11 +659,11 @@ function Home(props) {
                                 </li>
                               </ul>
                             </div> */}
+                            </div>
                           </div>
-                        </div>
-                      </>
-                    );
-                  })}
+                        </>
+                      );
+                    })}
                 </div>
                 <br />
                 <br />
@@ -783,7 +778,7 @@ function Home(props) {
                                     />
                                   </div>
                                   <h4 class="name">
-                                   Sakshi Neelam
+                                    Sakshi Neelam
                                     {/* <span>CEO - Tredex</span> */}
                                   </h4>
                                 </div>
@@ -806,7 +801,7 @@ function Home(props) {
                                     />
                                   </div>
                                   <h4 class="name">
-                                   Kartik Mahal
+                                    Kartik Mahal
                                     {/* <span>CEO - Dream App</span> */}
                                   </h4>
                                 </div>
