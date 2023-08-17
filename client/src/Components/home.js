@@ -53,7 +53,13 @@ function Home(props) {
     let loginData = props.candidate.loginData;
     if (loginData !== undefined) {
       if (loginData?.data?.status == "success") {
+        if (loginData.data.data.block === false) {
         setUSer(loginData.data.data);
+        }else{
+          Swal.fire("Error!", "This user has been blocked and their actions will no longer be visible to you.", "error");
+          props.userLogout();
+          navigate("/home");
+        }
         props.requestRecentlyJob({
           token: loginData.data.data.token,
         });
@@ -81,7 +87,13 @@ function Home(props) {
     let empLoginData = props.employee.empLoginData;
     if (empLoginData !== undefined) {
       if (empLoginData?.data?.status == "success") {
-        setEmp(empLoginData.data.data);
+        if (empLoginData.data.data.block === false) {
+          setEmp(empLoginData.data.data);
+        } else {
+          Swal.fire("Error!", "This user has been blocked and their actions will no longer be visible to you.", "error");
+          props.userLogout();
+          navigate("/home");
+        }
       }
     }
   }, [props.employee.empLoginData]);
@@ -90,7 +102,13 @@ function Home(props) {
     let loginData = props.candidate.loginData;
     if (loginData !== undefined) {
       if (loginData?.data?.status == "success") {
+        if (loginData.data.data.block === false) {
         setUSer(loginData.data.data);
+        }else{
+          Swal.fire("Error!", "This user has been blocked and their actions will no longer be visible to you.", "error");
+          props.userLogout();
+          navigate("/home");
+        }
       }
     }
   }, [props.candidate.loginData]);

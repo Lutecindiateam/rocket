@@ -136,7 +136,6 @@ function Login(props) {
   useEffect(() => {
     let empLoginData = props.employee.empLoginData;
     if (empLoginData !== undefined) {
-      console.log("empLoginData :: ",empLoginData)
       if (empLoginData?.data?.status === "success") {
         // if (localStorage.getItem("link")) {
         //   navigate(localStorage.getItem("link"));

@@ -147,10 +147,11 @@ function Login(props) {
   useEffect(() => {
     let loginData = props.candidate.loginData;
     // const loginData = data
-    // console.log("loginData ::",loginData)
+    console.log("loginData ::",loginData)
 
     if (loginData !== undefined) {
       if (loginData?.data?.status == "success") {
+        if(loginData.data)
         if (localStorage.getItem("link")) {
           navigate(localStorage.getItem("link"));
         } else {

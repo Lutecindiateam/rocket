@@ -144,8 +144,9 @@ function Jobs(props) {
                                                                                             <p>
                                                                                                 <i class="fa fa-map-marker"></i>{" "}
                                                                                                 {item.city_name},{" "}
-                                                                                                {item.state_name},{" "}
-                                                                                                {item.country_name}
+                                                                                                {item.state_name}
+                                                                                                {/* ,{" "}
+                                                                                                {item.country_name} */}
                                                                                             </p>
                                                                                         </div>
                                                                                     </div>
@@ -153,10 +154,10 @@ function Jobs(props) {
                                                                                 <td>
                                                                                     <a href={`/admin/viewJob/${item._id}`}>  <h6>{item.title}</h6>
                                                                                         <p>Category: {item.category}</p>
-                                                                                        <p>Function Area: {item.degree_level}</p></a>
+                                                                                        <p>Education: {item.degree_level}</p></a>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <h6>{item.currency_name} {item.salary_from}-{item.salary_to}</h6>
+                                                                                    <h6>INR {item.salary_from}-{item.salary_to} L</h6>
                                                                                     <p>{item.experience > 0 ? item.experience + "year experienced" : "Fresher"}</p>
                                                                                 </td>
                                                                                 <td>

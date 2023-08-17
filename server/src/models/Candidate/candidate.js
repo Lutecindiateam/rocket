@@ -97,6 +97,12 @@ const candidateSchema = new mongoose.Schema(
     status: {
       type: Boolean,
       default: false
+    },
+    resumeurl:{
+      type:String,
+    },
+    logourl:{
+      tye:String
     }
   },
   { timestamps: true }

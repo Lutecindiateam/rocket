@@ -2,11 +2,15 @@ const Job = require('../../models/Employer/postjob')
 const jobApplication = require('../../models/Candidate/applyjob');
 const { validationResult } = require('express-validator');
 const candidate = require('../../models/Candidate/candidate');
-
+const currentDate = new Date();
+const currentDateWithoutTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
 exports.PostJob = async (req, res) => {
-    const today = new Date();
     const numberOfDays = req.body.expiry_date;
-    const targetDate = new Date(today.getTime() + (numberOfDays * 24 * 60 * 60 * 1000));
+    const targetDate = new Date(currentDate.getTime() + (numberOfDays * 24 * 60 * 60 * 1000));
 
     const year = targetDate.getFullYear();
     const month = targetDate.getMonth() + 1; // Months are zero-based, so add 1
@@ -53,7 +57,7 @@ exports.GetJobList = async (req, res) => {
     // console.log(req.params)
     const JobId = req.params.id;
     try {
-        const jobs = await Job.find({ company_id: JobId });
+        const jobs = await Job.find({ company_id: JobId ,expiry_date: { $gte: currentDateWithoutTime } });
         // console.log(jobs);
         if (jobs) {
             const modifiedJobs = jobs.map((job) => {
@@ -78,6 +82,7 @@ exports.GetJobList = async (req, res) => {
                     website:job.website,
                     createdAt: job.createdAt,
                     updatedAt: job.updatedAt,
+                    deleted: job.deleted,
                     __v: job.__v,
                 };
             });

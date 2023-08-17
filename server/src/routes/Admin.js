@@ -5,6 +5,7 @@ const { getAllCandidates, getCandidateDetails, getAllJobs, getAllCompanies, getC
 const { MonthWiseCount, MonthWiseCountAppliedJobs } = require('../controller/Admin/Monthwise');
 const { getIndutries, getEducation, getCourse, getNoticePeriod, getExpiry } = require('../controller/Admin/Options');
 const { changePosition, getPostionStatus } = require('../controller/Admin/StatusChange');
+const { blockCompany, getCompanyblockstatus, changeCandidateBlockStatus, getCandidateblockstatus, changeJobBlockStatus, getJobblockstatus } = require('../controller/Admin/Block');
 const router =express.Router();
 
 
@@ -29,5 +30,10 @@ router.get('/admin/getFunctionalArea', getCourse)
 router.get('/admin/getIndustry', getExpiry)
 router.patch('/admin/editPartiCularPosition/:id', changePosition)
 router.get('/admin/editPosition/:id', getPostionStatus )
-
+router.patch('/admin/editPartiCularjob_tags/:id', blockCompany)
+router.get('/admin/editcompany_block/:id', getCompanyblockstatus)
+router.patch('/admin/editPartiCularCandidate/:id',changeCandidateBlockStatus)
+router.get('/admin/editcandidate_block_status/:id',getCandidateblockstatus )
+router.patch('/admin/editPartiCularjob_types/:id',changeJobBlockStatus )
+router.get('/admin/editjob_block/:id',getJobblockstatus )
 module.exports= router;

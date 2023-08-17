@@ -84,6 +84,10 @@ const jobSchema = new mongoose.Schema({
     position_status : {
         type: String
     },
+    deleted: {
+        type: Boolean,
+        default: false
+      },
     website:{
         type: String
     }

@@ -58,6 +58,43 @@ function Picture(props) {
     }
   };
 
+  const getImage = async () => {
+    const s3Key = `candidateProfile/${emp.id}`;
+    try {
+      const url = await Storage.get(s3Key, { validateObjectExistence: true });
+      if (url) {
+        setimg(
+          url
+        );
+      } else {
+        setimg(img1);
+      }
+      //     const response = await Storage.list(s3Key);
+      //     if (response.results.length > 0) {
+      //       const imageUrl = await Storage.get(s3Key);
+      //       if (imageUrl) {
+      //         props.requestCandidateLogo({
+      //           id: emp.id,
+      //           data:{ imageUrl},
+      //           token: emp.token,
+      //         });
+      //   setimg(
+      //     imageUrl
+      //   );
+      // } else {
+      //   setimg(img1);
+      // }
+      //     } else {
+      // setimg(img1);
+      //     }
+    } catch (error) {
+      setimg(img1);
+      console.error(error.message)
+      setimg(img1);
+    }
+
+  }
+
   //Uploading candidate image to aws s3 
 
   async function submitForm(e) {
@@ -77,6 +114,22 @@ function Picture(props) {
       });
       if (result) {
         alert("successful");
+        getImage();
+        // const response = await Storage.list(s3Key);
+        //     if (response.results.length > 0) {
+        //       const imageUrl = await Storage.get(s3Key);
+        //       if (imageUrl) {
+        //         props.requestCandidateLogo({
+        //           id: emp.id,
+        //           data:{ imageUrl},
+        //           token: emp.token,
+        //         });
+        //       } else {
+        //         setimg(img1);
+        //       }
+        //     } else {
+        //       setimg(img1);
+        //     }
       } else {
         console.log("semething went wrong");
       }
@@ -88,38 +141,14 @@ function Picture(props) {
       );
     }
   }
-  // const params = { Bucket: 'xxx-xx-xxx', Key: '1.jpg' };
-  // const promise = s3.getSignedUrlPromise('getObject', params);
-  // promise.then(function (url) {
-  //   res.send(url)
-  // }, function (err) { console.log(err) });
+
   useEffect(() => {
     let getCandidateData = props.candidate.getCandidateData;
     if (getCandidateData !== undefined) {
       if (getCandidateData?.data?.status == "success") {
         setData(getCandidateData.data.data);
-        const getImage = async () => {
-          const s3Key = `candidateProfile/${emp.id}`;
-          try {
-            const response = await Storage.list(s3Key);
-            if (response.results.length > 0) {
-              const imageUrl = await Storage.get(s3Key);
-              if (imageUrl) {
-                setimg(
-                  imageUrl
-                );
-              } else {
-                setimg(img1);
-              }
-            } else {
-              setimg(img1);
-            }
-          } catch (error) {
-            console.error(error.message)
-            setimg(img1);
-          }
-
-        }
+        setimg(getCandidateData.data.data.logourl)
+        
         getImage();
 
       }

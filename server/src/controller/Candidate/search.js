@@ -4,24 +4,30 @@ const Job = require('../../models/Employer/postjob')
 exports.searchjobs = async (req, res) => {
   // console.log(req.body);
   const  {title, country}  = req.body;
+  const currentDate = new Date();
+  const currentDateWithoutTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+
   try {
     let data;
 
-    const check = await Job.find({expiry_date: { $gt: new Date() }})
+    const check = await Job.find({expiry_date: { $gte: currentDateWithoutTime }})
     if(check){
 
     if (!title && !country) {
-      data = await Job.find({ expiry_date: { $gt: new Date() } });
+      data = await Job.find({ expiry_date: { $gte: currentDateWithoutTime } });
     } else if (!title && country) {
      data = await Job.aggregate([
       {
         $search: {
           index: "default",
           text: {
-            query: req.body.country,
-            path: {
-              wildcard: "*"
-            }
+            query: country,
+            path: ["state_name" ,"city_name"],
+            fuzzy: {}
           }
         }
       }])
@@ -31,10 +37,9 @@ exports.searchjobs = async (req, res) => {
           $search: {
             index: "default",
             text: {
-              query: req.body.title,
-              path: {
-                wildcard: "*"
-              }
+              query: title,
+              path: "title",
+              fuzzy: {}
             }
             
           }
@@ -58,11 +63,10 @@ exports.searchjobs = async (req, res) => {
               $search: {
                 index: "default",
                 text: {
-                  query: "<query>",
-                  path: {
-                    wildcard: "*"
-                  }
-                }
+                  query: `title:${title}  , state_name: ${country} ,city_name: ${country}`,
+                  path: ["title","state_name","city_name"]
+                },
+                fuzzy: {}
               }
             }
           ]

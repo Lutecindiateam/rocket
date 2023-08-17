@@ -7,34 +7,106 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { requestAdminJobDetails } from "../Redux/actions";
+import { requestAdminJobDetails, requestAdminEditType, requestAdminType } from "../Redux/actions";
 import image from "../images/extraLogo.png";
+import Swal from "sweetalert2";
 
 function ViewJob(props) {
 
   const params = useParams();
   const [data, setdata] = useState({});
   const [img, setimg] = useState({});
+  const [block, setBlock] = useState("")
+
   useEffect(() => {
     props.requestAdminJobDetails({
       id: params.id,
     });
   }, []);
 
+  function adminJobBlock() {
+    Swal.fire({
+      title: 'Are you sure?',
+      // text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, block it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        props.requestAdminEditType({
+          id: params.id,
+          data: {
+            action: true
+          }
+        });
+      }
+    })
+  }
+  function adminJobUnblock() {
+    Swal.fire({
+      title: 'Are you sure?',
+      // text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Unblock it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        props.requestAdminEditType({
+          id: params.id,
+          data: {
+            action: false
+          }
+        });
+      }
+    })
+  }
+
+
   useEffect(() => {
     let jobDeatilsData = props.data.jobDeatilsData;
     if (jobDeatilsData !== undefined) {
       setdata(jobDeatilsData.data.data.job[0]);
+      props.requestAdminType({
+        id: params.id,
+      });
       // if (jobDeatilsData.data.data.job[0].employee_logo) {
       //   setimg(
       //     process.env.REACT_APP_API_HOST +
       //     jobDeatilsData.data.data.job[0].employee_logo
       //   );
       // } else {
-        setimg(image);
+      setimg(image);
       // }
     }
   }, [props.data.jobDeatilsData]);
+
+  useEffect(() => {
+    const editTypeData = props.data.editTypeData;
+    if (editTypeData !== undefined) {
+      if (editTypeData.data.status == "success") {
+        setBlock(editTypeData.data.data)
+      } else {
+        setBlock(undefined)
+      }
+    }
+  }, [props.data.editTypeData])
+
+  useEffect(() => {
+    const typeData = props.data.typeData;
+    if (typeData !== undefined) {
+      if (typeData.data.status == "success") {
+        setBlock(typeData.data.data)
+      } else {
+        setBlock(undefined)
+      }
+    }
+  }, [props.data.typeData])
+
+  
 
   function printPage() {
     var printContents =
@@ -81,6 +153,22 @@ function ViewJob(props) {
                                 >
                                   <i class="icon-printer"></i> Print
                                 </button>
+                                {block === true ? (
+                                  <button
+                                    onClick={adminJobUnblock}
+                                    class="btn btn-otline-dark"
+                                  >
+                                    <i class="icon-printer"></i> Unblock
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={adminJobBlock}
+                                    class="btn btn-otline-dark"
+                                  >
+                                    <i class="icon-printer"></i> Block
+                                  </button>
+                                )
+                                }
                               </div>
                               <div>
                               </div>
@@ -101,7 +189,7 @@ function ViewJob(props) {
                               <hr />
                               <p>
                                 <b>Salary : </b>
-                                <text>INR {data.salary_from}-{data.salary_to}</text> 
+                                <text>INR {data.salary_from}-{data.salary_to}</text>
                               </p>
                               <p>
                                 <b>Desired description : </b>
@@ -151,6 +239,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ requestAdminJobDetails }, dispatch);
+  bindActionCreators({ requestAdminJobDetails, requestAdminEditType, requestAdminType }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewJob);

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { requestLogin, requestGetCandidate } from "../Redux/actions";
+import { requestLogin, requestGetCandidate, requestCandidateResume } from "../Redux/actions";
 import { Document, Page, pdfjs } from "react-pdf";
 import camera from "../images/camera.png";
 import Swal from "sweetalert2";
@@ -62,41 +62,49 @@ function Resume(props) {
     }
   }, [props.candidate.loginData]);
 
+
+  const getResume = async () => {
+    const s3Key = `candidateResume/${user.id}`;
+    try {
+      const url = await Storage.get(s3Key, { validateObjectExistence: true });
+      if (url) {
+        setPdf(url);
+      }        //     // List objects in the S3 bucket with the specified s3Key
+      //     const response = await Storage.list(s3Key);
+      //     // If the response is an array and it's not empty, the object exists
+      //     if (response.results.length > 0) {
+      //       // Fetch the object using the get method
+      //       const pdfUrl = await Storage.get(s3Key);
+
+      // if (pdfUrl) {
+      //   setPdf(pdfUrl);
+      // }
+      //     } else {
+      //       // Handle the case when the object is not present in S3
+      //       console.error("PDF object not found in S3.");
+      //       // Perform any necessary actions for handling the absence of the object
+      //       // For example, you can set the pdfUrl to null or display an error message to the user.
+      //     }
+    } catch (error) {
+      // Handle errors
+      console.error("Error fetching the PDF from S3:", error);
+    }
+  }
+
+
   useEffect(() => {
     let getCandidateData = props.candidate.getCandidateData;
     if (getCandidateData !== undefined) {
       if (getCandidateData?.data?.status === "success") {
         setData(getCandidateData.data.data);
         // setPdf(process.env.REACT_APP_API_HOST + getCandidateData.data.data.resume);
-        const getResume = async () => {
-          const s3Key = `candidateResume/${user.id}`;
-          try {
-            // List objects in the S3 bucket with the specified s3Key
-            const response = await Storage.list(s3Key);
-            // If the response is an array and it's not empty, the object exists
-            if (response.results.length > 0) {
-              // Fetch the object using the get method
-              const pdfUrl = await Storage.get(s3Key);
-              
-              if (pdfUrl) {
-                console.log("hello");
-                setPdf(pdfUrl);
-              }
-            } else {
-              // Handle the case when the object is not present in S3
-              console.error("PDF object not found in S3.");
-              // Perform any necessary actions for handling the absence of the object
-              // For example, you can set the pdfUrl to null or display an error message to the user.
-            }
-          } catch (error) {
-            // Handle errors
-            console.error("Error fetching the PDF from S3:", error);
-          }
-        }
+
         getResume();
       }
     }
-  }, [props.candidate.getCandidateData, addResume]);
+  }, [props.candidate.getCandidateData
+    // , props.candidate.resumeData
+  ]);
 
   // function addResume(){
   //   navigate("/addResumeForm")
@@ -111,7 +119,32 @@ function Resume(props) {
       });
       if (result) {
         alert("successful");
-        setPdf(result)
+        getResume()
+        // const url = await Storage.get(s3Key ,{ validateObjectExistence: true }); 
+        // console.log(url);
+        // setPdf(result)
+        // const get = await Storage.list(s3Key);
+        //     // If the response is an array and it's not empty, the object exists
+        //     if (get.results.length > 0) {
+        //       // Fetch the object using the get method
+        //       const url = await Storage.get(s3Key ,{expires: 0});              
+        //       if (url) {
+        //         console.log(url);
+        //         // setPdf(url);
+        //         props.requestCandidateResume({
+        //           id: user.id,
+        //           token: user.token,
+        //           data: {
+        //            url
+        //           },
+        //         });
+        //       }
+        //     } else {
+        //       // Handle the case when the object is not present in S3
+        //       console.error("PDF object not found in S3.");
+        //       // Perform any necessary actions for handling the absence of the object
+        //       // For example, you can set the pdfUrl to null or display an error message to the user.
+        //     }
       } else {
         console.log("semething went wrong");
       }
@@ -193,6 +226,7 @@ const mapDispatchToProps = (dispatch) =>
     {
       requestLogin,
       requestGetCandidate,
+      requestCandidateResume
     },
     dispatch
   );

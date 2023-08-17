@@ -13,6 +13,7 @@ import {
   requestCountry,
   requestState,
   requestCity,
+  requestCandidateResume
 } from "../Redux/actions";
 import WOW from "wowjs";
 import Swal from "sweetalert2";
@@ -164,28 +165,28 @@ function Profile(props) {
         if (getCandidateData.data.data.education) {
           setEducations(getCandidateData.data.data.education);
         }
-        const getResume = async () => {
-          const s3Key = `candidateResume/${emp.id}`;
-          try {
-            // List objects in the S3 bucket with the specified s3Key
-            const response = await Storage.list(s3Key);
-            // If the response is an array and it's not empty, the object exists
-            if (response.results.length > 0) {
-              // Fetch the object using the get method
-              const pdfUrl = await Storage.get(s3Key);
-              if (pdfUrl) {
-                setPdf(pdfUrl);
-              }
-            } else {
-              // Handle the case when the object is not present in S3
-              console.error("PDF object not found in S3.");
-            }
-          } catch (error) {
-            // Handle errors
-            console.error("Error fetching the PDF from S3:", error);
-          }
-        }
-        getResume();
+        // const getResume = async () => {
+        //   const s3Key = `candidateResume/${emp.id}`;
+        //   try {
+        //     // List objects in the S3 bucket with the specified s3Key
+        //     const response = await Storage.list(s3Key);
+        //     // If the response is an array and it's not empty, the object exists
+        //     if (response.results.length > 0) {
+        //       // Fetch the object using the get method
+        //       const pdfUrl = await Storage.get(s3Key);
+        //       if (pdfUrl) {
+        //         setPdf(pdfUrl);
+        //       }
+        //     } else {
+        //       // Handle the case when the object is not present in S3
+        //       console.error("PDF object not found in S3.");
+        //     }
+        //   } catch (error) {
+        //     // Handle errors
+        //     console.error("Error fetching the PDF from S3:", error);
+        //   }
+        // }
+        // getResume();
         // setSelectedState(getCandidateData.data.data.state);
         // setSelectedCity(getCandidateData.data.data.city)
         // if (getCandidateData.data.data.country) {
@@ -206,7 +207,7 @@ function Profile(props) {
 
       }
     }
-  }, [props.candidate.getCandidateData]);
+  }, [props.candidate.getCandidateData , props.candidate.resumeData]);
 
   useEffect(() => {
     let formfieldData = props.employee.formfieldData;
@@ -1105,7 +1106,28 @@ function Profile(props) {
       });
       if (result) {
         Swal.fire("Good job!", "Your Resume Uploaded Successfully.", "success");
-        setPdf(result)
+        // setPdf(result)
+        const get = await Storage.list(s3Key);
+            // If the response is an array and it's not empty, the object exists
+            if (get.results.length > 0) {
+              // Fetch the object using the get method
+              const url = await Storage.get(s3Key);              
+              if (url) {
+                // setPdf(url);
+                props.requestCandidateResume({
+                  id: emp.id,
+                  token: emp.token,
+                  data: {
+                   url
+                  },
+                });
+              }
+            } else {
+              // Handle the case when the object is not present in S3
+              console.error("PDF object not found in S3.");
+              // Perform any necessary actions for handling the absence of the object
+              // For example, you can set the pdfUrl to null or display an error message to the user.
+            }
       } else {
         console.log("semething went wrong");
       }
@@ -1706,7 +1728,7 @@ function Profile(props) {
                             </div>
                           </div>
                           <div>
-                            {pdf ? (
+                            {data.resumeurl ? (
                               <>
                                 <text style={{color: "green" }}>Your Resume Uploaded.</text>
                                 <Link to="/resume">
@@ -2128,6 +2150,7 @@ const mapDispatchToProps = (dispatch) =>
       requestState,
       requestCity,
       requestGetCandidate,
+      requestCandidateResume
     },
     dispatch
   );

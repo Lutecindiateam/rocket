@@ -408,7 +408,7 @@ export const getCandidate = (obj) => {
 
 export const candidatelogo = (obj) => {
   return axios
-    .post("/candidate/" + obj.id + "/profile", obj.data, {
+    .patch("/candidate/logurl/" + obj.id , obj.data, {
       headers: { Authorization: `Bearer ${obj.token}` },
     })
     .then((response) => {

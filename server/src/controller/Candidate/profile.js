@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const jobApplication = require('../../models/Candidate/applyjob')
 const jwkToPem = require('jwk-to-pem');
 const fetch = require('node-fetch');
+const currentDate = new Date();
+  
 
 const pems = {};
 
@@ -199,13 +201,17 @@ exports.getAllJob = async (req, res) => {
     const totalJobs = await Job.countDocuments();
     const lastPage = Math.ceil(totalJobs / pageSize);
     // const lastPage = Math.ceil((totalJobs - 6) / pageSize);
-
-    const jobs = await Job.find()
+    const currentDateWithoutTime = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate()
+    );
+    const jobs = await Job.find({deleted:false,  expiry_date: { $gte: currentDateWithoutTime }})
       .skip(skipCount)
       .limit(pageSize)
       .exec();
 
-    if (jobs) {
+      if (jobs) {
       const modifiedJobs = jobs.map((job) => {
         return {
           company_name: job.company_name,
@@ -376,7 +382,7 @@ exports.applyForJob = async (req, res) => {
 exports.getAppliedJobs = async (req, res) => {
   try {
     const CandidateID = req.params.id;
-    const user = await jobApplication.find({ candidate_id: CandidateID });
+    const user = await jobApplication.find({ candidate_id: CandidateID});
 
     if (user) {
       const jobs = [];
@@ -394,9 +400,10 @@ exports.getAppliedJobs = async (req, res) => {
           //   return { id: _id, ...rest };
           // });
 
+          const filterData = jobs.filter(job => !job.deleted  && job.expiry_date >= currentDate)
           return res.status(200).json({
             code: 200,
-            data: { jobs: jobs },
+            data: { jobs: filterData },
             message: "Jobs found",
             status: "success",
           });

@@ -15,7 +15,7 @@ import Breadcrumbs from "../Section/breadcrumbsSection";
 import Swal from "sweetalert2";
 
 function ManageJobs(props) {
-  
+
   useEffect(() => {
     new WOW.WOW().init();
     localStorage.removeItem("link");
@@ -76,13 +76,13 @@ function ManageJobs(props) {
     }
   }, [props.employee.empDeleteJobData]);
 
-  function addData(){
+  function addData() {
     navigate('/postJob')
   }
   return (
     <>
       <Header />
-      <Breadcrumbs title="Manage Jobs"/>     
+      <Breadcrumbs title="Manage Jobs" />
       <div class="manage-jobs section">
         <div class="container">
           <div class="alerts-inner">
@@ -110,103 +110,191 @@ function ManageJobs(props) {
                     </div>
 
                     {data.map((item, index) => {
-                      return (
-                        <div class="manage-content" key={index}>
-                          <div class="row align-items-center justify-content-center">
-                            <div class="col-lg-3 col-md-3 col-12">
-                            <Link to={`/empViewJob/${item.id}`}>
-                                {" "}
-                                <h3>{item.title}</h3>
-                              </Link>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-12">
-                              <p>
-                                <span class="time">{item.expiry_date.split("T")[0]}</span>
-                              </p>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-12">
-                              <p>
-                                {/* {item.currency_name} */}
-                                <>INR {item.salary_from}-
-                                {item.salary_to}</>
-                              </p>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-12">
-                            <Link to={`/empViewJob/${item.id}`}>
-                                {" "}
-                                <button
+                      console.log(item);
+                      if (item.deleted === false) {
+                        return (
+                          <div class="manage-content" key={index}>
+                            <div class="row align-items-center justify-content-center">
+                              <div class="col-lg-3 col-md-3 col-12">
+                                <Link to={`/empViewJob/${item.id}`}>
+                                  {" "}
+                                  <h3>{item.title}</h3>
+                                </Link>
+                              </div>
+                              <div class="col-lg-3 col-md-3 col-12">
+                                <p>
+                                  <span class="time">{item.expiry_date.split("T")[0]}</span>
+                                </p>
+                              </div>
+                              <div class="col-lg-3 col-md-3 col-12">
+                                <p>
+                                  {/* {item.currency_name} */}
+                                  <>INR {item.salary_from}-
+                                    {item.salary_to}</>
+                                </p>
+                              </div>
+                              <div class="col-lg-3 col-md-3 col-12">
+                                <Link to={`/empViewJob/${item.id}`}>
+                                  {" "}
+                                  <button
+                                    style={{
+                                      border: "0px",
+                                      padding: "2px 5px",
+                                      backgroundColor: "transparent",
+                                    }}
+                                  >
+                                    <i
+                                      style={{ color: "blue", fontSize: "16px" }}
+                                      class="fa fa-eye"
+                                    ></i>
+                                  </button>
+                                </Link>
+                                <Link to={`/editJob/${item.id}`}>
+                                  <button
+                                    style={{
+                                      border: "0px",
+                                      padding: "2px 5px",
+                                      backgroundColor: "transparent",
+                                    }}
+                                  >
+                                    <i
+                                      style={{ color: "green", fontSize: "16px" }}
+                                      class="fa fa-pencil-square-o"
+                                    ></i>
+                                  </button>
+                                </Link>
+                                {/* <button
                                   style={{
                                     border: "0px",
                                     padding: "2px 5px",
                                     backgroundColor: "transparent",
                                   }}
-                                >
-                                  <i
-                                    style={{ color: "blue", fontSize: "16px" }}
-                                    class="fa fa-eye"
-                                  ></i>
-                                </button>
-                              </Link>
-                              <Link to={`/editJob/${item.id}`}>
-                                <button
-                                  style={{
-                                    border: "0px",
-                                    padding: "2px 5px",
-                                    backgroundColor: "transparent",
+                                  onClick={() => {
+                                    Swal.fire({
+                                      title: 'Are you sure?',
+                                      text: "You won't be able to revert this!",
+                                      icon: 'warning',
+                                      showCancelButton: true,
+                                      confirmButtonColor: '#3085d6',
+                                      cancelButtonColor: '#d33',
+                                      confirmButtonText: 'Yes, delete it!'
+                                    }).then((result) => {
+                                      if (result.isConfirmed) {
+                                        deleteItem(item.id);
+                                      }
+                                    })
                                   }}
                                 >
                                   <i
-                                    style={{ color: "green", fontSize: "16px" }}
-                                    class="fa fa-pencil-square-o"
+                                    style={{ color: "red", fontSize: "16px" }}
+                                    class="fa fa-times"
                                   ></i>
-                                </button>
-                              </Link>
-                              <button
-                                style={{
-                                  border: "0px",
-                                  padding: "2px 5px",
-                                  backgroundColor: "transparent",
-                                }}
-                                onClick={() => {
-                                  Swal.fire({
-                                    title: 'Are you sure?',
-                                    text: "You won't be able to revert this!",
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    confirmButtonText: 'Yes, delete it!'
-                                  }).then((result) => {
-                                    if (result.isConfirmed) {
-                                      deleteItem(item.id);
-                                    }
-                                  })
-                                }}
-                                >
-                                <i
-                                  style={{ color: "red", fontSize: "16px" }}
-                                  class="fa fa-times"
-                                ></i>
-                              </button>
+                                </button> */}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
+                        )
+                      } else {
+                        return (
+                          <div class="manage-content" key={index}>
+                            <div class="row align-items-center justify-content-center">
+                              <div class="col-lg-3 col-md-3 col-12">
+                                {/* <Link to={`/empViewJob/${item.id}`}> */}
+                                  {" "}
+                                  <h3>{item.title}</h3>
+                                {/* </Link> */}
+                              </div>
+                              <div class="col-lg-3 col-md-3 col-12">
+                                <p>
+                                  <span class="time">{item.expiry_date.split("T")[0]}</span>
+                                </p>
+                              </div>
+                              <div class="col-lg-3 col-md-3 col-12">
+                                <p>
+                                  {/* {item.currency_name} */}
+                                  <>INR {item.salary_from}-
+                                    {item.salary_to}</>
+                                </p>
+                              </div>
+                              <div class="col-lg-3 col-md-3 col-12">
+                                {/* <Link to={`/empViewJob/${item.id}`}> */}
+                                  {" "}
+                                  <p style={{color:"red" , fontSize:"15px"}}>Blocked</p>
+                                  {/* <button
+                                    style={{
+                                      border: "0px",
+                                      padding: "2px 5px",
+                                      backgroundColor: "transparent",
+                                    }}
+                                  >
+                                    <i
+                                      style={{ color: "blue", fontSize: "16px" }}
+                                      class="fa fa-eye"
+                                    ></i>
+                                  </button> */}
+                                {/* </Link> */}
+                                {/* <Link to={`/editJob/${item.id}`}> */}
+                                  {/* <button
+                                    style={{
+                                      border: "0px",
+                                      padding: "2px 5px",
+                                      backgroundColor: "transparent",
+                                    }}
+                                  >
+                                    <i
+                                      style={{ color: "green", fontSize: "16px" }}
+                                      class="fa fa-pencil-square-o"
+                                    ></i>
+                                  </button> */}
+                                {/* </Link> */}
+                                {/* <button
+                                  style={{
+                                    border: "0px",
+                                    padding: "2px 5px",
+                                    backgroundColor: "transparent",
+                                  }}
+                                  onClick={() => {
+                                    Swal.fire({
+                                      title: 'Are you sure?',
+                                      text: "You won't be able to revert this!",
+                                      icon: 'warning',
+                                      showCancelButton: true,
+                                      confirmButtonColor: '#3085d6',
+                                      cancelButtonColor: '#d33',
+                                      confirmButtonText: 'Yes, delete it!'
+                                    }).then((result) => {
+                                      if (result.isConfirmed) {
+                                        deleteItem(item.id);
+                                      }
+                                    })
+                                  }}
+                                >
+                                  <i
+                                    style={{ color: "red", fontSize: "16px" }}
+                                    class="fa fa-times"
+                                  ></i>
+                                </button> */}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+
                     })}
                   </div>
                 ) : (
                   <div class="job-items">
                     <>
-                        <h6>You have not added any job.<br /><br /></h6>
-                        <button
-                          type="submit"
-                          onClick={addData}
-                          class="btn btn-primary me-2"
-                          style={{ color: "white" }}
-                        >
-                          Add job
-                        </button>
-                      </>
+                      <h6>You have not added any job.<br /><br /></h6>
+                      <button
+                        type="submit"
+                        onClick={addData}
+                        class="btn btn-primary me-2"
+                        style={{ color: "white" }}
+                      >
+                        Add job
+                      </button>
+                    </>
                   </div>
                 )}
               </div>

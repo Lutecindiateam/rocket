@@ -671,9 +671,10 @@ export const adminlogin = (obj) => {
       });
   };
   
+  //get company block status
   export const getTag = (obj) => {
     return axios
-      .get("/admin/editjob_tags/" + obj.id)
+      .get("/admin/editcompany_block/" + obj.id)
       .then((response) => {
         return response;
       })
@@ -695,6 +696,7 @@ export const adminlogin = (obj) => {
       });
   };
   
+  //edit block field for company
   export const editTag = (obj) => {
     return axios
       .patch("/admin/editPartiCularjob_tags/" + obj.id, obj.data)
@@ -707,9 +709,11 @@ export const adminlogin = (obj) => {
       });
   };
   
+
+  
   export const deleteTag = (obj) => {
     return axios
-      .delete("/admin/job_tags/" + obj.id)
+      .patch("/admin/block_company/" + obj.id , obj.data)
       .then((response) => {
         return response;
       })
@@ -733,9 +737,10 @@ export const adminlogin = (obj) => {
       });
   };
   
+  //get candidate block status
   export const getShift = (obj) => {
     return axios
-      .get("/admin/editjob_shifts/" + obj.id)
+      .get("/admin/editcandidate_block_status/" + obj.id)
       .then((response) => {
         return response;
       })
@@ -757,9 +762,11 @@ export const adminlogin = (obj) => {
       });
   };
   
+
+  //edit candidate block field
   export const editShift = (obj) => {
     return axios
-      .patch("/admin/editPartiCularjob_shifts/" + obj.id, obj.data)
+      .patch("/admin/editPartiCularCandidate/" + obj.id, obj.data)
       .then((response) => {
         return response;
       })
@@ -858,9 +865,10 @@ export const adminlogin = (obj) => {
       });
   };
   
+  //get job bolck status
   export const getType = (obj) => {
     return axios
-      .get("/admin/editjob_types/" + obj.id)
+      .get("/admin/editjob_block/" + obj.id)
       .then((response) => {
         return response;
       })
@@ -882,6 +890,7 @@ export const adminlogin = (obj) => {
       });
   };
   
+  //edit job block status 
   export const editType = (obj) => {
     return axios
       .patch("/admin/editPartiCularjob_types/" + obj.id, obj.data)

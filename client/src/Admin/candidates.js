@@ -140,11 +140,14 @@ function Candidates(props) {
                                 </thead>
                                 <tbody>
                                   {candidates.map((item, index) => {
-                                    // console.log(item);
-                                    const img = item.profile
-                                      ? process.env.REACT_APP_API_HOST +
-                                      item.profile
+                                    const img = item.logourl
+                                      ? item.logourl
                                       : image;
+                                    // console.log(item);
+                                    // const img = item.profile
+                                    //   ? process.env.REACT_APP_API_HOST +
+                                    //   item.profile
+                                    //   : image;
                                     return (
                                       <tr key={index}>
                                         <td>

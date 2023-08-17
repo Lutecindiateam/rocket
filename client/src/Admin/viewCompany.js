@@ -12,8 +12,11 @@ import image from "../images/extraLogo.png";
 import { Storage } from 'aws-amplify';
 import {
   requestAdminEditPosition,
-  requestAdminPosition
+  requestAdminPosition,
+  requestAdminEditTag,
+  requestAdminTag
 } from "../Redux/actions";
+import Swal from "sweetalert2";
 
 
 function ViewCompany(props) {
@@ -24,6 +27,7 @@ function ViewCompany(props) {
   const [certificate, setCertificate] = useState(null)
   const [status, setStatus] = useState("")
   const [data1, setData1] = useState({})
+  const [block, setBlock] = useState("")
 
   function onChangeData(e) {
     setData1((data1) => ({
@@ -43,6 +47,9 @@ function ViewCompany(props) {
     if (companyDeatilsData !== undefined) {
       setdata(companyDeatilsData.data.data[0]);
       props.requestAdminPosition({
+        id: params.id,
+      });
+      props.requestAdminTag({
         id: params.id,
       });
       // if (companyDeatilsData.data.data[0].logo) {
@@ -79,6 +86,47 @@ function ViewCompany(props) {
 
   }
 
+  function adminBlock() {
+    Swal.fire({
+      title: 'Are you sure?',
+      // text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, block it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        props.requestAdminEditTag({
+          id: params.id,
+          data: {
+            action: true
+          }
+        });
+      }
+    })
+  }
+  function adminUnblock() {
+    Swal.fire({
+      title: 'Are you sure?',
+      // text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Unblock it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        props.requestAdminEditTag({
+          id: params.id,
+          data: {
+            action: false
+          }
+        });
+      }
+    })
+  }
+
 
   async function saveStatus(e) {
     e.preventDefault();
@@ -87,7 +135,7 @@ function ViewCompany(props) {
         id: params.id,
         data: {
           status: data1.status,
-          reason : data1.reason
+          reason: data1.reason
         },
       });
     } catch (error) {
@@ -118,7 +166,25 @@ function ViewCompany(props) {
     }
   }, [props.data.positionData]);
 
+  useEffect(() => {
+    let editTagData = props.data.editTagData;
+    if (editTagData !== undefined) {
+      if (editTagData.data.status == "success") {
+        setBlock(editTagData.data.data)
+      } else {
+        setBlock(undefined)
+      }
+    }
+  }, [props.data.editTagData])
 
+  useEffect(() => {
+    let tag = props.data.tagData;
+    if (tag !== undefined) {
+      if (tag.data) {
+        setBlock(tag.data.data);
+      }
+    }
+  }, [props.data.tagData]);
 
   function printPage() {
     var printContents =
@@ -166,31 +232,43 @@ function ViewCompany(props) {
                                 >
                                   <i class="icon-printer"></i> Print
                                 </button>
-                                <button
-                                  onClick={console.log("hello")}
+                                {block === true ? (
+                                   <button
+                                   onClick={adminUnblock}
+                                   class="btn btn-otline-dark"
+                                 >
+                                   <i class="icon-printer"></i> Unblock
+                                 </button>
+                                ) : (
+                                  <button
+                                  onClick={adminBlock}
                                   class="btn btn-otline-dark"
                                 >
-                                  <i class="icon-printer"></i> Delete
+                                  <i class="icon-printer"></i> Block
                                 </button>
-                              </div>
-                              </div>
-                              <br />
-                              <b>Current Status: </b>
-                              {status == "Approved" ? (
-                                <b style={{ color: "green" }}>Approved</b>
-                              ) : (status == "Rejected" ? (
-                                <b style={{ color: "red" }}>Rejected</b>
-
-                              ) : (
-                                status == "Onhold" ? (
-                                  <b style={{ color: "orange" }}>on hold</b>
-                                ) : (
-                                  <b style={{ color: "yellow" }}>Pending</b>
                                 )
-                              ))}
-                              <br />
-                              <br />
-                              {/* <div>
+                                }
+                                
+                              </div>
+                            </div>
+                            <br />
+                           
+                            <b>Current Status: </b>
+                            {status == "Approved" ? (
+                              <b style={{ color: "green" }}>Approved</b>
+                            ) : (status == "Rejected" ? (
+                              <b style={{ color: "red" }}>Rejected</b>
+
+                            ) : (
+                              status == "Onhold" ? (
+                                <b style={{ color: "orange" }}>on hold</b>
+                              ) : (
+                                <b style={{ color: "yellow" }}>Pending</b>
+                              )
+                            ))}
+                            <br />
+                            <br />
+                            {/* <div>
                                 <a href={data.facebook_url} target="_blank">
                                   <button
                                     class="btn btn-primary btn-md text-white mb-0 me-0"
@@ -237,57 +315,57 @@ function ViewCompany(props) {
                                   </button>
                                 </a>
                               </div> */}
-                              <form onSubmit={saveStatus}>
+                            <form onSubmit={saveStatus}>
 
-                                <div class="col-lg-6 col-md-6">
-                                  <div class="form-group">
-                                    <b>Change Status :</b>
-                                    <select
-                                      class="select"
-                                      name="status"
-                                      id="status"
-                                      value={data1.status}
-                                      onChange={onChangeData}
-                                    // onBlur={validateExpiry}
-                                    >
-                                      <option value="">Change Status</option>
-                                      <option value="Approved">Approved</option>
-                                      <option value="Onhold">on hold</option>
-                                      <option value="Rejected">Rejected</option>
+                              <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                  <b>Change Status :</b>
+                                  <select
+                                    class="select"
+                                    name="status"
+                                    id="status"
+                                    value={data1.status}
+                                    onChange={onChangeData}
+                                  // onBlur={validateExpiry}
+                                  >
+                                    <option value="">Change Status</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Onhold">on hold</option>
+                                    <option value="Rejected">Rejected</option>
 
-                                      {/* {expiry_date.map((option) => (
+                                    {/* {expiry_date.map((option) => (
                                 <option value={option.day}>
                                   {option.day}
                                 </option>
                               ))} */}
-                                    </select>
-                                  </div>
+                                  </select>
                                 </div>
-                                <div class="col-lg-6 col-md-6">
-                              <div class="form-group">
-                                <b>Write Reason :</b>
-                                <input
-                                  class="form-control"
-                                  type="text"
-                                  name="reason"
-                                  id="reason"
-                                  value={data1.reason}
-                                  // onBlur={validatewebsite}
-                                  onChange={onChangeData}
-                                  placeholder="Enter Reason"
-                                />
-                                {/* {errorwebsite && (
+                              </div>
+                              <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                  <b>Write Reason :</b>
+                                  <input
+                                    class="form-control"
+                                    type="text"
+                                    name="reason"
+                                    id="reason"
+                                    value={data1.reason}
+                                    // onBlur={validatewebsite}
+                                    onChange={onChangeData}
+                                    placeholder="Enter Reason"
+                                  />
+                                  {/* {errorwebsite && (
                                   <div style={mystyle}>{errorwebsite}</div>
                                 )} */}
-                              </div>
-                             </div>
-                                <div class="form-group mb-8 button">
-                                  <button class="btn "
-                                    style={{ color: "white" }}
-                                  >Submit</button>
                                 </div>
-                              </form>
-                            
+                              </div>
+                              <div class="form-group mb-8 button">
+                                <button class="btn "
+                                  style={{ color: "white" }}
+                                >Submit</button>
+                              </div>
+                            </form>
+
                             <br />
                             <div id="printme">
                               <div class="d-flex ">
@@ -366,6 +444,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ requestAdminCompanyDetails, requestAdminEditPosition, requestAdminPosition }, dispatch);
+  bindActionCreators({ requestAdminCompanyDetails, requestAdminEditPosition, requestAdminPosition, requestAdminEditTag,requestAdminTag }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCompany);

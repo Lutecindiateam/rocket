@@ -131,7 +131,7 @@ exports.CandidateLogin =async(req,  res)=>{
 
             const user = await candidate.findOne({ email: email }).exec();
             if(user){
-              return res.status(200).json({data :{id: user.id, token:token , first_name:user.first_name , last_name:user.last_name}, status :"success",  message:"Login successful"})
+              return res.status(200).json({data :{id: user.id, token:token , first_name:user.first_name , last_name:user.last_name, block:user.deleted}, status :"success",  message:"Login successful"})
             }
             
             
@@ -157,7 +157,7 @@ exports.CandidateLogin =async(req,  res)=>{
               // jwt.sign(payload,process.env.JWT_SECRET,{expiresIn : 31556926},(err,token) => {
                 // return res.status(200).json({status :"success", data : token})
                 return res.status(201).json({
-                  data :{id: savedUser.id ,token:token , first_name:first_name , last_name:last_name},
+                  data :{id: savedUser.id ,token:token , first_name:first_name , last_name:last_name, block:savedUser.deleted},
                   status :"success",
                   message:"Candidate registered successfully"
               
@@ -214,3 +214,51 @@ exports.CandidateLogin =async(req,  res)=>{
       //   }
       // };
     
+exports.saveResumeUrl = async (req , res) =>{
+  try{
+    const userid = req.params.id;
+    const url = req.body.url;
+
+    const save = await candidate.findByIdAndUpdate(
+      {_id:userid},
+      {
+        $set:{
+          resumeurl:url
+        }
+      },
+      {new: true}
+    )
+if(save){
+  return res.status(200).json({
+    message:"resume saved successfully",
+    status:"success"
+  })
+}
+  }catch(error){
+    console.log(error.message);
+  }
+}
+exports.saveLogoUrl = async (req , res) =>{
+  try{
+    const userid = req.params.id;
+    const url = req.body.imageUrl;
+
+    const save = await candidate.findByIdAndUpdate(
+      {_id:userid},
+      {
+        $set:{
+          logourl:url
+        }
+      },
+      {new: true}
+    )
+if(save){
+  return res.status(200).json({
+    message:"logo saved successfully",
+    status:"success"
+  })
+}
+  }catch(error){
+    console.log(error.message);
+  }
+}

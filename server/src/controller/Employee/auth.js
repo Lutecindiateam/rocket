@@ -110,9 +110,9 @@ exports.EmployerLogin =async(req,  res)=>{
   const {token, email, sub , name} = req.body
     try {
         const user = await employer.findOne({ email:email }).exec();
-        
+        // console.log(user);
         if(user)  return res.status(201).json({
-          data :{id: user.id , token:token, name: user.name, website:user.website},
+          data :{id: user.id , token:token, name: user.name, website:user.website , block:user.deleted},
           status :"success",
           message:"Employer registered successfully"
       })
@@ -126,7 +126,7 @@ exports.EmployerLogin =async(req,  res)=>{
         // console.log("USER :: ",_user)
   
         const savedUser = await _user.save();
-        console.log("saveduser :: ",savedUser)
+        // console.log("saveduser :: ",savedUser)
 
         if(savedUser){    
                 // const payload = {
@@ -136,7 +136,7 @@ exports.EmployerLogin =async(req,  res)=>{
                 // jwt.sign(payload,process.env.JWT_SECRET,{expiresIn : 31556926},(err,token) => {
                   // return res.status(200).json({status :"success", data : token})
                   return res.status(201).json({
-                    data :{id: savedUser.id , token:token, name:savedUser.name,website:savedUser.website },
+                    data :{id: savedUser.id , token:token, name:savedUser.name,website:savedUser.website , block:savedUser.deleted},
                     status :"success",
                     message:"Employer registered successfully"
                 

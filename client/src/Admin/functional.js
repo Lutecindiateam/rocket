@@ -122,14 +122,14 @@ function FunctionalArea(props) {
     }
   };
 
-  useEffect(() => {
-    let functional = props.data.functionalData;
-    if (functional !== undefined) {
-      if (functional.data) {
-        seteditdata(functional.data.data.functional_areas[0]);
-      }
-    }
-  }, [props.data.functionalData]);
+  // useEffect(() => {
+  //   let functional = props.data.functionalData;
+  //   if (functional !== undefined) {
+  //     if (functional.data) {
+  //       seteditdata(functional.data.data.functional_areas[0]);
+  //     }
+  //   }
+  // }, [props.data.functionalData]);
 
   const saveedittoggle = (e) => {
     e.preventDefault();

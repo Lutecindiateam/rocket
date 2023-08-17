@@ -7,9 +7,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { requestAdminCandidateDetails } from "../Redux/actions";
+import { requestAdminCandidateDetails ,requestAdminEditShift, requestAdminShift} from "../Redux/actions";
 import image from "../images/profile.png";
 import { Storage } from 'aws-amplify';
+import Swal from "sweetalert2";
 
 function ViewCandidate(props) {
 
@@ -17,16 +18,64 @@ function ViewCandidate(props) {
   const [data, setdata] = useState({});
   const [img, setimg] = useState("");
   const [resume, setresume] = useState("");
+  const [block, setBlock] = useState("")
+
   useEffect(() => {
     props.requestAdminCandidateDetails({
       id: params.id,
     });
   }, []);
 
+  function adminCandidateBlock() {
+    Swal.fire({
+      title: 'Are you sure?',
+      // text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, block it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        props.requestAdminEditShift({
+          id: params.id,
+          data: {
+            action: true
+          }
+        });
+      }
+    })
+  }
+  function adminCandidateUnblock() {
+    Swal.fire({
+      title: 'Are you sure?',
+      // text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Unblock it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        props.requestAdminEditShift({
+          id: params.id,
+          data: {
+            action: false
+          }
+        });
+      }
+    })
+  }
+
+
+
   useEffect(() => {
     let candidateDeatilsData = props.data.candidateDeatilsData;
     if (candidateDeatilsData !== undefined) {
       setdata(candidateDeatilsData?.data?.data[0]);
+      props.requestAdminShift({
+        id: params.id,
+      });
       // if (candidateDeatilsData.data.data[0].profile) {
       //   setimg(
       //     process.env.REACT_APP_API_HOST + candidateDeatilsData.data.data[0].profile
@@ -66,6 +115,27 @@ function ViewCandidate(props) {
     }
   }
 
+  useEffect(() =>{
+   const editShiftData = props.data.editShiftData;
+   if (editShiftData !== undefined) {
+    if (editShiftData.data.status == "success") {
+      setBlock(editShiftData.data.data)
+    } else {
+      setBlock(undefined)
+    }
+  }
+  }, [props.data.editShiftData])
+
+  useEffect(() =>{
+    const shiftData= props.data.shiftData;
+    if (shiftData !== undefined) {
+      if (shiftData.data.status == "success") {
+        setBlock(shiftData.data.data)
+      } else {
+        setBlock(undefined)
+      }
+    }
+  },[props.data.shiftData])
 
   function printPage() {
     var printContents =
@@ -112,6 +182,22 @@ function ViewCandidate(props) {
                                 >
                                   <i class="icon-printer"></i> Print
                                 </button>
+                                {block === true ? (
+                                   <button
+                                   onClick={adminCandidateUnblock}
+                                   class="btn btn-otline-dark"
+                                 >
+                                   <i class="icon-printer"></i> Unblock
+                                 </button>
+                                ) : (
+                                  <button
+                                  onClick={adminCandidateBlock}
+                                  class="btn btn-otline-dark"
+                                >
+                                  <i class="icon-printer"></i> Block
+                                </button>
+                                )
+                                }
                               </div>
                               {/* <div>
                                 <a href={data.facebook_url} target="_blank">
@@ -235,6 +321,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ requestAdminCandidateDetails }, dispatch);
+  bindActionCreators({ requestAdminCandidateDetails ,requestAdminEditShift, requestAdminShift}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCandidate);
