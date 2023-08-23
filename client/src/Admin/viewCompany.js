@@ -138,6 +138,7 @@ function ViewCompany(props) {
           reason: data1.reason
         },
       });
+      Swal.fire("Good job!", "Status Changed Successfully.", "success");
     } catch (error) {
       console.error(error.message);
     }
@@ -233,39 +234,38 @@ function ViewCompany(props) {
                                   <i class="icon-printer"></i> Print
                                 </button>
                                 {block === true ? (
-                                   <button
-                                   onClick={adminUnblock}
-                                   class="btn btn-otline-dark"
-                                 >
-                                   <i class="icon-printer"></i> Unblock
-                                 </button>
+                                  <button
+                                    onClick={adminUnblock}
+                                    class="btn btn-otline-dark"
+                                  >
+                                    <i class="icon-printer"></i> Unblock
+                                  </button>
                                 ) : (
                                   <button
-                                  onClick={adminBlock}
-                                  class="btn btn-otline-dark"
-                                >
-                                  <i class="icon-printer"></i> Block
-                                </button>
+                                    onClick={adminBlock}
+                                    class="btn btn-otline-dark"
+                                  >
+                                    <i class="icon-printer"></i> Block
+                                  </button>
                                 )
                                 }
-                                
+
                               </div>
                             </div>
                             <br />
-                           
+
                             <b>Current Status: </b>
                             {status == "Approved" ? (
                               <b style={{ color: "green" }}>Approved</b>
                             ) : (status == "Rejected" ? (
                               <b style={{ color: "red" }}>Rejected</b>
-
+                            ) : (status == "Resubmission" ? (
+                              <b style={{ color: "red" }}>Resubmission</b>
+                            ) : ((status == "Onhold" ? (
+                              <b style={{ color: "orange" }}>on hold</b>
                             ) : (
-                              status == "Onhold" ? (
-                                <b style={{ color: "orange" }}>on hold</b>
-                              ) : (
-                                <b style={{ color: "yellow" }}>Pending</b>
-                              )
-                            ))}
+                              <b style={{ color: "yellow" }}>Pending</b>
+                            )))))}
                             <br />
                             <br />
                             {/* <div>
@@ -331,6 +331,7 @@ function ViewCompany(props) {
                                     <option value="">Change Status</option>
                                     <option value="Approved">Approved</option>
                                     <option value="Onhold">on hold</option>
+                                    <option value="Resubmission">Resubmission</option>
                                     <option value="Rejected">Rejected</option>
 
                                     {/* {expiry_date.map((option) => (
@@ -444,6 +445,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ requestAdminCompanyDetails, requestAdminEditPosition, requestAdminPosition, requestAdminEditTag,requestAdminTag }, dispatch);
+  bindActionCreators({ requestAdminCompanyDetails, requestAdminEditPosition, requestAdminPosition, requestAdminEditTag, requestAdminTag }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCompany);

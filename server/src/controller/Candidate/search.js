@@ -66,7 +66,7 @@ exports.searchjobs = async (req, res) => {
                   query: `title:${title}  , state_name: ${country} ,city_name: ${country}`,
                   path: ["title","state_name","city_name"]
                 },
-                fuzzy: {}
+                // fuzzy: {}
               }
             }
           ]

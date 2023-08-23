@@ -103,7 +103,7 @@ exports.getRecentlyAddedJobs = async (req, res) => {
     // console.log(req.body)
     try {
         const jobs = await Job.find()
-            .sort({ created_at: -1 })
+            .sort({ createdAt: -1 })
             .limit(6)
             .lean();
 

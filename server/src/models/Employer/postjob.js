@@ -5,13 +5,11 @@ const jobSchema = new mongoose.Schema({
         type: String,
         trim: true,
         required: [true, 'Title is required'],
-        maxlength: 70,
     },
     category: {
         type: String,
         trim: true,
         required: [true, 'Category is required'],
-        maxlength: 70,
     },
 
     description: {

@@ -91,7 +91,8 @@ function Sidebar(props) {
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item" >
                                     <a class="nav-link" href="/admin/career/1/10">
-                                        <i class="fa fa-area-chart"> Industrial Category </i>
+                                        {/* <i class="fa fa-area-chart"> Industrial Category </i> */}
+                                         Industrial Category 
                                     </a>
                                 </li>
                                 {/* <li class="nav-item">
@@ -101,17 +102,20 @@ function Sidebar(props) {
                                 </li> */}
                                 <li class="nav-item">
                                     <a class="nav-link" href="/admin/degree/1/10">
-                                        <i class="fa fa-graduation-cap" > Education </i>
+                                        {/* <i class="fa fa-graduation-cap" > Education </i> */}
+                                        <> Education </>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/admin/functional/1/10">
-                                        <i class="fa fa-cogs"> Course </i>
+                                        {/* <i class="fa fa-cogs"> Course </i> */}
+                                        Course
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/admin/industries/1/10">
-                                        <i class="fa fa-industry"> Expiry </i>
+                                        {/* <i class="fa fa-industry"> Expiry </i> */}
+                                        Expiry
                                     </a>
                                 </li>
                                 {/* <li class="nav-item">
@@ -163,19 +167,19 @@ function Sidebar(props) {
                         </div>
                     </li>
 
-                    <li class="nav-item nav-category">Subscribe</li>
+                    {/* <li class="nav-item nav-category">Subscribe</li>
                     <li class={`nav-item ${props.name === "Subscribe" && "active"} `}>
                         <a class="nav-link" href="/admin/subscribe/1/10">
                             <i class="menu-icon fa fa-file"></i>
                             <span class="menu-title">Subscribers</span>
                         </a>
-                    </li>
-                    <li class={`nav-item ${props.name === "Contact" && "active"} `}>
+                    </li> */}
+                    {/* <li class={`nav-item ${props.name === "Contact" && "active"} `}>
                         <a class="nav-link" href="/admin/contact/1/10">
                             <i class="menu-icon fa fa-question-circle-o"></i>
                             <span class="menu-title">Contact</span>
                         </a>
-                    </li>
+                    </li> */}
                     <li class="nav-item nav-category">Profile</li>
                     <li class={`nav-item ${props.name === "Profile" && "active"} `}>
                         <a class="nav-link" href="/admin/profile">

@@ -301,6 +301,7 @@ export const adminlogin = (obj) => {
   };
   
   export const getCareer = (obj) => {
+  //
     return axios
       .get("/admin/editcareer_levels/" + obj.id)
       .then((response) => {

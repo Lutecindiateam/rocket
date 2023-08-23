@@ -101,12 +101,11 @@ function EditJob(props) {
 
   useEffect(() => {
     let formfieldData = props.employee.formfieldData;
-    console.log(formfieldData);
     if (formfieldData !== undefined) {
       if (formfieldData?.data?.status === "success") {
+        setcategories(formfieldData.data.data.categories[0].category);
         // setSalaryPeriod(formfieldData.data.data.SalaryPeriod);
         // setcareer_levels(formfieldData.data.data.career_levels);
-        setcategories(formfieldData.data.data.categories);
         // setcurrencies(formfieldData.data.data.currencies);
         // setdegree_levels(formfieldData.data.data.degree_levels);
         // setfunctional_areas(formfieldData.data.data.functional_areas);
@@ -443,16 +442,13 @@ function EditJob(props) {
           category: data.category,
 
           // type: data.type,
-          // skill: selectedskill,
-          
+          // skill: selectedskill,         
           // currency: data.currency,
           // salary_period: data.salary_period,
           // career_level: data.career_level,
-          // shift: data.shift,
-          
+          // shift: data.shift,         
           // functional_area: data.functional_area,
-          // position: data.position,
-         
+          // position: data.position,         
           // Recruiter_name: data.Recruiter_name,
           // Recruiter_email: data.Recruiter_email,
         },
@@ -527,7 +523,7 @@ function EditJob(props) {
       }
     }
   }, [props.employee.empEditJobData]);
-
+  
   return (
     <>
       <Header />
@@ -604,7 +600,7 @@ function EditJob(props) {
                         </div> */}
                         <div class="col-lg-6 col-md-6">
                           <div class="form-group">
-                            <label>Job Category*</label>
+                            <label>Industrial Category*</label>
                             <select
                               class="select"
                               name="category"
@@ -615,19 +611,17 @@ function EditJob(props) {
                             // onChange={onChangeData}
                             >
                               <option value="0">Select Job Category</option>
-                              {categories.map((option) => (
-                                <option value={option._id}>{option.name}</option>
-                              ))}
-                              {/* <option value="Account & HR">Account & HR</option>
-                              <option value="Accountants">Accountants</option>
-                              <option value="Actuaries">Actuaries</option>
-                              <option value="Administrative assistant">Administrative assistant</option>
-                              <option value="Agricultural Inspectors">Agricultural Inspectors</option>
-                              <option value="Biomedical Engineers">Biomedical Engineers</option>
-                              <option value="Broadcast Technicians">Broadcast Technicians</option>
-                              <option value="Civil Engineers">Civil Engineers</option>
-                              <option value="Climate Change Analysts">Climate Change Analysts</option>
-                              <option value="Coaches and Scouts">Coaches and Scouts</option> */}
+                              {categories.map((option) => {
+                                if (option.disable === "yes") {
+                                  return (
+                                    <option key={option._id} value="0" style={{ color: "#964B00" , fontSize:"20px"}} disabled>{option.name}</option>
+                                  )
+                                } else {
+                                  return (
+                                    <option key={option._id} value={option._id}>{option.name}</option>
+                                  )
+                                }
+                              })}
                             </select>
                             {errorCategory && (
                               <div style={mystyle}>{errorCategory}</div>
@@ -712,7 +706,7 @@ function EditJob(props) {
                               type="date"
                               name="expiry_date"
                               id="expiry_date"
-                              value={data.expiry_date}
+                              value={data.expiry_date.split("T")[0]}
                               onBlur={validateExpiry}
                               readOnly
                               // onChange={onChangeData}

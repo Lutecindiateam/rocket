@@ -185,15 +185,15 @@ function Companies(props) {
                                         </td>
                                         <td>
                                           {item.status === "Approved" ? (
-                                            <h6 style={{color: "green"}}>{item.status}</h6>
-                                          ) : ( item.status === "Rejected" ? 
-                                          (<h6 style={{color: "red"}}>Rejected</h6>
-                                          ):(item.status === "Onhold" ? (
-                                            <h6 style={{color: "orange"}}>onhold</h6>
-                                          ) :(
-                                            <h6 style={{color: "yellow"}}>Pending</h6>
-                                          )))
-                                        }
+                                            <h6 style={{ color: "green" }}>{item.status}</h6>
+                                          ) : (item.status === "Rejected" ?
+                                            (<h6 style={{ color: "red" }}>Rejected</h6>
+                                            ) : (item.status === "Onhold" ? (
+                                              <h6 style={{ color: "orange" }}>onhold</h6>
+                                            ) : (item.status === "Resubmission" ? (
+                                              <h6 style={{ color: "red" }}>Resubmission</h6>
+                                            ) : (<h6 style={{ color: "yellow" }}>Pending</h6>
+                                            ))))}
                                         </td>
                                         <td>
                                           <a href={`/admin/viewCompany/${item._id}`}>

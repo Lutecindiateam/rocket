@@ -22,6 +22,7 @@ import image from "../images/extraLogo.png";
 import profile1 from "../images/profile.png";
 import Breadcrumbs from "../Section/breadcrumbsSection";
 import Swal from "sweetalert2";
+import { Storage } from 'aws-amplify';
 
 
 function ViewApplication(props) {
@@ -60,7 +61,7 @@ function ViewApplication(props) {
   const [errorrescheduledate, seterrorrescheduledate] = useState("");
   const [publish, setpublish] = useState([]);
   const [error, setError] = useState(false);
-
+  const [resume, setResume] = useState(null)
   function onchangeeditdata(e) {
     seteditdata((editdata) => ({
       ...editdata,
@@ -93,9 +94,22 @@ function ViewApplication(props) {
       seteditrescheduleModal(false);
     } else {
       seteditrescheduleModal(true);
-      props.requestInterview({
-        id: id,
-      });
+      const getCertificate = async () => {
+        const s3Key = `candidateResume/${id}`;
+        try {
+          const url = await Storage.get(s3Key, { validateObjectExistence: true });
+          if (url) {
+            setResume(url);
+          }
+        } catch (error) {
+          console.error(error.message)
+        }
+
+      }
+      getCertificate();
+      // props.requestInterview({
+      //   id: id,
+      // });
     }
   };
 
@@ -159,7 +173,7 @@ function ViewApplication(props) {
       setid(0);
       edittoggle();
       setError(false)
-    }else{
+    } else {
       setError(true)
     }
   };
@@ -239,7 +253,7 @@ function ViewApplication(props) {
       });
       editrescheduletoggle();
       setError(false)
-    }else{
+    } else {
       setError(true)
     }
   };
@@ -375,18 +389,18 @@ function ViewApplication(props) {
 
   useEffect(() => {
     if (error) {
-      if(errordate){
+      if (errordate) {
         document.getElementById("interview_date").focus();
-      }else if(errormode){
+      } else if (errormode) {
         document.getElementById("online").focus();
-      }else if(errorrescheduledate){
+      } else if (errorrescheduledate) {
         document.getElementById("interview_date_reschedule").focus();
-      }else if(errorreschedulemode){
+      } else if (errorreschedulemode) {
         document.getElementById("onlinereschedule").focus();
       }
       setError(false)
     }
-  },[error]);
+  }, [error]);
 
   return (
     <>
@@ -430,7 +444,7 @@ function ViewApplication(props) {
                           style={{ backgroundColor: "transparent" }}
                         >
                           {/* {data.currency_name}  */}
-                         <>INR {data.salary_from}- {data.salary_to}</>
+                          <>INR {data.salary_from}- {data.salary_to} L</>
                         </span>
                         {/* <span class="badge">
                           {data.shift_name}
@@ -463,16 +477,16 @@ function ViewApplication(props) {
                         </p>
                         <p>
                           <b style={{ color: "black" }}>Required Skills: </b>{" "}
-                          {data.skill_name}
+                          {data.desired_description}
                         </p>
-                        <p>
+                        {/* <p>
                           <b style={{ color: "black" }}>Recruiter Name: </b>{" "}
                           {data.Recruiter_name}
                         </p>
                         <p>
                           <b style={{ color: "black" }}>Recruiter E-mail: </b>{" "}
                           {data.Recruiter_email}
-                        </p>
+                        </p> */}
                         <h6>Job Description :</h6>
                         <br />
                         <pre
@@ -510,13 +524,13 @@ function ViewApplication(props) {
                             </li>
                             <br />
                             <li>
-                              <strong>Salary:</strong> 
+                              <strong>Salary: </strong>
                               {/* {data.currency_name}{" "} */}
-                             <>INR {data.salary_from}-{data.salary_to}</>
+                              <>INR {data.salary_from}-{data.salary_to}</>
                             </li>
                             <br />
                             <li>
-                              <strong>Gender:</strong>
+                              <strong>Gender: </strong>
                               {(() => {
                                 if (data.gender === 1) {
                                   return <span>Male</span>;
@@ -530,7 +544,7 @@ function ViewApplication(props) {
                             <br />
                             <li>
                               <strong>Application Deadline:</strong>{" "}
-                              {data.expiry_date}
+                              {data.expiry_date && data.expiry_date.slice(0, 10)}
                             </li>
                           </ul>
                         </div>
@@ -651,7 +665,33 @@ function ViewApplication(props) {
                               </div>
 
                               <div class="col-lg-2 col-md-2 col-12">
-                                {(() => {
+                                <button type="submit"
+                                  class="btn btn-primary me-2"
+                                  style={{ color: "white" }}
+                                  title="Reschedule Interview"
+                                  onClick={() => {
+                                    editrescheduletoggle(
+                                      item._id
+                                    );
+                                  }}
+                                >View Resume</button>
+                                {editreschedulemodal === true && (
+                                  <Modal
+                                    isOpen={editreschedulemodal}
+                                    toggle={editrescheduletoggle}
+                                    size="lg"
+                                  >
+                                    <ModalHeader
+                                      toggle={editrescheduletoggle}
+                                    >
+                                      Resume
+                                    </ModalHeader>
+                                    <ModalBody>
+                                      <iframe src={resume} width="100%" height="1000" />
+                                    </ModalBody>
+                                  </Modal>
+                                )}
+                                {/* {(() => {
                                   if (item.status === "approve") {
                                     return (
                                       <p
@@ -893,8 +933,8 @@ function ViewApplication(props) {
                                     );
                                   } else {
                                     return (
-                                      <>
-                                        {/* <button
+                                      <> */}
+                                {/* <button
                                           style={{
                                             border: "0px",
                                             padding: "2px 5px",
@@ -914,7 +954,7 @@ function ViewApplication(props) {
                                           ></i>
                                         </button> */}
 
-                                        <button
+                                {/* <button
                                           style={{
                                             border: "0px",
                                             padding: "2px 5px",
@@ -1055,7 +1095,7 @@ function ViewApplication(props) {
                                       </>
                                     );
                                   }
-                                })()}
+                                })()} */}
                               </div>
                             </div>
                           </div>

@@ -155,13 +155,72 @@ function Profile(props) {
       navigate("/login");
     }
   }, [props.candidate.loginData]);
-
-
+  
+  const getResume = async () => {
+    if(emp.id){
+    const s3Key = `candidateResume/${emp.id}`;
+    try {
+      const url = await Storage.get(s3Key, { validateObjectExistence: true });
+      if (url) {
+        setPdf(url);
+      }       
+    
+    } catch (error) {
+      // Handle errors
+      console.error("Error fetching the PDF from S3:", error);
+    }
+  }
+  }
+  async function addResume(e) {
+    e.preventDefault();
+    if (selectedFile) {
+      const s3Key = `candidateResume/${emp.id}`;
+      const result = await Storage.put(s3Key, selectedFile, {
+        contentType: selectedFile.type,
+      });
+      if (result) {
+        Swal.fire("Good job!", "Your Resume Uploaded Successfully.", "success");
+        getResume()
+        // setPdf(result)
+        // const get = await Storage.list(s3Key);
+        //     // If the response is an array and it's not empty, the object exists
+        //     if (get.results.length > 0) {
+        //       // Fetch the object using the get method
+        //       const url = await Storage.get(s3Key);              
+        //       if (url) {
+        //         // setPdf(url);
+        //         props.requestCandidateResume({
+        //           id: emp.id,
+        //           token: emp.token,
+        //           data: {
+        //            url
+        //           },
+        //         });
+        //       }
+        //     } else {
+        //       // Handle the case when the object is not present in S3
+        //       console.error("PDF object not found in S3.");
+        //       // Perform any necessary actions for handling the absence of the object
+        //       // For example, you can set the pdfUrl to null or display an error message to the user.
+        //     }
+      } else {
+        console.log("semething went wrong");
+      }
+    } else {
+      Swal.fire(
+        "Error!",
+        "Please select png or jpg or jpeg file for profile picture.",
+        "error"
+      );
+    }
+  }
+ 
   useEffect(() => {
     let getCandidateData = props.candidate.getCandidateData;
     if (getCandidateData !== undefined) {
       if (getCandidateData?.data?.status === "success") {
         setData(getCandidateData.data.data);
+        getResume()
         if (getCandidateData.data.data.education) {
           setEducations(getCandidateData.data.data.education);
         }
@@ -207,7 +266,7 @@ function Profile(props) {
 
       }
     }
-  }, [props.candidate.getCandidateData , props.candidate.resumeData]);
+  }, [props.candidate.getCandidateData]);
 
   useEffect(() => {
     let formfieldData = props.employee.formfieldData;
@@ -946,7 +1005,7 @@ function Profile(props) {
             given_name: data.first_name,
             family_name: data.last_name,
             gender: data.gender,
-            skills: data.skills,
+            skills: data.skills.charAt(0).toUpperCase() + data.skills.slice(1),
             state: selectedState,
             city: selectedCity,
             birth_date: data.birth_date,
@@ -956,14 +1015,14 @@ function Profile(props) {
             education: educations,
             // course: educations,
             industry: data.industry,
-            profile_title: data.profile_title,
-            profile_in_brief: data.profile_in_brief,
+            profile_title: data.profile_title.charAt(0).toUpperCase() + data.profile_title.slice(1),
+            profile_in_brief: data.profile_in_brief.charAt(0).toUpperCase() + data.profile_in_brief.slice(1),
             phone: data.phone,
-            current_organization: data.current_organization,
+            current_organization: data.current_organization.charAt(0).toUpperCase() + data.current_organization.slice(1),
             current_ctc: data.current_ctc,
             languages: data.languages,
             notice_period: data.notice_period,
-            address: data.address,
+            address: data.address.charAt(0).toUpperCase() + data.address.slice(1),
             email: data.email
             // skill: selectedskill,       
             // nationality: data.nationality,
@@ -1070,6 +1129,8 @@ function Profile(props) {
       setError(false)
     }
   }, [error]);
+
+ 
   useEffect(() => {
     let candidateprofile = props.candidate.candidateProfileData;
     if (candidateprofile !== undefined) {
@@ -1097,49 +1158,7 @@ function Profile(props) {
     }
   }, [props.candidate.candidateProfileData]);
 
-  async function addResume(e) {
-    e.preventDefault();
-    if (selectedFile) {
-      const s3Key = `candidateResume/${emp.id}`;
-      const result = await Storage.put(s3Key, selectedFile, {
-        contentType: selectedFile.type,
-      });
-      if (result) {
-        Swal.fire("Good job!", "Your Resume Uploaded Successfully.", "success");
-        // setPdf(result)
-        const get = await Storage.list(s3Key);
-            // If the response is an array and it's not empty, the object exists
-            if (get.results.length > 0) {
-              // Fetch the object using the get method
-              const url = await Storage.get(s3Key);              
-              if (url) {
-                // setPdf(url);
-                props.requestCandidateResume({
-                  id: emp.id,
-                  token: emp.token,
-                  data: {
-                   url
-                  },
-                });
-              }
-            } else {
-              // Handle the case when the object is not present in S3
-              console.error("PDF object not found in S3.");
-              // Perform any necessary actions for handling the absence of the object
-              // For example, you can set the pdfUrl to null or display an error message to the user.
-            }
-      } else {
-        console.log("semething went wrong");
-      }
-    } else {
-      Swal.fire(
-        "Error!",
-        "Please select png or jpg or jpeg file for profile picture.",
-        "error"
-      );
-    }
-  }
-
+  
 
   return (
     <>
@@ -1406,16 +1425,17 @@ function Profile(props) {
 
                             <div class="form-group">
                               <label>Profile in brief*</label>
-                              <input
+                              <textarea
                                 class="form-control"
-                                type="text"
+                                rows="2"
+                                // type="text"
                                 name="profile_in_brief"
                                 id="profile_in_brief"
                                 value={data.profile_in_brief}
                                 onBlur={validatePbrief}
                                 onChange={onChangeData}
                                 placeholder="Enter Profile in brief"
-                              />
+                              ></textarea>
                               {errorprofile_in_brief && (
                                 <div style={mystyle}>{errorprofile_in_brief}</div>
                               )}
@@ -1436,7 +1456,7 @@ function Profile(props) {
                                   {industry.map((option) => {
                                     if (option.disable === "yes") {
                                       return (
-                                        <option key={option._id} value="0" style={{ color: "#964B00",fontSize: "20px" }} disabled>{option.name}</option>
+                                        <option key={option._id} value="0" style={{ color: "#964B00", fontSize: "20px" }} disabled>{option.name}</option>
                                       )
                                     } else {
                                       return (
@@ -1728,9 +1748,9 @@ function Profile(props) {
                             </div>
                           </div>
                           <div>
-                            {data.resumeurl ? (
+                            {pdf ? (
                               <>
-                                <text style={{color: "green" }}>Your Resume Uploaded.</text>
+                                <text style={{ color: "green" }}>Your Resume Uploaded.</text>
                                 <Link to="/resume">
                                   <button
                                     type="submit"

@@ -113,8 +113,11 @@ function Picture(props) {
 
       });
       if (result) {
-        alert("successful");
-        getImage();
+        Swal.fire(
+          "Good job!",
+          "Profile upload Successfully.",
+          "success"
+        );        getImage();
         // const response = await Storage.list(s3Key);
         //     if (response.results.length > 0) {
         //       const imageUrl = await Storage.get(s3Key);

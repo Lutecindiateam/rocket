@@ -6,8 +6,6 @@ const employerSchema = new mongoose.Schema(
     name: {
       type: String,
       trim: true,
-      min: 3,
-      max: 20,
       required: true
     },
     sub: {
@@ -18,7 +16,8 @@ const employerSchema = new mongoose.Schema(
       trim: true
     },
     address: {
-      type: String
+      type: String,
+      trim: true,
     },
     website: {
       type: String,
@@ -29,14 +28,16 @@ const employerSchema = new mongoose.Schema(
       lowercase: true
     },
 
-    hash_password: {
-      type: String,
-    },
+    // hash_password: {
+    //   type: String,
+    // },
     authorized_person: {
-      type: String
+      type: String,
+      trim: true
     },
     authorized_mobile: {
       type: String,
+      trim: true,
     },
     state: {
       type: String,
@@ -47,7 +48,8 @@ const employerSchema = new mongoose.Schema(
 
     },
     pincode: {
-      type: String
+      type: String,
+      trim: true,
     },
     deleted: {
       type: Boolean,
@@ -59,7 +61,7 @@ const employerSchema = new mongoose.Schema(
     },
     reason:{
       type : String,
-      default:"Please wait, processing your request"
+      trim: true
     }
   },
   { timestamps: true }

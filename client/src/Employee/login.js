@@ -104,7 +104,7 @@ function Login(props) {
           props.requestEmpLogin({
             data: {
               email: user.attributes.email,
-              name:user.attributes.name,
+              name:user.attributes.name.charAt(0).toUpperCase() + user.attributes.name.slice(1),
               sub:user.attributes.sub,
               token:user.signInUserSession.idToken.jwtToken
             },

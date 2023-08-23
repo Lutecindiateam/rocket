@@ -340,7 +340,7 @@ function Home(props) {
                               </div>
                             </div>
                           </div>
-                          <div class="col-lg-4 d-flex flex-column">
+                          {/* <div class="col-lg-4 d-flex flex-column">
                             <div class="row flex-grow">
                               <div class="col-12 grid-margin stretch-card">
                                 <div class="card card-rounded">
@@ -359,7 +359,7 @@ function Home(props) {
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
 
                         <div class="row">
@@ -392,7 +392,7 @@ function Home(props) {
                               </div>
                             </div>
                           </div>
-                          <div class="col-lg-4 d-flex flex-column">
+                          {/* <div class="col-lg-4 d-flex flex-column">
                             <div class="row flex-grow">
                               <div class="col-12 grid-margin stretch-card">
                                 <div class="card card-rounded">
@@ -411,7 +411,7 @@ function Home(props) {
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
 
                         <div class="row">

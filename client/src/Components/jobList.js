@@ -178,7 +178,6 @@ function JobList(props) {
           <div class="single-head">
             <div class="row">
               {jobs.map((item, index) => {
-                // console.log(item);
                 // (async () => {
                 //   const s3key = `employerProfile/${item.company_id}`;
                 //   try {
@@ -204,7 +203,7 @@ function JobList(props) {
                     <div class="col-lg-6 col-12" key={index}>
 
                       <div class="single-job">
-                        <b><a href={`/jobDetails/${item.id}`}>{item.company_name}</a></b>
+                        <b><a href={`/jobDetails/${item.id}`}>{item.company_name.charAt(0).toUpperCase() + item.company_name.slice(1)}</a></b>
                         <br />
                         <div class="job-image">
                           <a href={`/jobDetails/${item.id}`}>
@@ -218,7 +217,7 @@ function JobList(props) {
                         </div>
                         <div class="job-content">
                           <h4>
-                            <a href={`/jobDetails/${item.id}`}>{item.title}</a>
+                            <a href={`/jobDetails/${item.id}`}>{item.title.charAt(0).toUpperCase() + item.title.slice(1)}</a>
                           </h4>
                           <a href={`/jobDetails/${item.id}`}>
                             <p>
@@ -235,14 +234,15 @@ function JobList(props) {
                                 target="_blank"
                               >
                                 {" "}
-                                {item.website}
+                                {item.website &&
+                                  item.website.substring(0, 30)}
                               </a>
                             </li>
                             <li>
                               <a href={`/jobDetails/${item.id}`}>
                                 {" "}
-                                <text>INR {item.salary_from}-
-                                {item.salary_to}</text> 
+                                INR {item.salary_from}-
+                                {item.salary_to} L
                               </a>
                             </li>
                             <li>

@@ -6,13 +6,11 @@ const candidate = require('../../models/Candidate/candidate');
 
 exports.getEmployerProfile = async (req, res) => {
     try {
-        // if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
         const profile = await Employer.findById(req.params.id);
 
         if (!profile) {
             return res.status(400).json({ message: "Candidate Not Found" })
         }
-
         return res.status(200).json({
             code: 200,
             data: profile,

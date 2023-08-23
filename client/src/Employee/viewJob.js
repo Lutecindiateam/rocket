@@ -118,7 +118,7 @@ function ViewJob(props) {
                           style={{ backgroundColor: "transparent" }}
                         >
                           {/* {data.currency_name} */}
-                           <>INR {data.salary_from}-{data.salary_to}</>
+                           <>INR {data.salary_from}-{data.salary_to} L</>
                         </span>
                         {/* <span class="badge">
                           {data.shift_name}
@@ -182,7 +182,7 @@ function ViewJob(props) {
                           <br />
                           <ul class="job-overview list-unstyled">
                             <li>
-                              <strong>Published on:</strong> {publish[0]}
+                              <strong>Published on: </strong> {publish[0]}
                             </li>
                             <br />
                             {/* <li>
@@ -191,20 +191,20 @@ function ViewJob(props) {
                             </li>
                             <br /> */}
                             <li>
-                              <strong>Experience:</strong>{" "}
+                              <strong>Experience: </strong>{" "}
                               {data.experience
                                 ? data.experience + " years"
                                 : "Fresher or experienced"}
                             </li>
                             <br />
                             <li>
-                              <strong>Salary:</strong> 
+                              <strong>Salary: </strong> 
                               {/* {data.currency_name}{" "} */}
                               <>INR {data.salary_from}-{data.salary_to}</>
                             </li>
                             <br />
                             <li>
-                              <strong>Gender:</strong>
+                              <strong>Gender: </strong>
                               {(() => {
                                 if (data.gender === 1) {
                                   return <span> Male</span>;
@@ -218,7 +218,7 @@ function ViewJob(props) {
                             <br />
                             <li>
                               <strong>Application Deadline:</strong>{" "}
-                              {data.expiry_date}
+                              {data.expiry_date.slice(0, 10)}
                             </li>
                           </ul>
                         </div>

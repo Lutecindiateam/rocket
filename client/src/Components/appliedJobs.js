@@ -137,7 +137,7 @@ function AppliedJobs(props) {
                                   <h3>
                                     <Link to={`/jobDetails/${item._id}`}>
                                       {" "}
-                                      {item.company_name}
+                                      {item.company_name.charAt(0).toUpperCase() + item.company_name.slice(1)}
                                     </Link>
                                     <span>
                                       <i class="lni lni-map-marker"></i>
@@ -153,7 +153,7 @@ function AppliedJobs(props) {
                                 <div class="title-img">
                                   <Link to={`/jobDetails/${item._id}`}>
                                     <h3>
-                                      {item.title}
+                                      {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
                                       <span>{item.jobs_name}</span>
                                     </h3>
                                   </Link>

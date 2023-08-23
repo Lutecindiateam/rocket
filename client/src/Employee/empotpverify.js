@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Auth } from 'aws-amplify';
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 function Empverify() {
@@ -33,7 +34,11 @@ function Empverify() {
             const confirm = await Auth.confirmSignUp(email, otpCode);
 
             // Registration and email verification successful
-            alert('Registration and email verification successful');
+            Swal.fire(
+                "Good job!",
+                "Registration and email verification successful.",
+                "success"
+              );
             if (confirm) {
                 navigate('/emplogin')
             }

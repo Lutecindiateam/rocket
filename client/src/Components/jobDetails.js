@@ -306,7 +306,7 @@ function JobDetails(props) {
             <div class="col-lg-8 col-12">
               <div class="job-details-inner">
               <h3 class="title">{data.company_name}</h3>
-<br />
+               <br />
                 <div class="job-details-head row mx-0">
                   <div class="company-logo col-auto">               
                     <a
@@ -405,7 +405,7 @@ function JobDetails(props) {
                       </li>
                       <li>
                         <strong>Salary:</strong> {data.currency_name}{" "}
-                        {data.salary_from}-{data.salary_to}
+                        INR {data.salary_from}-{data.salary_to} L
                       </li>
                       <li>
                         <strong>Gender:</strong>
@@ -472,19 +472,19 @@ function JobDetails(props) {
                   {/* <p>
                     <b style={{ color: "black" }}>CEO: </b> {data.employee_ceo}
                   </p> */}
-                  <p>
+                  {/* <p>
                     <b style={{ color: "black" }}>E-mail: </b>{" "}
                     {data.employee_email}
-                  </p>
+                  </p> */}
                   <p>
                     <b style={{ color: "black" }}>Website: </b>{" "}
-                    {data.employee_website}
+                    {data.website}
                   </p>
 
-                  <h6>Company Details :</h6>
+                  {/* <h6>Company Details :</h6>
                   <p>{data.employee_details}</p>
                   <h6>Company About Us :</h6>
-                  <p>{data.employee_about_us}</p>
+                  <p>{data.employee_about_us}</p> */}
                 </div>
               </div>
             </div>

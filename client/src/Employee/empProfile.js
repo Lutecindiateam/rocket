@@ -92,6 +92,7 @@ function Profie(props) {
   const [emp, setEmp] = useState({});
   const [certificateFile, setCertificateFile] = useState(null);
   const [certificate, setCertificate] = useState(null)
+  const [cert, setCert] = useState(null)
 
   // useEffect(() => {
   //   console.log(selectedState);
@@ -122,9 +123,10 @@ function Profie(props) {
 
       });
       if (result) {
-        alert("successful");
-        setCertificate(
-          result
+        Swal.fire(
+          "Good job!",
+          "Certificate Uploaded Successfully.",
+          "success"
         );
       } else {
         console.log("semething went wrong");
@@ -164,15 +166,9 @@ function Profie(props) {
     const getCertificate = async () => {
       const s3Key = `employerCertificate/${emp.id}`;
       try {
-
-        const response = await Storage.list(s3Key);
-        if (response.results.length) {
-          const certificateUrl = await Storage.get(s3Key);
-          if (certificateUrl) {
-            setCertificate(
-              certificateUrl
-            );
-          }
+        const url = await Storage.get(s3Key, { validateObjectExistence: true });
+        if (url) {
+          setCertificate(url);
         }
       } catch (error) {
         console.error(error.message)
@@ -181,28 +177,38 @@ function Profie(props) {
     }
     getCertificate();
 
-  })
+  }, [uploadfile])
+
+  async function viewCertificate() {
+    try {
+      setCert(certificate)
+    } catch (error) {
+      // Handle errors
+      console.error(error.message);
+    }
+  }
+
 
   useEffect(() => {
     let empData = props.employee.empData;
     if (empData !== undefined) {
       if (empData?.data?.status == "success") {
         setData(empData.data.data);
-        if (empData.data.data.country) {
-          setcountryId(empData.data.data.country);
-          props.requestState({
-            id: empData.data.data.country,
-          });
-          if (empData.data.data.state) {
-            setstateId(empData.data.data.state);
-            props.requestCity({
-              id: empData.data.data.state,
-            });
-            if (empData.data.data.city) {
-              setcityId(empData.data.data.city);
-            }
-          }
-        }
+        // if (empData.data.data.country) {
+        //   setcountryId(empData.data.data.country);
+        //   props.requestState({
+        //     id: empData.data.data.country,
+        //   });
+        //   if (empData.data.data.state) {
+        //     setstateId(empData.data.data.state);
+        //     props.requestCity({
+        //       id: empData.data.data.state,
+        //     });
+        //     if (empData.data.data.city) {
+        //       setcityId(empData.data.data.city);
+        //     }
+        //   }
+        // }
       }
     }
   }, [props.employee.empData]);
@@ -260,14 +266,14 @@ function Profie(props) {
     props.requestCountry();
   }, []);
 
-  useEffect(() => {
-    let countryData = props.candidate.countryData;
-    if (countryData !== undefined) {
-      if (countryData?.data?.status === "success") {
-        setcountries(countryData.data.data.countries);
-      }
-    }
-  }, [props.candidate.countryData]);
+  // useEffect(() => {
+  //   let countryData = props.candidate.countryData;
+  //   if (countryData !== undefined) {
+  //     if (countryData?.data?.status === "success") {
+  //       setcountries(countryData.data.data.countries);
+  //     }
+  //   }
+  // }, [props.candidate.countryData]);
 
   // function onChangeCountry(e) {
   //   setcountryId(e.target.value);
@@ -276,14 +282,14 @@ function Profie(props) {
   //   });
   // }
 
-  useEffect(() => {
-    let stateData = props.candidate.stateData;
-    if (stateData !== undefined) {
-      if (stateData?.data?.status === "success") {
-        setstates(stateData.data.data.states);
-      }
-    }
-  }, [props.candidate.stateData]);
+  // useEffect(() => {
+  //   let stateData = props.candidate.stateData;
+  //   if (stateData !== undefined) {
+  //     if (stateData?.data?.status === "success") {
+  //       setstates(stateData.data.data.states);
+  //     }
+  //   }
+  // }, [props.candidate.stateData]);
 
   // function onChangeState(e) {
   //   setstateId(e.target.value);
@@ -292,14 +298,14 @@ function Profie(props) {
   //   });
   // }
 
-  useEffect(() => {
-    let cityData = props.candidate.cityData;
-    if (cityData !== undefined) {
-      if (cityData?.data?.status === "success") {
-        setcities(cityData.data.data.cities);
-      }
-    }
-  }, [props.candidate.cityData]);
+  // useEffect(() => {
+  //   let cityData = props.candidate.cityData;
+  //   if (cityData !== undefined) {
+  //     if (cityData?.data?.status === "success") {
+  //       setcities(cityData.data.data.cities);
+  //     }
+  //   }
+  // }, [props.candidate.cityData]);
 
   // function onChangeCity(e) {
   //   setcityId(e.target.value);
@@ -606,24 +612,18 @@ function Profie(props) {
   // }
   function validatewebsite() {
     let formIsValid = false;
-    // if (!data["website"]) {
-    //   formIsValid = false;
-    //   seterrorwebsite("*Enter company website.");
-    // } else 
-    // if (typeof data["website"] === "undefined") {
-    //   formIsValid = false;
-    //   seterrorwebsite("*Enter company website.");
-    // } else
-    if (
-      !data["website"].match(
-        /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
-      )
-    ) {
-      formIsValid = false;
-      seterrorwebsite("*Please enter valid website.");
-    } else {
-      formIsValid = true;
-      seterrorwebsite("");
+    if (data["website"]) {
+      if (
+        !data["website"].match(
+          /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+        )
+      ) {
+        formIsValid = false;
+        seterrorwebsite("*Please enter valid website.");
+      } else {
+        formIsValid = true;
+        seterrorwebsite("");
+      }
     }
     return formIsValid;
   }
@@ -814,7 +814,7 @@ function Profie(props) {
             state: selectedState,
             website: data.website,
             city: selectedCity,
-            authorized_person: data.authorized_person,
+            authorized_person: data.authorized_person.charAt(0).toUpperCase() + data.authorized_person.slice(1),
             industry: data.industry,
             // ownership_type: data.ownership_type,
             // size: data.size,
@@ -823,7 +823,7 @@ function Profie(props) {
             // about_us: data.about_us,
             pincode: data.pincode,
             // no_of_offices: data.no_of_offices,
-            address: data.address,
+            address: data.address.charAt(0).toUpperCase() + data.address.slice(1),
             // website: data.website,
             // status: data.status,
             // is_featured: data.is_featured,
@@ -930,7 +930,6 @@ function Profie(props) {
       }
     }
   }, [props.employee.empProfileData]);
-
 
 
   return (
@@ -1360,7 +1359,7 @@ function Profie(props) {
                             </div>
                             <div class="col-lg-6 col-md-6">
                               <div class="form-group">
-                                <label>pincode</label>
+                                <label>Pincode</label>
                                 <input
                                   class="form-control"
                                   type="text"
@@ -1388,11 +1387,12 @@ function Profie(props) {
                                   <input type="file" accept=".pdf,.doc,.docx" onChange={handleCertificateChange} />
                                   <button type="submit"
                                     class="btn btn-primary me-2"
-                                    style={{
-                                      color: "white",
-                                      width: "200px",
-                                      height: "50px",
-                                    }} onClick={uploadfile}>Upload Certificate</button>
+                                    style={{ color: "white" }}
+                                    onClick={uploadfile}>Upload Certificate</button>
+                                  <button type="submit"
+                                    class="btn btn-primary me-2"
+                                    style={{ color: "white" }}
+                                    onClick={viewCertificate}>View Certificate</button>
                                 </div>
                               ) : (
                                 <div>
@@ -1413,13 +1413,15 @@ function Profie(props) {
                               )
                               }
                             </div>
-                            <br/>
-                            {data.status ? (
+                            <br />
+                            {data.status ? (data.reason ? (
                               <>
-                              <text><b>Current Status :</b> {data.status}</text>
-                              <text><b>Reason :</b> {data.reason}</text>
+                                <text><b>Current Status :</b> {data.status}</text>
+                                <text><b>Reason :</b> {data.reason}</text>
                               </>
                             ) : (
+                              <text><b>Current Status :</b> {data.status}</text>
+                            )) : (
                               <b>Current Status : Please Wait</b>
                             )}
                             {/*  <h3 class="title">Social Links</h3>
@@ -1445,7 +1447,7 @@ function Profie(props) {
                               <div class="form-group">
                                 <label>Twitter URL</label>
                                 <input
-                                  class="form-control"
+                                  claks="form-control"
                                   type="text"
                                   name="twitter_url"
                                   id="twitter_url"
@@ -1530,6 +1532,9 @@ function Profie(props) {
                             }}
                             value="Save"
                           />
+                          {cert !== null &&
+                            <iframe src={cert} width="100%" height="1000" />
+                          }
                         </form>
                       </div>
                     </div>

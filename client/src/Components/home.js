@@ -54,8 +54,8 @@ function Home(props) {
     if (loginData !== undefined) {
       if (loginData?.data?.status == "success") {
         if (loginData.data.data.block === false) {
-        setUSer(loginData.data.data);
-        }else{
+          setUSer(loginData.data.data);
+        } else {
           Swal.fire("Error!", "This user has been blocked and their actions will no longer be visible to you.", "error");
           props.userLogout();
           navigate("/home");
@@ -103,8 +103,8 @@ function Home(props) {
     if (loginData !== undefined) {
       if (loginData?.data?.status == "success") {
         if (loginData.data.data.block === false) {
-        setUSer(loginData.data.data);
-        }else{
+          setUSer(loginData.data.data);
+        } else {
           Swal.fire("Error!", "This user has been blocked and their actions will no longer be visible to you.", "error");
           props.userLogout();
           navigate("/home");
@@ -188,8 +188,9 @@ function Home(props) {
     requestOptions: {},
     debounce: 300,
   });
+  const items = ["full stack developer" , 'techinical' , 'cloud', 'Technical senior lead']
   const [categories, setCategories] = useState([]);
-  const [items, setitems] = useState([]);
+  // const [items, setitems] = useState([]);
   const [state, setState] = useState({
     suggestions: [],
     text: "",
@@ -202,6 +203,7 @@ function Home(props) {
       }
     }
   }, [props.candidate.categoryData]);
+  
   useEffect(() => {
     {
       categories.map((item1) => {
@@ -211,12 +213,16 @@ function Home(props) {
       });
     }
   }, [categories]);
+
+
   function suggestionSelected(value) {
     setState(() => ({
       text: value,
       suggestions: [],
     }));
   }
+
+  
 
   const onTextChanged = (e) => {
     const value = e.target.value;
@@ -233,6 +239,7 @@ function Home(props) {
     if (suggestions.length === 0) {
       return null;
     }
+
     return (
       <div className="srchList">
         <div
@@ -566,6 +573,8 @@ function Home(props) {
                         <>
                           <div class="col-lg-6 col-12" key={index}>
                             <div class="single-job">
+                              <b><a href={`/jobDetails/${item.id}`}>{item.company_name}</a></b>
+                              <br />
                               <div class="job-image">
                                 <a href={`/jobDetails/${item.id}`}>
                                   <img
@@ -596,22 +605,25 @@ function Home(props) {
                                       target="_blank"
                                     >
                                       {" "}
-                                      {item.website}
+                                      {item.website &&
+                                        item.website.substring(0, 30)}
                                     </a>
                                   </li>
                                   <li>
                                     <a href={`/jobDetails/${item.id}`}>
                                       {" "}
-                                      {item.currency_name} {item.salary_from}-
-                                      {item.salary_to}
+                                      {/* {item.currency_name} */}
+                                      INR {item.salary_from}-
+                                      {item.salary_to} L
                                     </a>
                                   </li>
                                   <li>
                                     <a href={`/jobDetails/${item.id}`}>
                                       {" "}
                                       <i class="lni lni-map-marker"></i>{" "}
-                                      {item.city_name}, {item.state_name},{" "}
-                                      {item.country_name}
+                                      {item.city_name}, {item.state_name}
+                                      {/* ,{" "}
+                                      {item.country_name} */}
                                     </a>
                                   </li>
                                 </ul>

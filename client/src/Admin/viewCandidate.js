@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { requestAdminCandidateDetails ,requestAdminEditShift, requestAdminShift} from "../Redux/actions";
+import { requestAdminCandidateDetails, requestAdminEditShift, requestAdminShift } from "../Redux/actions";
 import image from "../images/profile.png";
 import { Storage } from 'aws-amplify';
 import Swal from "sweetalert2";
@@ -89,45 +89,35 @@ function ViewCandidate(props) {
       // );
     }
   }, [props.data.candidateDeatilsData]);
+
   const viewResume = async () => {
     const s3Key = `candidateResume/${data._id}`;
-    try {
-      // List objects in the S3 bucket with the specified s3Key
-      const response = await Storage.list(s3Key);
-      // If the response is an array and it's not empty, the object exists
-      if (response.results.length > 0) {
-        // Fetch the object using the get method
-        const pdfUrl = await Storage.get(s3Key);
-        
+    try { 
+        const pdfUrl = await Storage.get(s3Key, { validateObjectExistence: true });
         if (pdfUrl) {
           console.log("hello");
           setresume(pdfUrl);
         }
-      } else {
-        // Handle the case when the object is not present in S3
-        console.error("PDF object not found in S3.");
-        // Perform any necessary actions for handling the absence of the object
-        // For example, you can set the pdfUrl to null or display an error message to the user.
-      }
+    
     } catch (error) {
       // Handle errors
       console.error("Error fetching the PDF from S3:", error);
     }
   }
 
-  useEffect(() =>{
-   const editShiftData = props.data.editShiftData;
-   if (editShiftData !== undefined) {
-    if (editShiftData.data.status == "success") {
-      setBlock(editShiftData.data.data)
-    } else {
-      setBlock(undefined)
+  useEffect(() => {
+    const editShiftData = props.data.editShiftData;
+    if (editShiftData !== undefined) {
+      if (editShiftData.data.status == "success") {
+        setBlock(editShiftData.data.data)
+      } else {
+        setBlock(undefined)
+      }
     }
-  }
   }, [props.data.editShiftData])
 
-  useEffect(() =>{
-    const shiftData= props.data.shiftData;
+  useEffect(() => {
+    const shiftData = props.data.shiftData;
     if (shiftData !== undefined) {
       if (shiftData.data.status == "success") {
         setBlock(shiftData.data.data)
@@ -135,7 +125,7 @@ function ViewCandidate(props) {
         setBlock(undefined)
       }
     }
-  },[props.data.shiftData])
+  }, [props.data.shiftData])
 
   function printPage() {
     var printContents =
@@ -183,19 +173,19 @@ function ViewCandidate(props) {
                                   <i class="icon-printer"></i> Print
                                 </button>
                                 {block === true ? (
-                                   <button
-                                   onClick={adminCandidateUnblock}
-                                   class="btn btn-otline-dark"
-                                 >
-                                   <i class="icon-printer"></i> Unblock
-                                 </button>
+                                  <button
+                                    onClick={adminCandidateUnblock}
+                                    class="btn btn-otline-dark"
+                                  >
+                                    <i class="icon-printer"></i> Unblock
+                                  </button>
                                 ) : (
                                   <button
-                                  onClick={adminCandidateBlock}
-                                  class="btn btn-otline-dark"
-                                >
-                                  <i class="icon-printer"></i> Block
-                                </button>
+                                    onClick={adminCandidateBlock}
+                                    class="btn btn-otline-dark"
+                                  >
+                                    <i class="icon-printer"></i> Block
+                                  </button>
                                 )
                                 }
                               </div>
@@ -297,7 +287,13 @@ function ViewCandidate(props) {
                                 {data.functional_area1}
                               </p>
                               <p>
-                              <button onClick={viewResume}>View Resume</button>
+                                <button
+                                  onClick={viewResume}
+                                  class="btn btn-primary me-2"
+                                  style={{ color: "white" }}
+                                >
+                                  View Resume
+                                </button>
                               </p>
                               {resume ? <iframe src={resume} width="1000" height="1100" /> : <p>Click On View Resume.</p>}
                             </div>
@@ -321,6 +317,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ requestAdminCandidateDetails ,requestAdminEditShift, requestAdminShift}, dispatch);
+  bindActionCreators({ requestAdminCandidateDetails, requestAdminEditShift, requestAdminShift }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCandidate);

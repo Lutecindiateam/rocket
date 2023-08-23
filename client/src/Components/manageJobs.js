@@ -130,7 +130,7 @@ function ManageJobs(props) {
                                 <p>
                                   {/* {item.currency_name} */}
                                   <>INR {item.salary_from}-
-                                    {item.salary_to}</>
+                                    {item.salary_to} L</>
                                 </p>
                               </div>
                               <div class="col-lg-3 col-md-3 col-12">
@@ -213,7 +213,7 @@ function ManageJobs(props) {
                                 <p>
                                   {/* {item.currency_name} */}
                                   <>INR {item.salary_from}-
-                                    {item.salary_to}</>
+                                    {item.salary_to} L</>
                                 </p>
                               </div>
                               <div class="col-lg-3 col-md-3 col-12">

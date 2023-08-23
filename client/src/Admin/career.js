@@ -180,43 +180,44 @@ function Career(props) {
 
   useEffect(() => {
     let allCareerData = props.data.allCareerData;
-    if (allCareerData !== undefined) {
-      if (allCareerData.data) {
-        setcareerData(allCareerData.data.data);
-        setpagination(allCareerData.data.meta);
-        if (allCareerData.data.meta.last_page < 5) {
-          let array = [];
-          Array.from(Array(allCareerData.data.meta.last_page), (e, i) =>
-            array.push(i + 1)
+    if (allCareerData !== undefined && allCareerData.data) {
+      // const allItems = allCareerData.data.data
+      // const nonDisabledItems = allItems.filter(item => item.disable !== 'yes');
+      // console.log();
+      setcareerData(allCareerData.data.data);
+      setpagination(allCareerData.data.meta);
+      if (allCareerData.data.meta.last_page < 5) {
+        let array = [];
+        Array.from(Array(allCareerData.data.meta.last_page), (e, i) =>
+          array.push(i + 1)
+        );
+        setpages(array);
+      } else {
+        let array = [];
+        if (allCareerData.data.meta.current_page <= 3) {
+          array.push(1, 2, 3, 4, 5);
+          setpages(array);
+        } else if (
+          allCareerData.data.meta.last_page - allCareerData.data.meta.current_page <=
+          2
+        ) {
+          array.push(
+            allCareerData.data.meta.last_page - 4,
+            allCareerData.data.meta.last_page - 3,
+            allCareerData.data.meta.last_page - 2,
+            allCareerData.data.meta.last_page - 1,
+            allCareerData.data.meta.last_page
           );
           setpages(array);
         } else {
-          let array = [];
-          if (allCareerData.data.meta.current_page <= 3) {
-            array.push(1, 2, 3, 4, 5);
-            setpages(array);
-          } else if (
-            allCareerData.data.meta.last_page - allCareerData.data.meta.current_page <=
-            2
-          ) {
-            array.push(
-              allCareerData.data.meta.last_page - 4,
-              allCareerData.data.meta.last_page - 3,
-              allCareerData.data.meta.last_page - 2,
-              allCareerData.data.meta.last_page - 1,
-              allCareerData.data.meta.last_page
-            );
-            setpages(array);
-          } else {
-            array.push(
-              Number(allCareerData.data.meta.current_page) - 2,
-              Number(allCareerData.data.meta.current_page) - 1,
-              allCareerData.data.meta.current_page,
-              Number(allCareerData.data.meta.current_page) + 1,
-              Number(allCareerData.data.meta.current_page) + 2
-            );
-            setpages(array);
-          }
+          array.push(
+            Number(allCareerData.data.meta.current_page) - 2,
+            Number(allCareerData.data.meta.current_page) - 1,
+            allCareerData.data.meta.current_page,
+            Number(allCareerData.data.meta.current_page) + 1,
+            Number(allCareerData.data.meta.current_page) + 2
+          );
+          setpages(array);
         }
       }
     }
@@ -268,7 +269,7 @@ function Career(props) {
   return (
     <>
       <div class="container-scroller">
-        <Header name="Career Levels" />
+        <Header name="Industrial Category" />
         <div class="container-fluid page-body-wrapper">
           <Sidebar name="Options" />
 
@@ -307,7 +308,14 @@ function Career(props) {
                                   type="button"
                                   onClick={addtoggle}
                                 >
-                                  Add new level
+                                  Add new Category
+                                </button>
+                                <button
+                                  class="btn btn-primary btn-md text-white mb-0 me-0"
+                                  type="button"
+                                  onClick={addtoggle}
+                                >
+                                  Add new SubCategory
                                 </button>
                                 <Modal isOpen={addmodal} toggle={addtoggle}>
                                   <ModalHeader toggle={addtoggle}>
@@ -316,7 +324,7 @@ function Career(props) {
                                   <ModalBody>
                                     <form class="forms-sample">
                                       <div class="form-group">
-                                        <label>Level</label>
+                                        <label>Category</label>
                                         <input
                                           type="text"
                                           class="form-control"
@@ -352,9 +360,9 @@ function Career(props) {
                               <table class="table select-table">
                                 <thead>
                                   <tr>
-                                    <th>Level</th>
-                                    <th>Created At</th>
-                                    <th>Updated At</th>
+                                    <th>Category</th>
+                                    {/* <th>SubCategory</th> */}
+                                    {/* <th>Updated At</th> */}
                                     <th>Action</th>
                                   </tr>
                                 </thead>
@@ -362,23 +370,26 @@ function Career(props) {
                                   {careerData.map((item, index) => {
                                     return (
                                       <tr key={index}>
-                                        <td>
-                                          <div class="d-flex ">
-                                            <div>
-                                              <h6>{item.name}</h6>
+                                        {item.disable === 'yes' ? (
+                                          <td>
+                                            <div class="d-flex ">
+                                              <div>
+                                                <h6>{item.name}</h6>
+                                              </div>
                                             </div>
-                                          </div>
+                                          </td>
+                                        ) : (
+                                          <td>
+                                          <p>
+                                            {item.name}
+                                          </p>
                                         </td>
-                                        <td>
-                                          {/* <p>
-                                            {item.created_at.substring(0, 10)}
-                                          </p> */}
-                                        </td>
-                                        <td>
-                                          {/* <p>
+                                        )}                     
+                                        {/* <td>
+                                          <p>
                                             {item.updated_at.substring(0, 10)}
-                                          </p> */}
-                                        </td>
+                                          </p>
+                                        </td> */}
                                         <td>
                                           <button
                                             class="badge badge-opacity-success"
@@ -451,6 +462,7 @@ function Career(props) {
                                         </td>
                                       </tr>
                                     );
+
                                   })}
                                 </tbody>
                               </table>

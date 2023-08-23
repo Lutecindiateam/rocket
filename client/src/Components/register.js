@@ -449,8 +449,8 @@ function Register(props) {
           password: data.password,
           password_confirmation: data.password_confirmation,
           attributes: {
-            given_name: data.first_name,
-            family_name: data.last_name,
+            given_name: data.first_name.charAt(0).toUpperCase() + data.first_name.slice(1),
+            family_name: data.last_name.charAt(0).toUpperCase() + data.last_name.slice(1),
           },
         });
         // console.log(user);

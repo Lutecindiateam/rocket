@@ -163,13 +163,13 @@ function BrowseJobs(props) {
     // if (loginData !== undefined) {
     //   if (loginData?.data?.status == "success") {
     //     setUser(loginData.data.data);
-        props.requestSearchJob({
-          token: loginData.data.data.token,
-          data: {
-            title: state.text,
-            country: country,
-          },
-        });
+    props.requestSearchJob({
+      token: loginData.data.data.token,
+      data: {
+        title: state.text,
+        country: country,
+      },
+    });
     //   }
     // } else {
     //   props.requestSearchJob({
@@ -187,22 +187,22 @@ function BrowseJobs(props) {
       // if (loginData !== undefined) {
       //   if (loginData?.data?.status == "success") {
       //     setUser(loginData.data.data);
-          props.requestSearchJob({
-            token: loginData.data.data.token,
-            data: {
-              title: "",
-              country: "",
-            },
-          });
-    //     }
-    //   } else {
-    //     props.requestSearchJob({
-    //       data: {
-    //         title: "",
-    //         country: "",
-    //       },
-    //     });
-    //   }
+      props.requestSearchJob({
+        token: loginData.data.data.token,
+        data: {
+          title: "",
+          country: "",
+        },
+      });
+      //     }
+      //   } else {
+      //     props.requestSearchJob({
+      //       data: {
+      //         title: "",
+      //         country: "",
+      //       },
+      //     });
+      //   }
     }
   }, []);
 
@@ -211,16 +211,17 @@ function BrowseJobs(props) {
     const country = answer_array[0];
 
     let loginData = props.candidate.loginData;
+
     // if (loginData !== undefined) {
     //   if (loginData?.data?.status == "success") {
     //     setUser(loginData.data.data);
-        props.requestSearchJob({
-          token: loginData.data.data.token,
-          data: {
-            title: state.text,
-            country: country,
-          },
-        });
+    props.requestSearchJob({
+      token: loginData.data.data.token,
+      data: {
+        title: state.text,
+        country: country,
+      },
+    });
     //   }
     // } else {
     //   props.requestSearchJob({
@@ -391,6 +392,8 @@ function BrowseJobs(props) {
                     <>
                       <div class="col-lg-6 col-12" key={index}>
                         <div class="single-job">
+                          <b><a href={`/jobDetails/${item.id}`}>{item.company_name}</a></b>
+                          <br />
                           <div class="job-image">
                             <a href={`/jobDetails/${item._id}`}>
                               <img
@@ -424,8 +427,9 @@ function BrowseJobs(props) {
                               <li>
                                 <a href={`/jobDetails/${item._id}`}>
                                   {" "}
-                                  {item.currency_name} {item.salary_from}-
-                                  {item.salary_to}
+                                  {/* {item.currency_name} */}
+                                  INR {item.salary_from}-
+                                  {item.salary_to} L
                                 </a>
                               </li>
                               <li>

@@ -51,25 +51,12 @@ function ViewResume(props) {
         const getResume = async () => {
           const s3Key = `candidateResume/${params.id}`;
           try {
-            // List objects in the S3 bucket with the specified s3Key
-            const response = await Storage.list(s3Key);
-            // If the response is an array and it's not empty, the object exists
-            if (response.results.length > 0) {
-              // Fetch the object using the get method
-              const pdfUrl = await Storage.get(s3Key);
-              
-              if (pdfUrl) {
-                setResume(pdfUrl);
-              }
-            } else {
-              // Handle the case when the object is not present in S3
-              console.error("PDF object not found in S3.");
-              // Perform any necessary actions for handling the absence of the object
-              // For example, you can set the pdfUrl to null or display an error message to the user.
+            const url = await Storage.get(s3Key, { validateObjectExistence: true });
+            if (url) {
+              setResume(url);
             }
           } catch (error) {
-            // Handle errors
-            console.error("Error fetching the PDF from S3:", error);
+            console.error(error.message)
           }
         }
         getResume();

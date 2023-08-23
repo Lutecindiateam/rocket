@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { requestAdminLogin, userLogout, requestAdminGetProfile } from "../Redux/actions";
 import { useNavigate } from "react-router-dom";
+import img from '../images/Rocket.png'
 
 function Header(props) {
   const [show, setShow] = useState("none");
@@ -73,8 +74,8 @@ function Header(props) {
           </div> */}
           <div>
             <a class="navbar-brand brand-logo" href="/admin/home">
-              {/* <img src={img} alt="logo" style={{ height: "40px" }} /> */}
-              <div
+              <img src={img} alt="logo" style={{ height: "70px" }} />
+              {/* <div
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -127,7 +128,7 @@ function Header(props) {
                     &nbsp;{"Portal"}
                   </h4>
                 </div>
-              </div>
+              </div> */}
             </a> 
             {/* <a class="navbar-brand brand-logo-mini" href="/admin/home">
               <img src={minimg} alt="logo" />

@@ -86,7 +86,7 @@ function Logo(props) {
 
       });
       if (result) {
-        alert("successful");
+        Swal.fire("Good job!", "Company logo upload Successfully.", "success");
       } else {
         console.log("semething went wrong");
       }

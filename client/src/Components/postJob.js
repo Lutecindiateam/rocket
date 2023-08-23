@@ -587,7 +587,7 @@ function PostJob(props) {
 
     return valid;
   }
-console.log(empProfile);
+ 
   function submitForm(e) {
     e.preventDefault();
     if (validateForm()) {
@@ -598,25 +598,25 @@ console.log(empProfile);
           data: {
             company_name: emp.name,
             company_id: emp.id,
-            title: data.title,
+            title: data.title.charAt(0).toUpperCase() + data.title.slice(1),
             category: empProfile.industry,
             gender: data.gender,
             expiry_date: data.expiry_date,
             salary_from: data.salary_from,
             salary_to: data.salary_to,
-            desired_description: data.desired_description,
+            desired_description: data.desired_description.charAt(0).toUpperCase() + data.desired_description.slice(1),
             pincode: data.pincode,
             remote: data.remote,
             career_level: data.career_level,
             experience: data.experience,
-            description: data.description,
+            description: data.description.charAt(0).toUpperCase() + data.description.slice(1),
             degree_level: data.degree_level,
             functional_area: data.functional_area,
             vacancy: data.vacancy,
             state: selectedState,
             city: selectedCity,
             // status: "pending"          
-             website: emp.website,            
+            website: empProfile.website,            
             // shift: data.shift,
             // tag: data.tag,
             // Recruiter_name: data.Recruiter_name,
@@ -628,7 +628,7 @@ console.log(empProfile);
         setError(false)
       }else{
         localStorage.setItem("link2", "/postJob");
-        Swal.fire("Error!", `Your Request is Pending Please Check Profille Status.`, "error");
+        Swal.fire("Error!", `Your job will be posted once your company profile approved.`, "error");
         navigate("/empProfile");
         }
       }else {
@@ -697,7 +697,6 @@ console.log(empProfile);
 
   useEffect(() => {
     let empAddJobData = props.employee.empAddJobData;
-    console.log(empAddJobData)
     if (empAddJobData !== undefined) {
       if (empAddJobData?.data?.status == "success") {
         Swal.fire("Good job!", "Job added successfully.", "success");
@@ -745,7 +744,7 @@ console.log(empProfile);
                         </div>
                         <div class="col-lg-6 col-md-6">
                           <div class="form-group">
-                            <label>Job Vacancy*</label>
+                            <label>Number of Job Vacancy*</label>
                             <input
                               class="form-control"
                               type="number"
@@ -859,7 +858,7 @@ console.log(empProfile);
                         </div>
                         <div class="col-lg-6 col-md-6">
                           <div class="form-group">
-                            <label>Expiry Days*</label>
+                            <label>Days for which you want to post job*</label>
                             <select
                               class="select"
                               name="expiry_date"
@@ -868,7 +867,7 @@ console.log(empProfile);
                               onChange={onChangeData}
                             // onBlur={validateExpiry}
                             >
-                              <option value="">Select a day</option>
+                              <option value="">Select a number of day</option>
                               {expiry_date.map((option) => (
                                 <option value={option.day}>
                                   {option.day}
@@ -916,7 +915,7 @@ console.log(empProfile);
 
                         <div class="col-lg-6 col-md-6">
                           <div class="form-group">
-                            <label>Educational Qualification*</label>
+                            <label>Required Educational Qualification*</label>
                             <select
                               class="select"
                               name="degree_level"
