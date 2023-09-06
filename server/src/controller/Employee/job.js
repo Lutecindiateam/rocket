@@ -7,7 +7,7 @@ const currentDateWithoutTime = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth(),
     currentDate.getDate()
-  );
+);
 exports.PostJob = async (req, res) => {
     const numberOfDays = req.body.expiry_date;
     const targetDate = new Date(currentDate.getTime() + (numberOfDays * 24 * 60 * 60 * 1000));
@@ -41,7 +41,8 @@ exports.PostJob = async (req, res) => {
             remote: req.body.remote,
             status: req.body.status,
             functional_area: req.body.status,
-            website: req.body.website
+            website: req.body.website,
+            address: req.body.address
         });
         res.status(201).json({
             status: "success",
@@ -57,7 +58,7 @@ exports.GetJobList = async (req, res) => {
     // console.log(req.params)
     const JobId = req.params.id;
     try {
-        const jobs = await Job.find({ company_id: JobId ,expiry_date: { $gte: currentDateWithoutTime } });
+        const jobs = await Job.find({ company_id: JobId, expiry_date: { $gte: currentDateWithoutTime } });
         // console.log(jobs);
         if (jobs) {
             const modifiedJobs = jobs.map((job) => {
@@ -79,7 +80,7 @@ exports.GetJobList = async (req, res) => {
                     state: job.state,
                     city: job.city,
                     company_id: job.company_id,
-                    website:job.website,
+                    website: job.website,
                     createdAt: job.createdAt,
                     updatedAt: job.updatedAt,
                     deleted: job.deleted,

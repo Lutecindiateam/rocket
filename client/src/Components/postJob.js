@@ -307,13 +307,14 @@ function PostJob(props) {
   //   return formIsValid;
   // }
   function validateFrom() {
+    const salaryFrom = parseFloat(data["salary_from"]);
     let formIsValid = false;
     // if (data["salary_from"] === undefined) {
     //   formIsValid = false;
     //   seterrorFrom("*Enter minimum salary.");
     // } else 
-    if (data["salary_from"] <= 0) {
-      formIsValid = false;
+    if ( salaryFrom <= 0) {
+      // formIsValid = false;
       seterrorFrom("*Minimum salary shold be more than 0.");
     } else {
       formIsValid = true;
@@ -322,14 +323,16 @@ function PostJob(props) {
     return formIsValid;
   }
   function validateTo() {
+    const salaryTo = parseFloat(data["salary_to"]);
+    const salaryFrom = parseFloat(data["salary_from"]);
     let formIsValid = false;
     // if (data["salary_to"] === undefined) {
     //   formIsValid = false;
     //   seterrorTo("*Enter maximum salary.");
     // } else
-    if (data["salary_to"] <= data["salary_from"]) {
-      formIsValid = false;
-      seterrorTo("*Maximum salary shold be more than Minimum salary.");
+    if (salaryTo <= salaryFrom) {
+      // formIsValid = false;
+      seterrorTo("*Maximum salary should be more than Minimum salary.");
     } else {
       formIsValid = true;
       seterrorTo("");
@@ -587,51 +590,52 @@ function PostJob(props) {
 
     return valid;
   }
- 
+
+
   function submitForm(e) {
     e.preventDefault();
     if (validateForm()) {
-      if(empProfile.industry !== undefined){
-      if (empProfile.status === "Approved") {
-        props.requestAddJob({
-          token: emp.token,
-          data: {
-            company_name: emp.name,
-            company_id: emp.id,
-            title: data.title.charAt(0).toUpperCase() + data.title.slice(1),
-            category: empProfile.industry,
-            gender: data.gender,
-            expiry_date: data.expiry_date,
-            salary_from: data.salary_from,
-            salary_to: data.salary_to,
-            desired_description: data.desired_description.charAt(0).toUpperCase() + data.desired_description.slice(1),
-            pincode: data.pincode,
-            remote: data.remote,
-            career_level: data.career_level,
-            experience: data.experience,
-            description: data.description.charAt(0).toUpperCase() + data.description.slice(1),
-            degree_level: data.degree_level,
-            functional_area: data.functional_area,
-            vacancy: data.vacancy,
-            state: selectedState,
-            city: selectedCity,
-            // status: "pending"          
-            website: empProfile.website,            
-            // shift: data.shift,
-            // tag: data.tag,
-            // Recruiter_name: data.Recruiter_name,
-            // Recruiter_email: data.Recruiter_email,
-            // salary_period: data.salary_period,
+      if (empProfile.industry !== undefined) {
+        if (empProfile.status === "Approved") {
+          props.requestAddJob({
+            token: emp.token,
+            data: {
+              company_name: emp.name,
+              company_id: emp.id,
+              title: data.title.charAt(0).toUpperCase() + data.title.slice(1),
+              category: empProfile.industry,
+              gender: data.gender,
+              expiry_date: data.expiry_date,
+              salary_from: data.salary_from,
+              salary_to: data.salary_to,
+              desired_description: data.desired_description.charAt(0).toUpperCase() + data.desired_description.slice(1),
+              pincode: data.pincode,
+              remote: data.remote,
+              career_level: data.career_level,
+              experience: data.experience,
+              description: data.description.charAt(0).toUpperCase() + data.description.slice(1),
+              degree_level: data.degree_level,
+              functional_area: data.functional_area,
+              vacancy: data.vacancy,
+              state: selectedState,
+              city: selectedCity,
+              address: empProfile.address,
+              website: empProfile.website,
+              // shift: data.shift,
+              // tag: data.tag,
+              // Recruiter_name: data.Recruiter_name,
+              // Recruiter_email: data.Recruiter_email,
+              // salary_period: data.salary_period,
 
-          },
-        });
-        setError(false)
-      }else{
-        localStorage.setItem("link2", "/postJob");
-        Swal.fire("Error!", `Your job will be posted once your company profile approved.`, "error");
-        navigate("/empProfile");
+            },
+          });
+          setError(false)
+        } else {
+          localStorage.setItem("link2", "/postJob");
+          Swal.fire("Error!", `Your job will be posted once your company profile approved.`, "error");
+          navigate("/empProfile");
         }
-      }else {
+      } else {
         localStorage.setItem("link2", "/postJob");
         Swal.fire("Error!", `Please Complete Your Profile.`, "error");
         navigate("/empProfile");
@@ -910,7 +914,7 @@ function PostJob(props) {
                             {errorTo && <div style={mystyle}>{errorTo}</div>}
                           </div>
                         </div>
-                       
+
 
 
                         <div class="col-lg-6 col-md-6">

@@ -88,6 +88,10 @@ const jobSchema = new mongoose.Schema({
       },
     website:{
         type: String
+    },
+    address:{
+        type:String,
+        trim:true
     }
 
 }, { timestamps: true })

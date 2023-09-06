@@ -89,7 +89,7 @@ function JobDetails(props) {
       }
     }
   }, [props.candidate.getCandidateData]);
-// console.log(user);
+
   useEffect(() => {
     let empLoginData = props.employee.empLoginData;
     if (empLoginData !== undefined) {
@@ -270,32 +270,35 @@ function JobDetails(props) {
   //     }
   //   }
   // }, [props.candidate.addCommentData]);
-
   Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
   useEffect(() => {
     setaddress(
       data.company_name +
       "," +
-      data.employee_location +
+      data.address +
+      // data.employee_location +
       "," +
       data.city_name +
       "," +
       data.state_name +
       "," +
-      data.country_name
+      "India"
+      // data.country_name
     );
     Geocode.fromAddress(`${address}`).then(
       (response) => {
         const { lat, lng } = response.results[0].geometry.location;
         setlat(lat);
         setlng(lng);
+        console.log(lat);
+        console.log(lng);
       },
       (error) => {
         console.error(error);
       }
     );
   }, [params.id, data]);
-
+console.log(`https://maps.google.com/maps?q=${address}&t=&z=13&ie=UTF8&iwloc=&center=${lat},${lng}&output=embed`);
   return (
     <>
       <Header />
