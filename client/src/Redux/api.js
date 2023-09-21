@@ -282,6 +282,18 @@ export const getJobsCategoryWise = (obj) => {
     });
 };
 
+export const getJobsSuggestions = (obj) => {
+  return axios
+  .get("/suggestions")
+  .then((response) => {
+    return response;
+  })
+  .catch((err) => {
+    console.log("Error", err.response.data.message);
+    return err.response;
+  });
+}
+
 export const jobDetails = (obj) => {
   return axios
     .get("/job/" + obj.id)

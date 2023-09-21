@@ -10,6 +10,7 @@ import {
   requestLogin,
   requestCountLastweekJob,
   requestRecentlyJob,
+  requestSuggestions,
   requestCategory,
   requestAddBookmark,
   userLogout
@@ -46,6 +47,7 @@ function Home(props) {
   useEffect(() => {
     // props.requestCountLastweekJob();
     props.requestCategory();
+    props.requestSuggestions();
     props.requestRecentlyJob({});
   }, []);
 
@@ -132,6 +134,7 @@ function Home(props) {
     }
   }, [props.candidate.recentlyAddedJobData]);
 
+
   // function bookmarkJobs(id) {
   //   if (user.id) {
   //     props.requestAddBookmark({
@@ -188,13 +191,21 @@ function Home(props) {
     requestOptions: {},
     debounce: 300,
   });
-  const items = ["full stack developer" , 'techinical' , 'cloud', 'Technical senior lead']
+  // const items = ["full stack developer" , 'techinical' , 'cloud', 'Technical senior lead']
   const [categories, setCategories] = useState([]);
-  // const [items, setitems] = useState([]);
+  const [items, setitems] = useState([]);
   const [state, setState] = useState({
     suggestions: [],
     text: "",
   });
+
+  useEffect(() => {
+    const suggestions = props.candidate.suggestionsJobData;
+    if(suggestions !== undefined){
+      if(suggestions?.data?.status == "success")
+      setitems(suggestions?.data?.data[0].suggestion)
+    }}, [props.candidate.suggestionsJobData])
+
   useEffect(() => {
     let categoryData = props.candidate.categoryData;
     if (categoryData) {
@@ -926,6 +937,7 @@ const mapDispatchToProps = (dispatch) =>
       requestCountLastweekJob,
       requestRecentlyJob,
       requestCategory,
+      requestSuggestions,
       requestAddBookmark,
       userLogout
     },

@@ -27,7 +27,7 @@ function BrowseJobs(props) {
     window.scrollTo(0, 0);
   }, []);
   const navigate = useNavigate();
-  // const [user, setUser] = useState({});
+  const [user, setUser] = useState({});
   const [categories, setCategories] = useState([]);
   const [items, setitems] = useState([]);
   const [state, setState] = useState({
@@ -39,6 +39,13 @@ function BrowseJobs(props) {
   useEffect(() => {
     props.requestCategory();
   }, []);
+
+  useEffect(() => {
+    const suggestions = props.candidate.suggestionsJobData;
+    if(suggestions !== undefined){
+      if(suggestions?.data?.status == "success")
+      setitems(suggestions?.data?.data[0].suggestion)
+    }}, [props.candidate.suggestionsJobData])
 
   useEffect(() => {
     let categoryData = props.candidate.categoryData;
@@ -155,14 +162,94 @@ function BrowseJobs(props) {
       );
     });
 
+    //this is for only login users can serach jobs
+  // function submitForm() {
+  //   const answer_array = value.split(",");
+  //   const country = answer_array[0];
+
+  //   let loginData = props.candidate.loginData;
+  //   // if (loginData !== undefined) {
+  //   //   if (loginData?.data?.status == "success") {
+  //   //     setUser(loginData.data.data);
+  //   props.requestSearchJob({
+  //     token: loginData.data.data.token,
+  //     data: {
+  //       title: state.text,
+  //       country: country,
+  //     },
+  //   });
+  //   //   }
+  //   // } else {
+  //   //   props.requestSearchJob({
+  //   //     data: {
+  //   //       title: state.text,
+  //   //       country: country,
+  //   //     },
+  //   //   });
+  //   // }
+  // }
+
+  // useEffect(() => {
+  //   if (state.text === null && value === null) {
+  //     let loginData = props.candidate.loginData;
+  //     // if (loginData !== undefined) {
+  //     //   if (loginData?.data?.status == "success") {
+  //     //     setUser(loginData.data.data);
+  //     props.requestSearchJob({
+  //       token: loginData.data.data.token,
+  //       data: {
+  //         title: "",
+  //         country: "",
+  //       },
+  //     });
+  //     //     }
+  //     //   } else {
+  //     //     props.requestSearchJob({
+  //     //       data: {
+  //     //         title: "",
+  //     //         country: "",
+  //     //       },
+  //     //     });
+  //     //   }
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   const answer_array = value.split(",");
+  //   const country = answer_array[0];
+
+  //   let loginData = props.candidate.loginData;
+
+  //   // if (loginData !== undefined) {
+  //   //   if (loginData?.data?.status == "success") {
+  //   //     setUser(loginData.data.data);
+  //   props.requestSearchJob({
+  //     token: loginData.data.data.token,
+  //     data: {
+  //       title: state.text,
+  //       country: country,
+  //     },
+  //   });
+  //   //   }
+  //   // } else {
+  //   //   props.requestSearchJob({
+  //   //     data: {
+  //   //       title: state.text,
+  //   //       country: country,
+  //   //     },
+  //   //   });
+  //   // }
+  // }, [value, state.text]);
+
+  //this is fo both non login and login 
   function submitForm() {
     const answer_array = value.split(",");
     const country = answer_array[0];
 
     let loginData = props.candidate.loginData;
-    // if (loginData !== undefined) {
-    //   if (loginData?.data?.status == "success") {
-    //     setUser(loginData.data.data);
+    if (loginData !== undefined) {
+      if (loginData?.data?.status == "success") {
+        setUser(loginData.data.data);
     props.requestSearchJob({
       token: loginData.data.data.token,
       data: {
@@ -170,23 +257,23 @@ function BrowseJobs(props) {
         country: country,
       },
     });
-    //   }
-    // } else {
-    //   props.requestSearchJob({
-    //     data: {
-    //       title: state.text,
-    //       country: country,
-    //     },
-    //   });
-    // }
+      }
+    } else {
+      props.requestSearchJob({
+        data: {
+          title: state.text,
+          country: country,
+        },
+      });
+    }
   }
 
   useEffect(() => {
     if (state.text === null && value === null) {
       let loginData = props.candidate.loginData;
-      // if (loginData !== undefined) {
-      //   if (loginData?.data?.status == "success") {
-      //     setUser(loginData.data.data);
+      if (loginData !== undefined) {
+        if (loginData?.data?.status == "success") {
+          setUser(loginData.data.data);
       props.requestSearchJob({
         token: loginData.data.data.token,
         data: {
@@ -194,15 +281,15 @@ function BrowseJobs(props) {
           country: "",
         },
       });
-      //     }
-      //   } else {
-      //     props.requestSearchJob({
-      //       data: {
-      //         title: "",
-      //         country: "",
-      //       },
-      //     });
-      //   }
+          }
+        } else {
+          props.requestSearchJob({
+            data: {
+              title: "",
+              country: "",
+            },
+          });
+        }
     }
   }, []);
 
@@ -212,9 +299,9 @@ function BrowseJobs(props) {
 
     let loginData = props.candidate.loginData;
 
-    // if (loginData !== undefined) {
-    //   if (loginData?.data?.status == "success") {
-    //     setUser(loginData.data.data);
+    if (loginData !== undefined) {
+      if (loginData?.data?.status == "success") {
+        setUser(loginData.data.data);
     props.requestSearchJob({
       token: loginData.data.data.token,
       data: {
@@ -222,15 +309,15 @@ function BrowseJobs(props) {
         country: country,
       },
     });
-    //   }
-    // } else {
-    //   props.requestSearchJob({
-    //     data: {
-    //       title: state.text,
-    //       country: country,
-    //     },
-    //   });
-    // }
+      }
+    } else {
+      props.requestSearchJob({
+        data: {
+          title: state.text,
+          country: country,
+        },
+      });
+    }
   }, [value, state.text]);
 
   useEffect(() => {

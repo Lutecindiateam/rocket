@@ -1,5 +1,6 @@
 const jobApplication = require('../../models/Candidate/applyjob')
 const Job = require('../../models/Employer/postjob')
+const suggestion = require('../../models/Candidate/suggestion')
 
 exports.searchjobs = async (req, res) => {
   // console.log(req.body);
@@ -95,6 +96,31 @@ status: "success"
  }catch(err){
   console.log(err.message);
  }
+ }
+
+ exports.saveSuggestions = async(req, res) => {
+  try{
+    const data= req.body.suggestion
+const save = await suggestion.create({suggestion : data })
+ret
+  }catch(error){
+    console.log(error.message);
+  }
+ }
+
+ exports.getSuggestions = async(req, res) =>{
+  try{
+const sugg = await suggestion.find();
+return res.status(200).json({
+  code: 200,
+  data: sugg ,
+  message: "Job Suggestion is found",
+  status: "success"
+
+})
+  }catch(error){
+    console.log(error.message);
+  }
  }
 
  // return jobs;

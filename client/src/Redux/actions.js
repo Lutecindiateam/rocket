@@ -660,6 +660,12 @@ export const RECEIVE_CATEGORY_JOBS = "RECEIVE_CATEGORY_JOBS";
 export const requestCategoryJobs = (obj) => ({ type: REQUEST_CATEGORY_JOBS, obj });
 export const receiveCategoryJobs = (data) => ({ type: RECEIVE_CATEGORY_JOBS, data });
 
+//job suggestions
+export const REQUEST_JOBS_SUGGESTIONS = "REQUEST_JOBS_SUGGESTIONS";
+export const RECEIVE_JOBS_SUGGESTIONS = "RECEIVE_JOBS_SUGGESTIONS";
+export const requestSuggestions = (obj) => ({ type: REQUEST_JOBS_SUGGESTIONS, obj });
+export const receiveSuggestions = (data) => ({ type: RECEIVE_JOBS_SUGGESTIONS, data });
+
 //job detatls
 export const REQUEST_JOB_DETAILS = "REQUEST_JOB_DETAILS";
 export const RECEIVE_JOB_DETAILS = "RECEIVE_JOB_DETAILS";

@@ -29,6 +29,7 @@ import {
   RECEIVE_STATE,
   RECEIVE_JOBS,
   RECEIVE_CATEGORY_JOBS,
+  RECEIVE_JOBS_SUGGESTIONS,
   RECEIVE_CANDIDATE_LOGO,
   RECEIVE_CANDIDATE_PROFILE,
   RECEIVE_ADD_CONTACT,
@@ -147,6 +148,11 @@ export default (state = {}, { type, data }) => {
       return {
         ...state,
         categoryJobData: data,
+      };
+      case RECEIVE_JOBS_SUGGESTIONS:
+      return {
+        ...state,
+        suggestionsJobData: data,
       };
 
     case RECEIVE_COUNTRY:

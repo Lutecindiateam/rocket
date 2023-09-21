@@ -43,6 +43,7 @@ import {
 //  REQUEST_STATE, receiveState,
  REQUEST_JOBS, receiveJobs,
  REQUEST_CATEGORY_JOBS, receiveCategoryJobs,
+ REQUEST_JOBS_SUGGESTIONS, receiveSuggestions,
  REQUEST_ADD_JOB, receiveAddJob,
  REQUEST_EDIT_JOB, receiveEditJob,
  REQUEST_FORM_FIELD, receiveFormField,
@@ -359,7 +360,7 @@ import {
 import {
    login , googlelogin,addResume, register,empregister, emplogin, empJoblist, empdeleteJob, deleteBookmark, applyJobs, jobDetails, addBookmark, getAppliedJobs,
    jobAlert, deleteApplyJob, getCandidate, candidateForJob, empGetCandidate, approve, schedule, reject ,
-   searchJob, readNotification,  getJobs, getJobsCategoryWise,checkBookmarkApplied,
+   searchJob, readNotification,  getJobs, getJobsCategoryWise, getJobsSuggestions,checkBookmarkApplied,
     addJob,editJob, getFormFields, emplogo, empprofile, getemp, candidatelogo, candidateprofile,candidateresume, getIterview, scheduleIterview,rescheduleIterview, interview,
     addcontact, countLastweekJob, recentlyJob, interviewApprove, interviewReject, confirmInterview, notconfirmInterview,
      empdeleteAccount
@@ -1334,6 +1335,15 @@ export function* loginCandidate(action) {
       console.log(e.message)
     }
   }
+  export function* suggestionsJobDatasCandidate(action) {
+    try {
+      const response = yield call(getJobsSuggestions, action.obj)
+     
+      yield put(receiveSuggestions(response))
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
 
 
   // export function* countryCandidate(action) {
@@ -1941,6 +1951,7 @@ export function* loginCandidate(action) {
     yield takeLatest(REQUEST_ADD_CONTACT, addcontactCandidate)
     yield takeLatest(REQUEST_ADD_RESUME, addResumeCandidate)
     yield takeLatest(REQUEST_CATEGORY_JOBS, categoryJobDatasCandidate)
+    yield takeLatest(REQUEST_JOBS_SUGGESTIONS, suggestionsJobDatasCandidate)
     yield takeLatest(REQUEST_REGISTER, registerCandidate)
     yield takeLatest(REQUEST_EMP_REGISTER, empregisterEmployee)
     // yield takeLatest(REQUEST_COUNTRY, countryCandidate)
